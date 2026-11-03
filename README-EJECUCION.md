@@ -1,6 +1,6 @@
 # Ejecutar Bendita Gracia
 
-La implementación usa Next.js, TypeScript y fuentes locales. Incluye portada, catálogo con búsqueda y categorías, fichas, consultas por WhatsApp y placeholders SVG identificados como ilustrativos. Todavía no está aprobada para publicar.
+La implementación usa Next.js, TypeScript y fuentes locales. Incluye portada, catálogo con búsqueda y categorías, fichas, consultas por WhatsApp e imágenes ilustrativas recortadas de los mockups, identificadas como tales. Todavía no está aprobada para publicar.
 
 ## Inicio local
 
@@ -29,7 +29,7 @@ Los tests de navegador levantan producción en el puerto 3107; detené previamen
 ## Contenido y configuración
 
 - Diseños y datos: `src/data/catalog.ts`. Los seis diseños son referencias ilustrativas, no inventario confirmado.
-- Imágenes: `public/images/products`. Se generan con `python scripts/create-placeholders.py`; reemplazalas por fotografías autorizadas y actualizá `images`, `alt` e `illustrative` en los datos.
+- Imágenes: `public/images/references`. Se generan desde `mockups/` con `python scripts/prepare-reference-images.py` (solo escenas de producto, sin la etiqueta impresa). Después de regenerarlas, borrá `.next/cache/images` para que Next no sirva las versiones anteriores. Reemplazalas por fotografías autorizadas y actualizá `images`, `alt` e `illustrative` en los datos.
 - Las imágenes frontal y lateral reales están pendientes. El acercamiento actual amplía la misma ilustración, no simula una segunda fotografía ni un visor 360°.
 - `NEXT_PUBLIC_WHATSAPP_PHONE`: número internacional, solo dígitos. Valor de referencia: `573144616230`; confirmá vigencia y país antes de usarlo públicamente. Se incorpora al compilar.
 - `SITE_URL`: origen canónico. El valor de desarrollo es `http://localhost:3000`; para este puerto configurá `http://127.0.0.1:3107` en el entorno del proceso.
