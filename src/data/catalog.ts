@@ -1,7 +1,7 @@
 export const categories = [
-  { id: 'velas-florales', name: 'Velas florales', note: 'La delicadeza de cada pétalo', image: 'rosas-marfil' },
-  { id: 'figuras-en-cera', name: 'Figuras en cera', note: 'Pequeños detalles, formas especiales', image: 'figuras-con-estrella' },
-  { id: 'wax-sachet', name: 'Wax sachet', note: 'Botánica en pequeños detalles', image: 'sachet-botanico' },
+  { id: 'velas-florales', name: 'Velas florales', note: 'La delicadeza de cada pétalo', image: 'category-floral' },
+  { id: 'figuras-en-cera', name: 'Figuras en cera', note: 'Pequeños detalles, formas especiales', image: 'category-figures' },
+  { id: 'wax-sachet', name: 'Wax sachet', note: 'Botánica en pequeños detalles', image: 'category-sachet' },
 ] as const;
 
 export type Category = typeof categories[number]['id'];
@@ -29,7 +29,7 @@ const designs: [string, string, Category, string][] = [
 
 export const products: Product[] = designs.map(([slug, name, category, description]) => ({
   id: slug, slug, name, category, description,
-  images: [{ src: `/images/products/${slug}.svg`, alt: `Ilustración de referencia: ${name.toLowerCase()}`, illustrative: true }],
+  images: [{ src: `/images/references/${slug}.webp`, alt: `Imagen ilustrativa de referencia: ${name.toLowerCase()}`, illustrative: true }],
   priceCOP: null, dimensions: null, fragrances: null, availability: 'unconfirmed',
 }));
 
