@@ -1,6 +1,8 @@
 # Bendita Gracia — guía de construcción
 
-Propuesta de sitio de velas y detalles aromáticos. Este paquete contiene cuatro mockups y documentación de implementación; no contiene una aplicación ya construida ni modelos 3D.
+La carpeta ahora incluye una implementación Next.js basada en estos mockups, además de la documentación original. Consultá [README-EJECUCION.md](README-EJECUCION.md) para ejecutarla y conocer el estado de verificación y los pendientes. No está publicada ni aprobada para producción.
+
+Los documentos de diseño siguientes describen el paquete original de referencias. No se incluyen fotografías individuales ni modelos 3D.
 
 ## Archivos
 
