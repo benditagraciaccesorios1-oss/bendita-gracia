@@ -16,7 +16,27 @@ test('demonstration designs never claim unconfirmed commercial data', () => {
     assert.equal(product.dimensions, null);
     assert.equal(product.fragrances, null);
     assert.equal(product.availability, 'unconfirmed');
-    assert.ok(product.images.every(image => image.illustrative && image.alt));
+    assert.ok(product.images.every(image => typeof image.illustrative === 'boolean' && image.alt));
+  }
+});
+
+test('uploaded photographs join matching designs without turning the palette or flyer into products', () => {
+  assert.equal(products.length, 10);
+  for (const slug of ['rosas-rosa', 'rosas-marfil', 'peonia-en-domo', 'figuras-con-estrella', 'sachet-botanico']) {
+    const product = products.find(item => item.slug === slug)!;
+    assert.ok(product.images[0].src.startsWith('/images/originals/'));
+    assert.equal(product.images[0].illustrative, false);
+  }
+  assert.equal(products.find(item => item.slug === 'peonia-morada')!.images[0].illustrative, true);
+  assert.equal(new Set(products.map(item => item.slug)).size, products.length);
+  assert.ok(products.every(item => !/paleta|peppermint|folleto/i.test(item.name)));
+});
+
+test('rose designs open the uncropped photograph rather than a small enlarged crop', () => {
+  for (const slug of ['rosas-rosa', 'rosas-marfil']) {
+    const product = products.find(item => item.slug === slug)!;
+    assert.equal(product.images[0].src, '/images/originals/rosas-conjunto.webp');
+    assert.match(product.images[0].alt, /conjunto|rosa y marfil|marfil y rosa/i);
   }
 });
 

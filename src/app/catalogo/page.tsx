@@ -6,7 +6,7 @@ import { Flourish, WaxButton } from '@/components/wax';
 import { ProductCard } from '@/features/catalog/product-card';
 import { categories, filterProducts } from '@/data/catalog';
 
-export const metadata: Metadata = { title: 'Nuestras creaciones', description: 'Explorá velas florales, figuras en cera y wax sachet. Diseños ilustrativos con información comercial por confirmar.' };
+export const metadata: Metadata = { title: 'Nuestras creaciones', description: 'Explorá velas florales, figuras en cera y wax sachet. Fotografías de los diseños y referencias identificadas, con información comercial por confirmar.' };
 
 type Search = { q?: string | string[]; categoria?: string | string[] };
 
@@ -39,9 +39,9 @@ export default async function CatalogPage({ searchParams }: { searchParams: Prom
           {categories.map(item => <Link key={item.id} href={categoryHref(item.id)} aria-current={category === item.id ? 'true' : undefined}>{item.name}</Link>)}
         </nav>
       </div>
-      <div className="results-meta"><p>{results.length} {results.length === 1 ? 'diseño ilustrativo' : 'diseños ilustrativos'}{query && <> para «{query}»</>}</p>{(query || category) && <Link href="/catalogo">Limpiar filtros</Link>}</div>
+      <div className="results-meta"><p>{results.length} {results.length === 1 ? 'diseño' : 'diseños'}{query && <> para «{query}»</>}</p>{(query || category) && <Link href="/catalogo">Limpiar filtros</Link>}</div>
       {results.length ? <section className="product-grid" aria-label="Diseños del catálogo">{results.map((product, index) => <ProductCard product={product} index={index} key={product.id} />)}</section> : <section className="empty-state"><h2>No encontramos ese detalle</h2><p>Probá con otro nombre o elegí una categoría diferente.</p><WaxButton href="/catalogo">Limpiar filtros</WaxButton></section>}
-      <p className="catalog-disclaimer">Muestra visual, no inventario de venta. Imágenes ilustrativas. Nombres, precios, medidas, fragancias y disponibilidad por confirmar.</p>
+      <p className="catalog-disclaimer">Fotografías proporcionadas por la marca; las referencias sin fotografía están identificadas como ilustrativas. Precios, medidas, fragancias y disponibilidad por confirmar. No constituye inventario de venta.</p>
     </main>
     <ContactSection /><SiteFooter />
   </>;

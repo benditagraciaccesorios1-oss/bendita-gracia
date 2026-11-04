@@ -42,10 +42,10 @@ export default async function DetailPage({ params }: Props) {
           </dl>
           <WaxButton href={whatsappUrl(whatsappPhone, product.name)} external>Consultar por WhatsApp <span aria-hidden="true">↗</span></WaxButton>
           <p className="consult-note">Solo prepara una consulta; no confirma un pedido. Confirmá el número y país de destino antes de publicar.</p>
-          <details className="product-accordion"><summary>Información del diseño</summary><p>Referencia visual ilustrativa. Materiales, colores, cuidados y advertencias de uso están por confirmar con la marca. No hay variantes ni condiciones de entrega verificadas.</p></details>
+          <details className="product-accordion"><summary>Información del diseño</summary><p>{product.images[0].illustrative ? 'Referencia visual ilustrativa.' : 'Fotografía proporcionada por la marca.'} Materiales, colores, cuidados y advertencias de uso están por confirmar con la marca. No hay variantes ni condiciones de entrega verificadas.</p></details>
         </div>
       </section>
-      {related.length > 0 && <section className="related-section" aria-labelledby="related-heading"><h2 id="related-heading">Más diseños para descubrir</h2><div className="related-grid">{related.map((item, index) => <Link href={`/catalogo/${item.slug}`} key={item.id}><WaxFrame tone={index % 2 === 0 ? 'oat' : 'sage'}><ProductImage src={item.images[0].src} alt={item.images[0].alt} /></WaxFrame><h3>{item.name}</h3></Link>)}</div></section>}
+      {related.length > 0 && <section className="related-section" aria-labelledby="related-heading"><h2 id="related-heading">Más diseños para descubrir</h2><div className="related-grid">{related.map((item, index) => <Link href={`/catalogo/${item.slug}`} key={item.id}><WaxFrame tone={index % 2 === 0 ? 'oat' : 'sage'}><ProductImage src={item.images[0].src} alt={item.images[0].alt} illustrative={item.images[0].illustrative} /></WaxFrame><h3>{item.name}</h3></Link>)}</div></section>}
     </main>
     <SiteFooter />
   </>;
