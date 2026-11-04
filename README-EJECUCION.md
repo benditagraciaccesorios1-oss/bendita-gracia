@@ -57,3 +57,7 @@ La verificación incluye las tarjetas, enlaces/foco, guías ilustrativas del hom
 La vista de desarrollo es http://127.0.0.1:3110. No se repitió el build de producción para preservar el preview anterior de 3108. No hay despliegue ni aprobación nativa: el assessment no estuvo disponible. El cambio de cera es optativo y solo se activa en el home; las superficies de catálogo y detalle no reciben sus gotas ni animaciones.
 
 El historial detallado está en `odd/tasks/catalogo-web.md`. Auditoría de la base: cero vulnerabilidades de producción y 16 avisos moderados en herramientas de desarrollo derivados de `minimatch`; no se aplicaron downgrades forzados ni se agregaron dependencias para los efectos visuales.
+
+## Repositorio
+
+Destino de publicación del código autorizado por la propietaria: https://github.com/Maleja-Ortiz12/bendita-gracia (rama `main`). Subir el repositorio no despliega la web ni elimina el pendiente de verificación de 1024 px. Los commits de código de esta entrega son `37eca61` (fotografías y galería) y `cbc11cc` (home, referencias y animaciones).
