@@ -23,6 +23,10 @@ CROPS = {
     'peonia-morada': ('02-catalogo.png', (51, 631, 301, 838)),
     'figuras-con-estrella': ('02-catalogo.png', (549, 633, 811, 838)),
     'sachet-botanico': ('02-catalogo.png', (1040, 632, 1319, 838)),
+    # Wide home-carousel scenes from the mobile mockup's larger category cards, inside their wax rims.
+    'hero-velas-florales': ('04-movil.png', (76, 958, 650, 1158)),
+    'hero-figuras': ('04-movil.png', (78, 1281, 650, 1474)),
+    'hero-sachet': ('04-movil.png', (76, 1600, 650, 1796)),
 }
 
 for name, (source, box) in CROPS.items():

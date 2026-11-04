@@ -1,7 +1,7 @@
 export const categories = [
-  { id: 'velas-florales', name: 'Velas florales', note: 'La delicadeza de cada pétalo', image: 'category-floral' },
-  { id: 'figuras-en-cera', name: 'Figuras en cera', note: 'Pequeños detalles, formas especiales', image: 'category-figures' },
-  { id: 'wax-sachet', name: 'Wax sachet', note: 'Botánica en pequeños detalles', image: 'category-sachet' },
+  { id: 'velas-florales', name: 'Velas florales', note: 'La delicadeza de cada pétalo', image: 'rosas-conjunto' },
+  { id: 'figuras-en-cera', name: 'Figuras en cera', note: 'Pequeños detalles, formas especiales', image: 'figuras-con-estrella' },
+  { id: 'wax-sachet', name: 'Wax sachet', note: 'Botánica en pequeños detalles', image: 'sachet-flores-conjunto' },
 ] as const;
 
 export type Category = typeof categories[number]['id'];

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { ProductImage } from '@/components/product-image';
-import { WaxButton, WaxFrame } from '@/components/wax';
+import { WaxButton, WaxEdge, WaxFrame, WaxRim } from '@/components/wax';
 import { categories, type Product } from '@/data/catalog';
 
 export function ProductCard({ product, index }: { product: Product; index: number }) {
@@ -12,5 +12,6 @@ export function ProductCard({ product, index }: { product: Product; index: numbe
     <div className="card-info"><p className="eyebrow">{category.name}</p><h2><Link href={`/catalogo/${product.slug}`}>{product.name}</Link></h2>
       <div className="card-bottom"><p>Precio<span>{product.priceCOP === null ? 'Por confirmar' : new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(product.priceCOP)}</span></p><WaxButton href={`/catalogo/${product.slug}`}>Ver detalle <span aria-hidden="true">↗</span></WaxButton></div>
     </div>
+    <WaxRim /><WaxEdge />
   </article>;
 }
