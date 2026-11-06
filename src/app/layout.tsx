@@ -17,7 +17,8 @@ export const metadata: Metadata = {
   title: { default: 'Bendita Gracia · Luz, aroma y diseño', template: '%s | Bendita Gracia' },
   description: 'Velas decorativas, wax melts y wax sachet de Bendita Gracia. Elige forma, fragancia y color, y pide por WhatsApp.',
   robots: { index: false, follow: false },
-  openGraph: { title: 'Bendita Gracia', description: 'Luz, aroma y diseño. Catálogo ilustrativo.', locale: 'es_CO', type: 'website', images: [{ url: '/social-card.svg', width: 1200, height: 630 }] },
+  openGraph: { title: 'Bendita Gracia', description: 'Luz, aroma y diseño para tus espacios.', locale: 'es_CO', type: 'website', images: [{ url: '/social-card.jpg', width: 1200, height: 630, alt: 'Inicio de Bendita Gracia: velas decorativas y nuestras creaciones.' }] },
+  twitter: { card: 'summary_large_image', title: 'Bendita Gracia', description: 'Luz, aroma y diseño para tus espacios.', images: ['/social-card.jpg'] },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
