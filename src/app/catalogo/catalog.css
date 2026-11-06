@@ -1,19 +1,4 @@
-/* Listing-only treatment: imported page styles can persist after client navigation. */
-.catalog-page .internal-header {
-  position: static;
-  top: auto;
-  z-index: auto;
-  padding: 12px 0 14px;
-}
-.catalog-page .internal-header .navigation-wrap { padding-bottom: 40px; }
-.catalog-page .navigation > .wax-edge.is-melt {
-  left: 18px;
-  width: calc(100% - 36px);
-  height: 44px;
-  bottom: -37px;
-  color: #34482b;
-  filter: drop-shadow(0 2px 2px #5b3b2b40);
-}
+/* Listing-only treatment; the melting menu itself lives in melt-header.css. */
 .catalog-page .product-grid { row-gap: 46px; padding-bottom: 55px; }
 .catalog-page .product-card > .wax-edge.is-melt {
   display: block;
@@ -24,28 +9,6 @@
   color: var(--card-rim);
   filter: drop-shadow(0 2px 2px #5b3b2b33);
 }
-.catalog-page .wax-sheen { display: none; }
-@media (prefers-reduced-motion: no-preference) {
-  .catalog-page .wax-drop {
-    transform-box: fill-box;
-    transform-origin: 50% 0;
-    animation: catalog-wax-swell 7.2s ease-in-out infinite;
-  }
-  .catalog-page .wax-drop:nth-of-type(2) { animation-delay: -2.4s; }
-  .catalog-page .wax-drop:nth-of-type(3) { animation-delay: -4.5s; }
-  .catalog-page .wax-sheen { display: inline; animation: catalog-wax-sheen 13s linear infinite; }
-  @keyframes catalog-wax-swell {
-    0%, 100% { transform: scale(1, 1); }
-    55% { transform: scale(1.04, 1.12); }
-    75% { transform: scale(.99, 1.07); }
-  }
-  @keyframes catalog-wax-sheen {
-    from { stroke-dashoffset: 106; opacity: 0; }
-    12%, 82% { opacity: 1; }
-    to { stroke-dashoffset: 0; opacity: 0; }
-  }
-}
 @media (max-width: 767px) {
-  .catalog-page .internal-header { padding-top: 8px; }
   .catalog-page .product-grid { row-gap: 42px; }
 }

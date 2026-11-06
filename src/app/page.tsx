@@ -18,6 +18,12 @@ const creationTitles = { 'velas-decorativas': 'Velas Decorativas', 'wax-melts': 
 
 const lowestPrice = (category: Category) => Math.min(...products.flatMap(item => item.category === category && item.priceCOP !== null ? [item.priceCOP] : []));
 
+const essencePillars = [
+  { title: 'Luz', tone: 'rose', text: 'Velitas para celebrar y para pedir: la noche de velitas y estrellas con peticiones como creer, soñar y amar.' },
+  { title: 'Aroma', tone: 'sage', text: 'Wax melts y wax sachet cargados de aromas premium, en diez fragancias, de yogurt de fresa a sándalo.' },
+  { title: 'Diseño', tone: 'oat', text: 'Figuras en cera de soya, formas de estrellas, corazones, flores, nubes y mar, y sachets con semillas secas y flores 3D.' },
+] as const;
+
 // Fine-line leaf sprig used beside the section title and in the corner of each creation card.
 function Sprig({ className }: { className: string }) {
   return <svg className={`sprig ${className}`} viewBox="0 0 60 48" aria-hidden="true" focusable="false">
@@ -50,12 +56,30 @@ export default function Home() {
           </Link>;
         })}</div>
       </section>
-      <ContactSection />
+      {/* Built only from what the brand already states: its tagline, the product lines and how ordering works. */}
       <section className="essence-section container" id="esencia" aria-labelledby="essence-heading">
-        <div className="essence-symbol" aria-hidden="true">✧</div>
-        <div><p className="eyebrow">NUESTRA ESENCIA</p><h2 id="essence-heading">Luz, aroma <em>y diseño.</em></h2></div>
-        <div><p>Una propuesta de formas y texturas para descubrir pequeños detalles.</p><p className="content-note">{categories.map(category => `${category.name} desde ${formatCOP(lowestPrice(category.id))}`).join(' · ')}. Elegí forma, fragancia y color, y pedí por WhatsApp.</p><Link href="/catalogo" className="text-link">Conocer los diseños <span aria-hidden="true">↗</span></Link></div>
+        <div className="essence-intro">
+          <p className="eyebrow">NUESTRA ESENCIA</p><h2 id="essence-heading">Luz, aroma <em>y diseño.</em></h2>
+          <p className="essence-motto">Pequeños detalles, grandes intenciones</p>
+          <p>Una propuesta de formas y texturas para descubrir pequeños detalles.</p>
+        </div>
+        <div className="essence-pillars">
+          {essencePillars.map(pillar => <article className={`essence-pillar tone-${pillar.tone}`} key={pillar.title}>
+            <h3>{pillar.title}</h3><p>{pillar.text}</p>
+          </article>)}
+        </div>
+        <div className="essence-order">
+          <h3>Cómo pedir</h3>
+          <ol>
+            <li><strong>Elige tu diseño</strong> en el catálogo.</li>
+            <li><strong>Personalízalo</strong> con forma, fragancia, color y presentación.</li>
+            <li><strong>Escríbenos por WhatsApp</strong> y confirmamos disponibilidad.</li>
+          </ol>
+          <p className="content-note">{categories.map(category => `${category.name} desde ${formatCOP(lowestPrice(category.id))}`).join(' · ')}.</p>
+          <Link href="/catalogo" className="text-link">Conocer los diseños <span aria-hidden="true">↗</span></Link>
+        </div>
       </section>
+      <ContactSection />
     </main>
     <SiteFooter />
   </div>;

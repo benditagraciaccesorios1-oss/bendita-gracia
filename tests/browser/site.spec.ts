@@ -31,7 +31,7 @@ for (const width of [360, 390, 768, 1024, 1440]) {
 test('catalog search combines filters, persists on reload and clears empty results', async ({ page }) => {
   await page.goto('/catalogo');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Nuestras creaciones');
-  await expect(page.locator('.product-card')).toHaveCount(13);
+  await expect(page.locator('.product-card')).toHaveCount(12);
   await page.getByRole('searchbox').fill('PEONÍA');
   await page.getByRole('button', { name: 'Buscar' }).click();
   await expect(page.locator('.product-card')).toHaveCount(2);
@@ -43,7 +43,7 @@ test('catalog search combines filters, persists on reload and clears empty resul
   await page.getByRole('link', { name: 'Wax sachet', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'No encontramos ese detalle' })).toBeVisible();
   await page.getByRole('link', { name: 'Limpiar filtros', exact: true }).first().click();
-  await expect(page.locator('.product-card')).toHaveCount(13);
+  await expect(page.locator('.product-card')).toHaveCount(12);
 });
 
 test('detail gallery, consultation, internal links and 404 work', async ({ page }) => {

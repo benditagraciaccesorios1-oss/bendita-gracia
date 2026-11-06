@@ -1,0 +1,41 @@
+/* Melting, animated menu shared by every inner page (catalog, details, not found). The menu stays in normal
+   flow so its drops never cover content; the home has its own sticky treatment. */
+.melt-page .internal-header {
+  position: static;
+  top: auto;
+  z-index: auto;
+  padding: 12px 0 14px;
+}
+.melt-page .internal-header .navigation-wrap { padding-bottom: 40px; }
+.melt-page .navigation > .wax-edge.is-melt {
+  left: 18px;
+  width: calc(100% - 36px);
+  height: 44px;
+  bottom: -37px;
+  color: #34482b;
+  filter: drop-shadow(0 2px 2px #5b3b2b40);
+}
+.melt-page .wax-sheen { display: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .melt-page .wax-drop {
+    transform-box: fill-box;
+    transform-origin: 50% 0;
+    animation: page-wax-swell 7.2s ease-in-out infinite;
+  }
+  .melt-page .wax-drop:nth-of-type(2) { animation-delay: -2.4s; }
+  .melt-page .wax-drop:nth-of-type(3) { animation-delay: -4.5s; }
+  .melt-page .wax-sheen { display: inline; animation: page-wax-sheen 13s linear infinite; }
+  @keyframes page-wax-swell {
+    0%, 100% { transform: scale(1, 1); }
+    55% { transform: scale(1.04, 1.12); }
+    75% { transform: scale(.99, 1.07); }
+  }
+  @keyframes page-wax-sheen {
+    from { stroke-dashoffset: 106; opacity: 0; }
+    12%, 82% { opacity: 1; }
+    to { stroke-dashoffset: 0; opacity: 0; }
+  }
+}
+@media (max-width: 767px) {
+  .melt-page .internal-header { padding-top: 8px; }
+}

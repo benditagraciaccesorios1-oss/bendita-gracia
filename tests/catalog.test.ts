@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { originalImageSizes } from '../src/data/image-sizes.ts';
 import { categories, filterProducts, formatCOP, orderMessage, priceLabel, products, resolveCategory, whatsappUrl } from '../src/data/catalog.ts';
 
 const bySlug = (slug: string) => {
@@ -49,7 +50,7 @@ test('document prices, sizes and fragrance rules are published exactly', () => {
 });
 
 test('designs missing from the document keep unconfirmed commercial data', () => {
-  for (const slug of ['rosas-rosa', 'rosas-marfil', 'peonia-en-domo', 'peonia-morada', 'figuras-con-estrella']) {
+  for (const slug of ['rosas-rosa', 'rosas-marfil', 'peonia-en-domo', 'peonia-morada']) {
     const product = bySlug(slug);
     assert.equal(product.priceCOP, null);
     assert.deepEqual(product.variants, []);
@@ -64,9 +65,13 @@ test('designs missing from the document keep unconfirmed commercial data', () =>
 });
 
 test('document photographs join their lines after the sharper earlier photographs', () => {
-  assert.equal(products.length, 13);
+  assert.equal(products.length, 12);
   assert.equal(products.some(item => item.slug === 'copos-en-caja'), false);
+  assert.deepEqual(bySlug('noche-de-velitas').options, [{ id: 'referencia', label: 'Referencia', values: ['Velitas en caja', 'Velitas sobre base de perlas'] }]);
   const images = (slug: string) => bySlug(slug).images.map(image => image.src.replace('/images/originals/', ''));
+  // The star-topped candles on a pearl base are a reference look for the noche de velitas line, not a separate design.
+  assert.equal(products.some(item => item.slug === 'figuras-con-estrella'), false);
+  assert.deepEqual(images('noche-de-velitas'), ['noche-de-velitas.webp', 'figuras-con-estrella.webp']);
   assert.deepEqual(images('wax-melts'), ['wax-melts-corazones-quemador.webp', 'wax-melts-estrellas.webp', 'wax-melts-nubes.webp', 'wax-melts-corazones-colores.webp', 'wax-melts-mar.webp']);
   assert.deepEqual(images('figuras-navidenas'), ['figuras-navidenas.webp', 'copos-en-caja.webp', 'figura-arbol-caja.webp', 'figuras-kit-x2.webp', 'figuras-kit-x3.webp']);
   assert.deepEqual(images('sachet-navideno'), ['sachet-navideno.webp', 'sachet-en-caja.webp', 'sachet-navidad-colgantes.webp']);
@@ -99,6 +104,8 @@ test('the order message lists the chosen presentation and options only', () => {
     `Hola, me interesa el diseño Wax melts. Presentación: 75 gr (${formatCOP(18000)}). ¿Me confirmas disponibilidad?`);
   assert.equal(orderMessage(bySlug('noche-de-velitas')),
     `Hola, me interesa el diseño Noche de velitas. Presentación: 5 unidades (${formatCOP(14900)}). ¿Me confirmas disponibilidad?`);
+  assert.equal(orderMessage(bySlug('noche-de-velitas'), { options: { referencia: 'Velitas sobre base de perlas' } }),
+    `Hola, me interesa el diseño Noche de velitas. Presentación: 5 unidades (${formatCOP(14900)}). Referencia: Velitas sobre base de perlas. ¿Me confirmas disponibilidad?`);
   assert.equal(orderMessage(bySlug('peonia-en-domo')), 'Hola, me interesa el diseño Peonía bajo domo. ¿Me compartes precio, fragancias y disponibilidad?');
   // Values outside the published lists are ignored instead of being sent as a choice.
   assert.equal(orderMessage(melts, { variant: 9, options: { forma: 'Rombos' } }),
@@ -114,4 +121,15 @@ test('WhatsApp encodes a consultation and refuses malformed destinations', () =>
   const message = orderMessage(bySlug('wax-melts'), { variant: 0 });
   assert.equal(new URL(whatsappUrl('573144616230', undefined, message)).searchParams.get('text'), message);
   assert.throws(() => whatsappUrl('invalid'), /international/);
+});
+
+test('every product photograph has enough pixels to look sharp on scaled screens', () => {
+  for (const product of products) {
+    for (const image of product.images.filter(item => !item.illustrative)) {
+      const size = originalImageSizes[image.src];
+      assert.ok(size, `missing size for ${image.src}`);
+      assert.ok(size[0] >= 800, `${image.src} is only ${size[0]} px wide`);
+      assert.ok(Math.max(...size) <= 1600, `${image.src} is larger than needed`);
+    }
+  }
 });

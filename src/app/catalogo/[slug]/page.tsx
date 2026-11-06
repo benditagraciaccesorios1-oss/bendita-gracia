@@ -28,8 +28,8 @@ export default async function DetailPage({ params }: Props) {
   const category = categories.find(item => item.id === product.category)!;
   const related = products.filter(item => item.slug !== slug && item.category === product.category).slice(0, 3);
 
-  return <>
-    <div className="internal-header"><Navigation /></div>
+  return <div className="melt-page">
+    <div className="internal-header"><Navigation edge="melt" /></div>
     <main id="contenido" className="container" tabIndex={-1}>
       <nav className="breadcrumbs" aria-label="Ruta de navegación"><Link href="/">Inicio</Link><span aria-hidden="true">/</span><Link href="/catalogo">Catálogo</Link><span aria-hidden="true">/</span><span aria-current="page">{product.name}</span></nav>
       <section className="product-detail" aria-labelledby="product-name">
@@ -53,5 +53,5 @@ export default async function DetailPage({ params }: Props) {
       {related.length > 0 && <section className="related-section" aria-labelledby="related-heading"><h2 id="related-heading">Más diseños para descubrir</h2><div className="related-grid">{related.map((item, index) => <Link href={`/catalogo/${item.slug}`} key={item.id}><WaxFrame tone={index % 2 === 0 ? 'oat' : 'sage'}><ProductImage src={item.images[0].src} alt={item.images[0].alt} illustrative={item.images[0].illustrative} /></WaxFrame><h3>{item.name}</h3></Link>)}</div></section>}
     </main>
     <SiteFooter />
-  </>;
+  </div>;
 }

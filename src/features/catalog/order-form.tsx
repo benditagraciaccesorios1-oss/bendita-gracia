@@ -13,7 +13,7 @@ export function OrderForm({ product, phone }: { product: Product; phone: string 
   const chosen = product.variants[variant];
   const href = whatsappUrl(phone, undefined, orderMessage(product, { variant, options }));
 
-  return <form className={styles.form} aria-label="Armá tu pedido" onSubmit={event => event.preventDefault()}>
+  return <form className={styles.form} aria-label="Arma tu pedido" onSubmit={event => event.preventDefault()}>
     {product.variants.length > 1 && <fieldset className={styles.presentations}>
       <legend>Presentación</legend>
       {product.variants.map((item, index) => <label key={item.label} className={index === variant ? styles.active : undefined}>
@@ -25,10 +25,10 @@ export function OrderForm({ product, phone }: { product: Product; phone: string 
       <span>{option.label}</span>
       {option.values
         ? <select value={options[option.id] ?? ''} onChange={event => setOptions({ ...options, [option.id]: event.target.value })}>
-          <option value="">Elegí una opción</option>
+          <option value="">Elige una opción</option>
           {option.values.map(value => <option key={value}>{value}</option>)}
         </select>
-        : <input type="text" maxLength={60} placeholder="Contanos tu preferencia" value={options[option.id] ?? ''} onChange={event => setOptions({ ...options, [option.id]: event.target.value })} />}
+        : <input type="text" maxLength={60} placeholder="Cuéntanos tu preferencia" value={options[option.id] ?? ''} onChange={event => setOptions({ ...options, [option.id]: event.target.value })} />}
     </label>)}
     <p className={styles.total} aria-live="polite">Total <strong>{formatCOP(chosen.priceCOP)}</strong> <span>{chosen.label}</span></p>
     <WaxButton href={href} external>Pedir por WhatsApp <span aria-hidden="true">↗</span></WaxButton>

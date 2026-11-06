@@ -10,8 +10,8 @@ const creations = [
   { id: 'wax-melts', name: 'Wax Melts', note: 'Aromas premium para tu quemador', art: 'home-creation-figuras-pebetero' },
   { id: 'wax-sachet', name: 'Wax Sachet', note: 'Tabletas aromáticas para tus espacios', art: 'home-creation-sachets-colgantes' },
 ];
-// Every crop has the same size: the illustration area of a guide card, inside its border.
-const artSize = [445, 232];
+// Every crop has the same size: the illustration area of a guide card, enlarged 4× with AI (445×232 source).
+const artSize = [1780, 928];
 
 const box = async (locator: Locator) => (await locator.boundingBox())!;
 const sourceOf = (src: string) => decodeURIComponent(new URL(src, 'http://local').searchParams.get('url') ?? new URL(src, 'http://local').pathname);
@@ -170,9 +170,18 @@ test('home wax drops and sheen move gently without moving the layout, and stay s
   const before = await layout();
   await page.waitForTimeout(1500);
   expect(await layout()).toEqual(before);
-  // Detail pages keep the default satin edge; the catalog listing now opts into wax separately.
-  await page.goto('/catalogo/rosas-rosa');
-  await expect(page.locator('.wax-edge.is-melt, .wax-drop, .wax-sheen')).toHaveCount(0);
+  // S26: every page keeps the melting, animated menu, including details and the not-found page.
+  for (const path of ['/catalogo/rosas-rosa', '/no-existe']) {
+    await page.goto(path);
+    const menu = page.locator('.internal-header .navigation > .wax-edge.is-melt');
+    await expect(menu).toHaveCount(1);
+    expect(await menu.locator('.wax-drop').first().evaluate(el => getComputedStyle(el).animationName), path).not.toBe('none');
+    expect(await page.locator('.internal-header').evaluate(el => getComputedStyle(el).position), path).toBe('static');
+    // The menu's drops do not cover the content below it.
+    const edge = (await menu.boundingBox())!;
+    const main = (await page.locator('main').boundingBox())!;
+    expect(edge.y + edge.height, path).toBeLessThanOrEqual(main.y + 2);
+  }
 
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');

@@ -44,7 +44,7 @@ const colorOption: ProductOption = { id: 'color', label: 'Color', values: null }
 type Commercial = Partial<Pick<Product, 'variants' | 'options' | 'dimensions' | 'fragrances' | 'scentless' | 'details'>>;
 
 const designs: [string, string, Category, string, Commercial?][] = [
-  ['wax-melts', 'Wax melts', 'wax-melts', 'Trocitos de cera cargados de aromas premium: al ponerse sobre un quemador destilan todo su aroma. Elegí la forma, la cantidad en gramos, el color y la fragancia.', {
+  ['wax-melts', 'Wax melts', 'wax-melts', 'Trocitos de cera cargados de aromas premium: al ponerse sobre un quemador destilan todo su aroma. Elige la forma, la cantidad en gramos, el color y la fragancia.', {
     variants: [{ label: '75 gr', priceCOP: 18000 }, { label: '100 gr', priceCOP: 30000 }],
     options: [{ id: 'forma', label: 'Forma', values: meltShapes }, fragranceOption, colorOption], fragrances,
   }],
@@ -52,12 +52,14 @@ const designs: [string, string, Category, string, Commercial?][] = [
     variants: [{ label: 'Kit completo', priceCOP: 74900 }],
     options: [{ id: 'forma-pebetero', label: 'Forma del pebetero', values: null }, { id: 'forma', label: 'Forma de los wax melts', values: meltShapes }, fragranceOption], fragrances,
   }],
-  ['figuras-navidenas', 'Figuras de temporada', 'velas-decorativas', 'Diferentes figuras en cera de soya, solas o en kit. Elegí color y fragancia.', {
+  ['figuras-navidenas', 'Figuras de temporada', 'velas-decorativas', 'Diferentes figuras en cera de soya, solas o en kit. Elige color y fragancia.', {
     variants: [{ label: '1 unidad', priceCOP: 9990 }, { label: 'Kit x 2 unidades', priceCOP: 17900 }, { label: 'Kit x 3 unidades', priceCOP: 26900 }],
     options: [colorOption, fragranceOption], dimensions: '7 cm de alto', fragrances,
   }],
   ['noche-de-velitas', 'Noche de velitas', 'velas-decorativas', 'Velitas de colores presentadas en caja para la noche de velitas. No llevan fragancia.', {
     variants: [{ label: '5 unidades', priceCOP: 14900 }], dimensions: '7,5 × 1,5 cm', scentless: true,
+    // The star-topped candles on a pearl base (formerly «Figuras con estrella») are a reference look for this line.
+    options: [{ id: 'referencia', label: 'Referencia', values: ['Velitas en caja', 'Velitas sobre base de perlas'] }],
   }],
   ['velitas-de-peticiones', 'Velitas de peticiones', 'velas-decorativas', 'Velitas en forma de estrella con base en madera, cada una con una petición. No llevan fragancia.', {
     variants: [{ label: '8 unidades', priceCOP: 18000 }], dimensions: '4,5 cm aprox.', scentless: true,
@@ -70,7 +72,6 @@ const designs: [string, string, Category, string, Commercial?][] = [
   ['rosas-marfil', 'Vela de rosas marfil', 'velas-decorativas', 'Pétalos en relieve y una silueta redonda en tonos marfil.'],
   ['peonia-en-domo', 'Peonía bajo domo', 'velas-decorativas', 'Una composición floral en tonos marfil y lavanda bajo una cúpula transparente.'],
   ['peonia-morada', 'Peonía morada', 'velas-decorativas', 'Capas de pétalos abiertos en una delicada composición de color lavanda.'],
-  ['figuras-con-estrella', 'Figuras con estrella', 'velas-decorativas', 'Figuras alargadas en tonos cálidos, coronadas con una pequeña estrella.'],
 ];
 
 // Sharper earlier photographs lead where a line has them; the smaller document photos follow.
@@ -78,12 +79,11 @@ const photographs: Record<string, [string, string][]> = {
   'wax-melts': [['wax-melts-corazones-quemador', 'Wax melts de corazones rojos y rosados junto a un quemador con vela encendida'], ['wax-melts-estrellas', 'Wax melts en forma de estrella en tonos pastel'], ['wax-melts-nubes', 'Wax melts en forma de nube sobre una bandeja'], ['wax-melts-corazones-colores', 'Wax melts de corazones en seis colores'], ['wax-melts-mar', 'Wax melts en formas de mar: conchas y estrellas']],
   'kit-pebetero': [['kit-pebetero-navidad', 'Kit con pebetero, velas tealight, cerillos y wax melts navideños'], ['kit-pebetero-caja', 'Kit de pebetero presentado en caja con wax melts, velas tealight y cerillos']],
   'figuras-navidenas': [['figuras-navidenas', 'Figuras de árbol y reno con lazos color vino'], ['copos-en-caja', 'Copos de nieve en cajas con lazos rojos'], ['figura-arbol-caja', 'Figura de árbol navideño en cera de soya dentro de su caja'], ['figuras-kit-x2', 'Kit de dos figuras navideñas en cera de soya'], ['figuras-kit-x3', 'Kit de tres figuras navideñas en caja: copo, árbol y galleta']],
-  'noche-de-velitas': [['noche-de-velitas', 'Velitas de colores encendidas frente a sus cajas']],
+  'noche-de-velitas': [['noche-de-velitas', 'Velitas de colores encendidas frente a sus cajas'], ['figuras-con-estrella', 'Velitas de estrella con peticiones sobre una base de perlas']],
   'velitas-de-peticiones': [['velitas-peticiones-estrella', 'Velitas de estrella encendidas sobre el césped junto a su caja']],
   'rosas-rosa': [['rosas-conjunto', 'Conjunto de velas de rosas rosa y marfil sobre una base de madera'], ['rosas-rosa', 'Detalle de la vela rosa con relieves de rosas']],
   'rosas-marfil': [['rosas-conjunto', 'Conjunto de velas de rosas marfil y rosa'], ['rosas-marfil', 'Detalle de la vela marfil con relieves de rosas']],
   'peonia-en-domo': [['peonia-en-domo', 'Peonía marfil bajo domo con flores en tonos morados al fondo']],
-  'figuras-con-estrella': [['figuras-con-estrella', 'Figuras alargadas con estrella sobre una base con perlas decorativas']],
   'sachet-botanico': [['sachet-botanico', 'Sachets con detalles botánicos en bolsas de tul'], ['sachet-botanico-rosa', 'Sachet con pequeños detalles botánicos rosados'], ['sachet-botanico-especias', 'Sachets botánicos con canela, anís estrellado y pétalos en bolsas de tul']],
   'sachet-navideno': [['sachet-navideno', 'Sachets colgantes con motivos navideños'], ['sachet-en-caja', 'Presentación de sachets en cajas con ventana'], ['sachet-navidad-colgantes', 'Sachets navideños colgantes de estrella, corona y etiqueta']],
   'sachet-floral': [['sachet-flor-azul', 'Sachet con flor azul en relieve'], ['sachet-flor-rosa', 'Sachet con flor rosa en relieve'], ['sachet-flores-conjunto', 'Sachets con flores azul y rosa en bolsas de tul'], ['sachet-flor-empaque', 'Sachet con flor azul y lazo en su empaque'], ['sachet-minimalista-flores', 'Sachets minimalistas con flores en relieve y cintas']],
@@ -149,3 +149,9 @@ export function whatsappUrl(phone: string, product?: string, message?: string) {
 }
 
 export const whatsappPhone = process.env.NEXT_PUBLIC_WHATSAPP_PHONE || '573144616230';
+
+/** Readable form of the WhatsApp number, e.g. «+57 314 4616230» for a Colombian mobile. */
+export function displayPhone(phone: string) {
+  const colombian = /^57(\d{3})(\d{7})$/.exec(phone);
+  return colombian ? `+57 ${colombian[1]} ${colombian[2]}` : `+${phone}`;
+}

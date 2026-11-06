@@ -20,7 +20,7 @@ test('home cards lead to the priced categories and old category links still filt
 
   await page.goto('/catalogo?categoria=velas-florales');
   await expect(page.getByRole('link', { name: 'Velas decorativas', exact: true })).toHaveAttribute('aria-current', 'true');
-  await expect(page.locator('.product-card')).toHaveCount(8);
+  await expect(page.locator('.product-card')).toHaveCount(7);
   await expect(page.locator('.product-card', { hasText: 'Peonía morada' }).locator('.card-bottom')).toContainText('Por confirmar');
 });
 
@@ -29,7 +29,7 @@ test('wax melts order collects presentation, form, fragrance and color into the 
   const facts = page.locator('.product-facts');
   await expect(facts).toContainText(/75 gr: \$\s?18\.000 · 100 gr: \$\s?30\.000/);
   await expect(facts).toContainText('Yogurt de fresa, Lavanda, Frutos rojos');
-  const form = page.getByRole('form', { name: 'Armá tu pedido' });
+  const form = page.getByRole('form', { name: 'Arma tu pedido' });
   await expect(form.locator('[aria-live]')).toContainText(cop('18.000'));
   expect(await whatsappText(page, /Pedir por WhatsApp/)).toMatch(/^Hola, me interesa el diseño Wax melts\. Presentación: 75 gr \(\$\s?18\.000\)\. ¿Me confirmas disponibilidad\?$/);
 
@@ -39,7 +39,7 @@ test('wax melts order collects presentation, form, fragrance and color into the 
   await expect(form.getByRole('radio', { name: /100 gr/ })).toBeChecked();
   await expect(form.locator('[aria-live]')).toContainText(cop('30.000'));
 
-  await expect(form.getByLabel('Forma').locator('option')).toHaveText(['Elegí una opción', 'Estrellas', 'Corazones', 'Flores', 'De mar', 'Nubes', 'Cubos']);
+  await expect(form.getByLabel('Forma').locator('option')).toHaveText(['Elige una opción', 'Estrellas', 'Corazones', 'Flores', 'De mar', 'Nubes', 'Cubos']);
   await form.getByLabel('Forma').selectOption('Estrellas');
   await form.getByLabel('Fragancia').selectOption('Lavanda');
   await form.getByLabel('Color').fill('Rosa pastel');
@@ -76,6 +76,18 @@ test('merged snowflake figures redirect to the seasonal figures line', async ({ 
 test('order form fits small screens without horizontal overflow', async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 780 });
   await page.goto('/catalogo/figuras-navidenas');
-  await expect(page.getByRole('form', { name: 'Armá tu pedido' })).toBeVisible();
+  await expect(page.getByRole('form', { name: 'Arma tu pedido' })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+});
+
+test('star candles on a pearl base are a reference option of noche de velitas', async ({ page }) => {
+  await page.goto('/catalogo/figuras-con-estrella');
+  await expect(page).toHaveURL(/\/catalogo\/noche-de-velitas$/);
+  await expect(page.getByRole('button', { name: 'Imagen 2', exact: true })).toBeVisible();
+  const form = page.getByRole('form', { name: 'Arma tu pedido' });
+  await expect(form.getByLabel('Referencia').locator('option')).toHaveText(['Elige una opción', 'Velitas en caja', 'Velitas sobre base de perlas']);
+  await form.getByLabel('Referencia').selectOption('Velitas sobre base de perlas');
+  expect(await whatsappText(page, /Pedir por WhatsApp/)).toMatch(/^Hola, me interesa el diseño Noche de velitas\. Presentación: 5 unidades \(\$\s?14\.900\)\. Referencia: Velitas sobre base de perlas\. ¿Me confirmas disponibilidad\?$/);
+  await page.goto('/catalogo');
+  await expect(page.locator('.product-card', { hasText: 'Figuras con estrella' })).toHaveCount(0);
 });

@@ -12,7 +12,7 @@ const links = [
   { href: '/#contacto', label: 'Contacto' },
 ];
 
-// `edge="melt"` gives the menu the fuller dripping lip of the home mockup; other pages keep the default edge.
+// `edge="melt"` gives the menu the dripping, animated lip used on every page; `satin` is the plain edge.
 export function Navigation({ edge = 'satin' }: { edge?: 'satin' | 'melt' }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
