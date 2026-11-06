@@ -6,6 +6,7 @@ secondary gallery views and are never upscaled by the presentation component.
 """
 import io
 import json
+import sys
 import zipfile
 from pathlib import Path
 from PIL import Image, ImageOps
@@ -51,6 +52,12 @@ DOCUMENT_SOURCES = {
     'velitas-peticiones-estrella': 'image15.png',
 }
 sizes = {}
+# Photos narrower than this blur on scaled laptop screens. `--export-small DIR` writes their sources so
+# scripts/upscale-photos.py can enlarge them with Real-ESRGAN into images/ai/; those versions are then used here.
+SMALL_WIDTH = 1000
+MAX_SIDE = 1600
+AI = ROOT / 'images' / 'ai'
+EXPORT = Path(sys.argv[sys.argv.index('--export-small') + 1]) if '--export-small' in sys.argv else None
 
 def save(name, original, crop=None):
     image = ImageOps.exif_transpose(original)
@@ -58,7 +65,16 @@ def save(name, original, crop=None):
     image = image.convert('RGBA' if 'A' in image.getbands() else 'RGB')
     if crop:
         image = image.crop(crop)
-    # Keep the source resolution. Display code must not enlarge the photograph.
+    if EXPORT:
+        if image.width < SMALL_WIDTH:
+            image.save(EXPORT / f'{name}.png')
+            print(f'exported {name}.png')
+        return
+    upscaled = AI / f'{name}.webp'
+    if image.width < SMALL_WIDTH and upscaled.exists():
+        with Image.open(upscaled) as enlarged:
+            image = enlarged.convert(image.mode)
+        image.thumbnail((MAX_SIDE, MAX_SIDE), Image.Resampling.LANCZOS)
     sizes[f'/images/originals/{name}.webp'] = list(image.size)
     image.save(OUT / f'{name}.webp', quality=96, method=6)
     print(f'{name}.webp')
@@ -71,6 +87,9 @@ with zipfile.ZipFile(DOCUMENT) as document:
     for name, media in DOCUMENT_SOURCES.items():
         with Image.open(io.BytesIO(document.read(f'word/media/{media}'))) as original:
             save(name, original)
+
+if EXPORT:
+    sys.exit()
 
 metadata = ROOT / 'src/data/image-sizes.ts'
 metadata.write_text(

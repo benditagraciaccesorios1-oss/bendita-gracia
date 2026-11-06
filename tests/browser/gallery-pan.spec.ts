@@ -161,7 +161,7 @@ for (const width of [390, 1440]) {
     await expect(viewer).toHaveCount(0);
   });
 
-  test(`normal gallery view keeps touch scrolling and small photos stay centered when enlarged at ${width}px`, async ({ page }, testInfo) => {
+  test(`normal gallery view keeps touch scrolling and the next photo enlarges at its own native size at ${width}px`, async ({ page }, testInfo) => {
     await page.setViewportSize({ width, height: 860 });
     await page.goto('/catalogo/rosas-rosa');
     const { zoom, viewer, photo, frameImage } = parts(page);
@@ -183,11 +183,11 @@ for (const width of [390, 1440]) {
     await expect(frameImage).toHaveAttribute('src', '/images/originals/rosas-rosa.webp');
     expect(await frameImage.evaluate(el => getComputedStyle(el).objectFit)).toBe('scale-down');
 
-    // 320×310 photograph: native size, centered, panning clamped to zero where it fits.
+    // 1280×1240 AI-enlarged detail photograph: native size, panning stays within its edges.
     await zoom.click();
-    const small = await box(photo);
-    expect(Math.round(small.width)).toBe(320);
-    expect(Math.round(small.height)).toBe(310);
+    const native = await box(photo);
+    expect(Math.round(native.width)).toBe(1280);
+    expect(Math.round(native.height)).toBe(1240);
     await expectWithinEdges(viewer, photo);
     await mouseDrag(page, viewer, 200, 200);
     await expectWithinEdges(viewer, photo);
@@ -195,7 +195,6 @@ for (const width of [390, 1440]) {
     await page.keyboard.press('ArrowLeft');
     await page.keyboard.press('ArrowUp');
     await expectWithinEdges(viewer, photo);
-    expect((await box(photo)).x).toBeCloseTo(small.x, 0);
     await page.screenshot({ path: testInfo.outputPath(`gallery-small-${width}.png`) });
   });
 }

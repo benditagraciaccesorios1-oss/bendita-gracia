@@ -3,12 +3,17 @@
 These are reference renders, not photographs or a confirmed product inventory.
 Do not extract navigation, headings, buttons or complete page compositions.
 """
+import sys
 from pathlib import Path
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'public/images/references'
 OUT.mkdir(parents=True, exist_ok=True)
+# Crops shown larger than their pixels; scripts/upscale-photos.py enlarges them with AI into images/ai/references/.
+AI = ROOT / 'images' / 'ai' / 'references'
+ENLARGED = {'hero-floral', 'hero-velas-florales', 'hero-figuras', 'hero-sachet', 'peonia-morada'}
+EXPORT = Path(sys.argv[sys.argv.index('--export') + 1]) if '--export' in sys.argv else None
 
 CROPS = {
     'hero-floral': ('01-inicio.png', (552, 0, 1536, 290)),
@@ -31,5 +36,13 @@ CROPS = {
 
 for name, (source, box) in CROPS.items():
     with Image.open(ROOT / 'mockups' / source) as image:
-        image.crop(box).convert('RGB').save(OUT / f'{name}.webp', quality=93, method=6)
-    print(f'{name}.webp: {box[2] - box[0]}x{box[3] - box[1]}')
+        crop = image.crop(box).convert('RGB')
+    if EXPORT:
+        if name in ENLARGED:
+            crop.save(EXPORT / f'{name}.png')
+        continue
+    if name in ENLARGED and (AI / f'{name}.webp').exists():
+        with Image.open(AI / f'{name}.webp') as enlarged:
+            crop = enlarged.convert('RGB')
+    crop.save(OUT / f'{name}.webp', quality=93, method=6)
+    print(f'{name}.webp: {crop.width}x{crop.height}')
