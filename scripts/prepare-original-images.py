@@ -1,10 +1,12 @@
-"""Optimize supplied product photographs without modifying the uploads.
+"""Optimize supplied product photographs and the price-document photos without modifying either source.
 
 The first upload is a flyer and the last a palette, not catalog products.
 Group framing retains both complete rose candles. Small detail crops are optional
 secondary gallery views and are never upscaled by the presentation component.
 """
+import io
 import json
+import zipfile
 from pathlib import Path
 from PIL import Image, ImageOps
 
@@ -29,17 +31,46 @@ SOURCES = {
     'sachet-flores-conjunto': ('4.02.19 PM (5)', None),
     'sachet-flor-empaque': ('4.02.19 PM', None),
 }
+# Photographs embedded in the brand's price document, in document order.
+DOCUMENT = ROOT / 'Información página web - Bendita Gracia.docx'
+DOCUMENT_SOURCES = {
+    'wax-melts-corazones-quemador': 'image1.png',
+    'wax-melts-nubes': 'image2.png',
+    'wax-melts-estrellas': 'image3.png',
+    'wax-melts-corazones-colores': 'image4.png',
+    'wax-melts-mar': 'image5.png',
+    'kit-pebetero-navidad': 'image6.jpeg',
+    'kit-pebetero-caja': 'image7.jpeg',
+    'sachet-botanico-especias': 'image8.png',
+    'sachet-minimalista-flores': 'image9.jpeg',
+    'sachet-navidad-colgantes': 'image10.jpeg',
+    'figura-arbol-caja': 'image11.png',
+    'figuras-kit-x2': 'image12.jpeg',
+    'figuras-kit-x3': 'image13.jpeg',
+    'noche-de-velitas': 'image14.jpeg',
+    'velitas-peticiones-estrella': 'image15.png',
+}
 sizes = {}
-for name, (stamp, crop) in SOURCES.items():
-    source = ROOT / 'images' / f'WhatsApp Image 2026-11-02 at {stamp}.jpeg'
-    with Image.open(source) as original:
-        image = ImageOps.exif_transpose(original).convert('RGB')
-        if crop:
-            image = image.crop(crop)
-        # Keep the source resolution. Display code must not enlarge the photograph.
-        sizes[f'/images/originals/{name}.webp'] = list(image.size)
-        image.save(OUT / f'{name}.webp', quality=96, method=6)
+
+def save(name, original, crop=None):
+    image = ImageOps.exif_transpose(original)
+    # Document PNGs may carry rounded transparent corners; keep them.
+    image = image.convert('RGBA' if 'A' in image.getbands() else 'RGB')
+    if crop:
+        image = image.crop(crop)
+    # Keep the source resolution. Display code must not enlarge the photograph.
+    sizes[f'/images/originals/{name}.webp'] = list(image.size)
+    image.save(OUT / f'{name}.webp', quality=96, method=6)
     print(f'{name}.webp')
+
+for name, (stamp, crop) in SOURCES.items():
+    with Image.open(ROOT / 'images' / f'WhatsApp Image 2026-11-02 at {stamp}.jpeg') as original:
+        save(name, original, crop)
+
+with zipfile.ZipFile(DOCUMENT) as document:
+    for name, media in DOCUMENT_SOURCES.items():
+        with Image.open(io.BytesIO(document.read(f'word/media/{media}'))) as original:
+            save(name, original)
 
 metadata = ROOT / 'src/data/image-sizes.ts'
 metadata.write_text(

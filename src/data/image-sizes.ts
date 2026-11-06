@@ -59,5 +59,65 @@ export const originalImageSizes: Record<string, [number, number]> = {
   "/images/originals/sachet-flor-empaque.webp": [
     1200,
     1600
+  ],
+  "/images/originals/wax-melts-corazones-quemador.webp": [
+    236,
+    346
+  ],
+  "/images/originals/wax-melts-nubes.webp": [
+    234,
+    207
+  ],
+  "/images/originals/wax-melts-estrellas.webp": [
+    216,
+    245
+  ],
+  "/images/originals/wax-melts-corazones-colores.webp": [
+    232,
+    363
+  ],
+  "/images/originals/wax-melts-mar.webp": [
+    232,
+    212
+  ],
+  "/images/originals/kit-pebetero-navidad.webp": [
+    435,
+    460
+  ],
+  "/images/originals/kit-pebetero-caja.webp": [
+    347,
+    463
+  ],
+  "/images/originals/sachet-botanico-especias.webp": [
+    261,
+    320
+  ],
+  "/images/originals/sachet-minimalista-flores.webp": [
+    507,
+    676
+  ],
+  "/images/originals/sachet-navidad-colgantes.webp": [
+    432,
+    525
+  ],
+  "/images/originals/figura-arbol-caja.webp": [
+    232,
+    257
+  ],
+  "/images/originals/figuras-kit-x2.webp": [
+    397,
+    529
+  ],
+  "/images/originals/figuras-kit-x3.webp": [
+    516,
+    688
+  ],
+  "/images/originals/noche-de-velitas.webp": [
+    489,
+    652
+  ],
+  "/images/originals/velitas-peticiones-estrella.webp": [
+    700,
+    489
   ]
 };
