@@ -25,7 +25,7 @@ for (const width of [390, 1440]) {
     await page.mouse.wheel(0, 700);
     await expect.poll(() => header.evaluate(el => el.getBoundingClientRect().bottom)).toBeLessThan(0);
     const cards = page.locator('.product-card');
-    await expect(cards).toHaveCount(10);
+    await expect(cards).toHaveCount(13);
     await cards.nth(3).scrollIntoViewIfNeeded();
     const card = (await cards.nth(3).boundingBox())!;
     const edge = (await cards.nth(3).locator('.is-melt').boundingBox())!;
@@ -49,9 +49,9 @@ test('catalog wax animates decoratively and respects reduced motion without chan
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.goto('/catalogo');
   const edges = page.locator('.catalog-page .wax-edge.is-melt');
-  await expect(edges).toHaveCount(11);
+  await expect(edges).toHaveCount(14);
   const parts = page.locator('.catalog-page .wax-drop, .catalog-page .wax-sheen');
-  expect(await parts.count()).toBeGreaterThan(11);
+  expect(await parts.count()).toBeGreaterThan(14);
   for (const part of await parts.all()) {
     expect(await part.evaluate(el => getComputedStyle(el).animationName)).not.toBe('none');
     expect(await part.evaluate(el => el.getAnimations().some(animation => animation.playState === 'running'))).toBe(true);

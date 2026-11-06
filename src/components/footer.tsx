@@ -13,5 +13,5 @@ export function ContactSection() {
 }
 
 export function SiteFooter() {
-  return <footer className="site-footer container"><Link href="/" className="footer-brand">BENDITA GRACIA</Link><p>Luz, aroma y diseño.</p><p className="demo-notice">Catálogo de referencia · Diseños y precios por confirmar.</p></footer>;
+  return <footer className="site-footer container"><Link href="/" className="footer-brand">BENDITA GRACIA</Link><p>Luz, aroma y diseño.</p><p className="demo-notice">Precios en pesos colombianos · Disponibilidad por confirmar.</p></footer>;
 }

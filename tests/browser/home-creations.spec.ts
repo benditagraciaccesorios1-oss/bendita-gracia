@@ -2,13 +2,13 @@ import { test, expect, type Locator, type Page } from '@playwright/test';
 
 // «Encuentra tu detalle» follows the «Explora nuestras creaciones» block of the new home guide image: complete
 // rounded cards with the scene flush on top and the title and a short description on the attached card body.
-// Home titles follow the root reference; category IDs, links and notes stay those of the catalog. The images are the three illustrations of that
+// Home titles follow the root reference and link to the catalog categories of the same name (S20). The images are the three illustrations of that
 // guide block, cropped at source resolution with their printed «Imagen ilustrativa» label (S15-S16); the uploaded
 // photographs stay in the catalog and details.
 const creations = [
-  { id: 'velas-florales', name: 'Velas Decorativas', note: 'La delicadeza de cada pétalo', art: 'home-creation-velas-regalo' },
-  { id: 'figuras-en-cera', name: 'Wax Melts', note: 'Pequeños detalles, formas especiales', art: 'home-creation-figuras-pebetero' },
-  { id: 'wax-sachet', name: 'Wax Sachet', note: 'Botánica en pequeños detalles', art: 'home-creation-sachets-colgantes' },
+  { id: 'velas-decorativas', name: 'Velas Decorativas', note: 'Pequeños detalles, grandes intenciones', art: 'home-creation-velas-regalo' },
+  { id: 'wax-melts', name: 'Wax Melts', note: 'Aromas premium para tu quemador', art: 'home-creation-figuras-pebetero' },
+  { id: 'wax-sachet', name: 'Wax Sachet', note: 'Tabletas aromáticas para tus espacios', art: 'home-creation-sachets-colgantes' },
 ];
 // Every crop has the same size: the illustration area of a guide card, inside its border.
 const artSize = [445, 232];
@@ -120,11 +120,11 @@ test('creation cards route to their catalog filter by pointer and by keyboard', 
   await page.goto('/');
   const cards = page.locator('.category-grid').getByRole('link');
   // The accessible name carries the title and the description.
-  await expect(cards.nth(1)).toHaveAccessibleName(/Wax Melts.*Pequeños detalles, formas especiales/);
+  await expect(cards.nth(1)).toHaveAccessibleName(/Wax Melts.*Aromas premium para tu quemador/);
   // A click on the description text still follows the card link.
   await cards.nth(1).locator('p').click();
-  await expect(page).toHaveURL(/\/catalogo\?categoria=figuras-en-cera$/);
-  await expect(page.getByRole('link', { name: 'Figuras en cera', exact: true })).toHaveAttribute('aria-current', 'true');
+  await expect(page).toHaveURL(/\/catalogo\?categoria=wax-melts$/);
+  await expect(page.getByRole('navigation', { name: 'Filtrar por categoría' }).getByRole('link', { name: 'Wax melts', exact: true })).toHaveAttribute('aria-current', 'true');
 
   await page.goto('/');
   // Real keyboard navigation from the previous card, so the visible focus ring applies.

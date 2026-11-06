@@ -3,18 +3,20 @@ import { Navigation } from '@/components/navigation';
 import { ContactSection, SiteFooter } from '@/components/footer';
 import { ProductImage } from '@/components/product-image';
 import { HeroCarousel } from '@/features/home/hero-carousel';
-import { categories } from '@/data/catalog';
+import { categories, formatCOP, products, type Category } from '@/data/catalog';
 import './home-reference.css';
 
 // Only the artwork panels from the exact creation-card block supplied by the user.
 const guideScenes = {
-  'velas-florales': { file: 'home-creation-velas-regalo', alt: 'Imagen ilustrativa: caja de regalo con velas decorativas de árbol y reno' },
-  'figuras-en-cera': { file: 'home-creation-figuras-pebetero', alt: 'Imagen ilustrativa: pebetero con figuras de cera y pequeños árboles decorativos' },
+  'velas-decorativas': { file: 'home-creation-velas-regalo', alt: 'Imagen ilustrativa: caja de regalo con velas decorativas de árbol y reno' },
+  'wax-melts': { file: 'home-creation-figuras-pebetero', alt: 'Imagen ilustrativa: pebetero con figuras de cera y pequeños árboles decorativos' },
   'wax-sachet': { file: 'home-creation-sachets-colgantes', alt: 'Imagen ilustrativa: sachets colgantes con flores, lazos y detalles botánicos' },
 } as const;
 
-// Home headings follow the visual reference; catalog IDs, filters and data stay unchanged.
-const creationTitles = { 'velas-florales': 'Velas Decorativas', 'figuras-en-cera': 'Wax Melts', 'wax-sachet': 'Wax Sachet' } as const;
+// Home headings keep the visual reference's capitalization; each card links to the matching catalog category.
+const creationTitles = { 'velas-decorativas': 'Velas Decorativas', 'wax-melts': 'Wax Melts', 'wax-sachet': 'Wax Sachet' } as const;
+
+const lowestPrice = (category: Category) => Math.min(...products.flatMap(item => item.category === category && item.priceCOP !== null ? [item.priceCOP] : []));
 
 // Fine-line leaf sprig used beside the section title and in the corner of each creation card.
 function Sprig({ className }: { className: string }) {
@@ -37,7 +39,7 @@ export default function Home() {
       <section className="categories-section container" aria-labelledby="categories-heading">
         {/* This section follows the «Explora nuestras creaciones» block of the new home guide: a title between fine
             rules and sprigs, then complete cards with the scene on top and the title and description on a tinted body.
-            Home titles follow the guide; category IDs, notes and catalog filters remain unchanged. */}
+            Home titles follow the guide and link to the matching catalog categories. */}
         <div className="section-heading creations-heading">
           <div className="creations-title"><span className="heading-rule" aria-hidden="true" /><Sprig className="heading-sprig" /><h2 id="categories-heading">Explora nuestras creaciones</h2><Sprig className="heading-sprig is-mirrored" /><span className="heading-rule" aria-hidden="true" /></div>
         </div>
@@ -52,7 +54,7 @@ export default function Home() {
       <section className="essence-section container" id="esencia" aria-labelledby="essence-heading">
         <div className="essence-symbol" aria-hidden="true">✧</div>
         <div><p className="eyebrow">NUESTRA ESENCIA</p><h2 id="essence-heading">Luz, aroma <em>y diseño.</em></h2></div>
-        <div><p>Una propuesta de formas y texturas para descubrir pequeños detalles.</p><p className="content-note">Fotografías de los diseños de Bendita Gracia, junto con referencias ilustrativas identificadas. Materiales, fragancias y disponibilidad están por confirmar.</p><Link href="/catalogo" className="text-link">Conocer los diseños <span aria-hidden="true">↗</span></Link></div>
+        <div><p>Una propuesta de formas y texturas para descubrir pequeños detalles.</p><p className="content-note">{categories.map(category => `${category.name} desde ${formatCOP(lowestPrice(category.id))}`).join(' · ')}. Elegí forma, fragancia y color, y pedí por WhatsApp.</p><Link href="/catalogo" className="text-link">Conocer los diseños <span aria-hidden="true">↗</span></Link></div>
       </section>
     </main>
     <SiteFooter />
