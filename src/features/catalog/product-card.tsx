@@ -3,7 +3,7 @@ import { ProductImage } from '@/components/product-image';
 import { WaxButton, WaxEdge, WaxFrame, WaxRim } from '@/components/wax';
 import { categories, type Product } from '@/data/catalog';
 
-export function ProductCard({ product, index }: { product: Product; index: number }) {
+export function ProductCard({ product, index, animatedWax = false }: { product: Product; index: number; animatedWax?: boolean }) {
   const category = categories.find(item => item.id === product.category)!;
   return <article className="product-card">
     <Link href={`/catalogo/${product.slug}`} aria-label={`Ver ${product.name}`}>
@@ -12,6 +12,6 @@ export function ProductCard({ product, index }: { product: Product; index: numbe
     <div className="card-info"><p className="eyebrow">{category.name}</p><h2><Link href={`/catalogo/${product.slug}`}>{product.name}</Link></h2>
       <div className="card-bottom"><p>Precio<span>{product.priceCOP === null ? 'Por confirmar' : new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(product.priceCOP)}</span></p><WaxButton href={`/catalogo/${product.slug}`}>Ver detalle <span aria-hidden="true">↗</span></WaxButton></div>
     </div>
-    <WaxRim /><WaxEdge />
+    <WaxRim />{animatedWax ? <WaxEdge variant="melt" drops={[[25, .65], [80, .8]]} /> : <WaxEdge />}
   </article>;
 }

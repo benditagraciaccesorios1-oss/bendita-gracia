@@ -5,6 +5,7 @@ import { ContactSection, SiteFooter } from '@/components/footer';
 import { Flourish, WaxButton } from '@/components/wax';
 import { ProductCard } from '@/features/catalog/product-card';
 import { categories, filterProducts } from '@/data/catalog';
+import './catalog.css';
 
 export const metadata: Metadata = { title: 'Nuestras creaciones', description: 'Explorá velas florales, figuras en cera y wax sachet. Fotografías de los diseños y referencias identificadas, con información comercial por confirmar.' };
 
@@ -23,8 +24,8 @@ export default async function CatalogPage({ searchParams }: { searchParams: Prom
     return `/catalogo${next.size ? `?${next.toString()}` : ''}`;
   }
 
-  return <>
-    <div className="internal-header"><Navigation /></div>
+  return <div className="catalog-page">
+    <div className="internal-header"><Navigation edge="melt" /></div>
     <main id="contenido" className="container" tabIndex={-1}>
       <section className="page-intro"><p className="eyebrow">EL UNIVERSO BENDITA GRACIA</p><h1>Nuestras creaciones</h1><p>Luz, aroma y diseño para tus espacios.</p><Flourish /></section>
       <div className="catalog-tools">
@@ -40,9 +41,9 @@ export default async function CatalogPage({ searchParams }: { searchParams: Prom
         </nav>
       </div>
       <div className="results-meta"><p>{results.length} {results.length === 1 ? 'diseño' : 'diseños'}{query && <> para «{query}»</>}</p>{(query || category) && <Link href="/catalogo">Limpiar filtros</Link>}</div>
-      {results.length ? <section className="product-grid" aria-label="Diseños del catálogo">{results.map((product, index) => <ProductCard product={product} index={index} key={product.id} />)}</section> : <section className="empty-state"><h2>No encontramos ese detalle</h2><p>Probá con otro nombre o elegí una categoría diferente.</p><WaxButton href="/catalogo">Limpiar filtros</WaxButton></section>}
+      {results.length ? <section className="product-grid" aria-label="Diseños del catálogo">{results.map((product, index) => <ProductCard product={product} index={index} animatedWax key={product.id} />)}</section> : <section className="empty-state"><h2>No encontramos ese detalle</h2><p>Probá con otro nombre o elegí una categoría diferente.</p><WaxButton href="/catalogo">Limpiar filtros</WaxButton></section>}
       <p className="catalog-disclaimer">Fotografías proporcionadas por la marca; las referencias sin fotografía están identificadas como ilustrativas. Precios, medidas, fragancias y disponibilidad por confirmar. No constituye inventario de venta.</p>
     </main>
     <ContactSection /><SiteFooter />
-  </>;
+  </div>;
 }

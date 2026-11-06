@@ -170,8 +170,8 @@ test('home wax drops and sheen move gently without moving the layout, and stay s
   const before = await layout();
   await page.waitForTimeout(1500);
   expect(await layout()).toEqual(before);
-  // Other pages keep the default satin edge without drops or motion.
-  await page.goto('/catalogo');
+  // Detail pages keep the default satin edge; the catalog listing now opts into wax separately.
+  await page.goto('/catalogo/rosas-rosa');
   await expect(page.locator('.wax-edge.is-melt, .wax-drop, .wax-sheen')).toHaveCount(0);
 
   await page.emulateMedia({ reducedMotion: 'reduce' });
