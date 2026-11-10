@@ -1,16 +1,15 @@
 // Titles match the home cards; notes come from the brand's price document where it provides one.
 export const categories = [
-  { id: 'velas-decorativas', name: 'Sets decorativos', note: 'Pequeños detalles, grandes intenciones' },
+  { id: 'velas-decorativas', name: 'Velas decorativas', note: 'Pequeños detalles, grandes intenciones' },
   { id: 'wax-melts', name: 'Wax melts', note: 'Aromas premium para tu quemador' },
   { id: 'wax-sachet', name: 'Wax sachet', note: 'Tabletas aromáticas para tus espacios' },
   { id: 'temporada', name: 'Temporada navideña', note: 'Creaciones para celebrar la Navidad' },
-  { id: 'detalles-unicos', name: 'Detalles únicos', note: 'Velas florales para regalar y decorar' },
 ] as const;
 
 export type Category = typeof categories[number]['id'];
 
 // Earlier category links keep filtering after the catalog was regrouped.
-const legacyCategories: Record<string, Category> = { 'velas-florales': 'velas-decorativas', 'figuras-en-cera': 'velas-decorativas' };
+const legacyCategories: Record<string, Category> = { 'velas-florales': 'velas-decorativas', 'figuras-en-cera': 'velas-decorativas', 'detalles-unicos': 'velas-decorativas' };
 
 export function resolveCategory(id: string): Category | '' {
   return categories.find(item => item.id === id)?.id ?? legacyCategories[id] ?? '';
@@ -43,11 +42,14 @@ const meltShapes = ['Estrellas', 'Corazones', 'Flores', 'De mar', 'Nubes', 'Cubo
 const fragranceOption: ProductOption = { id: 'fragancia', label: 'Fragancia', values: fragrances };
 const colorOption: ProductOption = { id: 'color', label: 'Color', values: null };
 
+const packagingOption: ProductOption = { id: 'empaque', label: 'Empaque', values: null };
+const flowerDetails = [{ label: 'Personalización', value: 'También pueden ser detalles únicos. Puedes elegir entre diferentes empaques; el precio final varía según el empaque elegido y se confirma por WhatsApp.' }];
+
 type Commercial = Partial<Pick<Product, 'variants' | 'options' | 'dimensions' | 'fragrances' | 'scentless' | 'details'>>;
 
 const designs: [string, string, Category, string, Commercial?][] = [
-  ['peonia-en-recipiente', 'Peonía en recipiente', 'detalles-unicos', 'Peonía en recipiente con detalles florales y un lazo decorativo.', { variants: [{ label: '1 unidad', priceCOP: 21900 }] }],
-  ['set-florero-margaritas-peonia', 'Set florero margaritas + peonía en base de cerámica', 'velas-decorativas', 'Set de florero con margaritas y peonía sobre una base de cerámica.', { variants: [{ label: 'Set completo', priceCOP: 39900 }] }],
+  ['peonia-en-recipiente', 'Peonía en recipiente', 'velas-decorativas', 'Peonía en recipiente con detalles florales y un lazo decorativo.', { variants: [{ label: '1 unidad', priceCOP: 21900 }], options: [packagingOption], details: flowerDetails }],
+  ['set-florero-margaritas-peonia', 'Set florero margaritas + peonía en base de cerámica', 'velas-decorativas', 'Set de florero con margaritas y peonía sobre una base de cerámica.', { variants: [{ label: 'Set completo', priceCOP: 39900 }], options: [packagingOption], details: flowerDetails }],
   ['wax-melts', 'Wax melts', 'wax-melts', 'Trocitos de cera cargados de aromas premium: al ponerse sobre un quemador destilan todo su aroma. Elige la forma, la cantidad en gramos, el color y la fragancia.', {
     variants: [{ label: '75 gr', priceCOP: 18000 }, { label: '100 gr', priceCOP: 30000 }],
     options: [{ id: 'forma', label: 'Forma', values: meltShapes }, fragranceOption, colorOption], fragrances,
@@ -109,7 +111,7 @@ export function formatCOP(value: number) {
 
 export function priceLabel(product: Product) {
   if (product.priceCOP === null) return 'Por confirmar';
-  return product.variants.length > 1 ? `Desde ${formatCOP(product.priceCOP)}` : formatCOP(product.priceCOP);
+  return product.variants.length > 1 || product.options.some(option => option.id === 'empaque') ? `Desde ${formatCOP(product.priceCOP)}` : formatCOP(product.priceCOP);
 }
 
 export type OrderChoice = { variant?: number; options?: Record<string, string> };
@@ -123,7 +125,8 @@ export function orderMessage(product: Product, { variant = 0, options = {} }: Or
     const value = options[option.id]?.trim().slice(0, 60);
     if (value && (option.values === null || option.values.includes(value))) lines.push(`${option.label}: ${value}`);
   }
-  return `Hola, me interesa el diseño ${product.name}. ${lines.join('. ')}. ¿Me confirmas disponibilidad?`;
+  const packagingNote = product.options.some(option => option.id === 'empaque') ? ' El precio final depende del empaque.' : '';
+  return `Hola, me interesa el diseño ${product.name}. ${lines.join('. ')}.${packagingNote} ¿Me confirmas disponibilidad?`;
 }
 
 

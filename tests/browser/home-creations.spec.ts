@@ -2,7 +2,7 @@ import { test, expect, type Locator, type Page } from '@playwright/test';
 
 // Real catalog photos above the existing category titles and attached tinted description panels.
 const creations = [
-  { id: 'velas-decorativas', name: 'Sets decorativos', note: 'Pequeños detalles, grandes intenciones', art: 'set-florero-margaritas-peonia' },
+  { id: 'velas-decorativas', name: 'Velas decorativas', note: 'Pequeños detalles, grandes intenciones', art: 'set-florero-margaritas-peonia' },
   { id: 'wax-melts', name: 'Wax Melts', note: 'Aromas premium para tu quemador', art: 'wax-melts-corazones-quemador' },
   { id: 'wax-sachet', name: 'Wax Sachet', note: 'Tabletas aromáticas para tus espacios', art: 'sachet-botanico-trio' },
 ];

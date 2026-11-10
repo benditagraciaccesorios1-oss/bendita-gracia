@@ -11,6 +11,7 @@ export function OrderForm({ product, phone }: { product: Product; phone: string 
   const [variant, setVariant] = useState(0);
   const [options, setOptions] = useState<Record<string, string>>({});
   const chosen = product.variants[variant];
+  const flexiblePackaging = product.options.some(option => option.id === 'empaque');
   const href = whatsappUrl(phone, undefined, orderMessage(product, { variant, options }));
 
   return <form className={styles.form} aria-label="Arma tu pedido" onSubmit={event => event.preventDefault()}>
@@ -30,7 +31,8 @@ export function OrderForm({ product, phone }: { product: Product; phone: string 
         </select>
         : <input type="text" maxLength={60} placeholder="Cuéntanos tu preferencia" value={options[option.id] ?? ''} onChange={event => setOptions({ ...options, [option.id]: event.target.value })} />}
     </label>)}
-    <p className={styles.total} aria-live="polite">Total <strong>{formatCOP(chosen.priceCOP)}</strong> <span>{chosen.label}</span></p>
+    <p className={styles.total} aria-live="polite">{flexiblePackaging ? 'Precio de referencia' : 'Total'} <strong>{formatCOP(chosen.priceCOP)}</strong> <span>{chosen.label}</span></p>
+    {flexiblePackaging && <p className={styles.packagingNote}>El precio final varía según el empaque elegido. Consulta las opciones y el valor por WhatsApp.</p>}
     <WaxButton href={href} external>Pedir por WhatsApp <span aria-hidden="true">↗</span></WaxButton>
   </form>;
 }

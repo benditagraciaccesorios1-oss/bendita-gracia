@@ -19,8 +19,8 @@ test('home cards lead to the priced categories and old category links still filt
   await expect(cards.nth(1).locator('.card-bottom')).toContainText(cop('74.900'));
 
   await page.goto('/catalogo?categoria=velas-florales');
-  await expect(page.getByRole('link', { name: 'Sets decorativos', exact: true })).toHaveAttribute('aria-current', 'true');
-  await expect(page.locator('.product-card')).toHaveCount(1);
+  await expect(page.getByRole('link', { name: 'Velas decorativas', exact: true })).toHaveAttribute('aria-current', 'true');
+  await expect(page.locator('.product-card')).toHaveCount(2);
   await expect(page.locator('.product-card', { hasText: 'Set florero margaritas' }).locator('.card-bottom')).toContainText(cop('39.900'));
 });
 
@@ -118,13 +118,31 @@ test('seasonal line groups the Christmas designs and the new peony products show
 });
 
 
-test('unique flower details have a separate home link and catalog filter', async ({ page }) => {
+test('flowers share decorativas and unique details is no longer a separate category', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('link', { name: /Detalles únicos: descubre nuestras velas florales/ }).click();
-  await expect(page).toHaveURL(/categoria=detalles-unicos$/);
-  await expect(page.getByRole('navigation', { name: 'Filtrar por categoría' }).getByRole('link', { name: 'Detalles únicos', exact: true })).toHaveAttribute('aria-current', 'true');
-  await expect(page.locator('.product-card h2')).toHaveText(['Peonía en recipiente']);
-  await expect(page.locator('.card-bottom')).toContainText(cop('21.900'));
-  await page.getByRole('link', { name: 'Sets decorativos', exact: true }).click();
-  await expect(page.locator('.product-card h2')).toHaveText(['Set florero margaritas + peonía en base de cerámica']);
+  await expect(page.getByRole('link', { name: /Detalles únicos: descubre/ })).toHaveCount(0);
+  await page.locator('.category-grid').getByRole('link', { name: /Velas decorativas/ }).click();
+  await expect(page).toHaveURL(/categoria=velas-decorativas$/);
+  await expect(page.locator('.product-card h2')).toHaveText(['Peonía en recipiente', 'Set florero margaritas + peonía en base de cerámica']);
+  await expect(page.getByRole('navigation', { name: 'Filtrar por categoría' }).getByRole('link', { name: 'Detalles únicos', exact: true })).toHaveCount(0);
+  await page.goto('/catalogo?categoria=detalles-unicos');
+  await expect(page.getByRole('link', { name: 'Velas decorativas', exact: true })).toHaveAttribute('aria-current', 'true');
+  await expect(page.locator('.product-card')).toHaveCount(2);
 });
+
+for (const [slug, price] of [['peonia-en-recipiente', '21.900'], ['set-florero-margaritas-peonia', '39.900']]) {
+  test(`flower packaging for ${slug} remains a variable-price WhatsApp consultation`, async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 900 });
+    await page.goto(`/catalogo/${slug}`);
+    await expect(page.locator('.product-facts')).toContainText('detalles únicos');
+    await expect(page.locator('.product-facts')).toContainText('diferentes empaques');
+    const form = page.getByRole('form', { name: 'Arma tu pedido' });
+    await expect(form.locator('[aria-live]')).toContainText('Precio de referencia');
+    await expect(form.locator('[aria-live]')).toContainText(cop(price));
+    await expect(form).toContainText('El precio final varía según el empaque elegido');
+    await form.getByLabel('Empaque', { exact: true }).fill('Consultar opciones para regalo');
+    expect(await whatsappText(page, /Pedir por WhatsApp/)).toContain('Empaque: Consultar opciones para regalo. El precio final depende del empaque.');
+    await expect(form.locator('[aria-live]')).toContainText(cop(price));
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  });
+}

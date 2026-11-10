@@ -12,5 +12,13 @@
 @media (max-width: 767px) {
   .catalog-page .product-grid { row-gap: 42px; }
 }
-/* Long product names keep their exact wording but use a smaller size so the card keeps its height. */
-.catalog-page .product-card h2.is-long-name { font-size: 18px; line-height: 1.08; letter-spacing: -.02em; }
+/* Let the text column shrink and wrap complete names rather than overflowing the card rim. */
+.catalog-page .product-card { height: 270px; grid-template-columns: minmax(0, 59fr) minmax(0, 41fr); }
+.catalog-page .product-card .card-info { min-width: 0; }
+.catalog-page .product-card h2 { min-width: 0; max-width: 100%; font-size: clamp(19px, 1.8vw, 26px); line-height: 1.12; overflow-wrap: anywhere; hyphens: auto; }
+.catalog-page .product-card h2.is-long-name { font-size: 18px; line-height: 1.12; letter-spacing: -.02em; }
+.catalog-page .product-card h2::after { margin-top: 6px; }
+.catalog-page .card-bottom p span { font-size: 16px; line-height: 1.2; }
+@media (max-width: 767px) {
+  .catalog-page .product-card { grid-template-columns: minmax(0, 56fr) minmax(0, 44fr); }
+}

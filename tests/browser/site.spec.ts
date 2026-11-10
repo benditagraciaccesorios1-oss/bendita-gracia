@@ -35,11 +35,11 @@ test('catalog search combines filters, persists on reload and clears empty resul
   await page.getByRole('searchbox').fill('PEONÍA');
   await page.getByRole('button', { name: 'Buscar' }).click();
   await expect(page.locator('.product-card')).toHaveCount(2);
-  await page.getByRole('link', { name: 'Sets decorativos', exact: true }).click();
+  await page.getByRole('link', { name: 'Velas decorativas', exact: true }).click();
   await expect(page).toHaveURL(/categoria=velas-decorativas/);
   await page.reload();
   await expect(page.getByRole('searchbox')).toHaveValue('PEONÍA');
-  await expect(page.locator('.product-card')).toHaveCount(1);
+  await expect(page.locator('.product-card')).toHaveCount(2);
   await page.getByRole('link', { name: 'Wax sachet', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'No encontramos ese detalle' })).toBeVisible();
   await page.getByRole('link', { name: 'Limpiar filtros', exact: true }).first().click();

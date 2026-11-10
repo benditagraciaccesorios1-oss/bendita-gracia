@@ -15,8 +15,8 @@ const categoryPhotos = {
 } as const;
 
 // Home headings keep the visual reference's capitalization; each card links to the matching catalog category.
-const homeCategories = categories.filter(category => category.id !== 'temporada' && category.id !== 'detalles-unicos');
-const creationTitles = { 'velas-decorativas': 'Sets decorativos', 'wax-melts': 'Wax Melts', 'wax-sachet': 'Wax Sachet' } as const;
+const homeCategories = categories.filter(category => category.id !== 'temporada');
+const creationTitles = { 'velas-decorativas': 'Velas decorativas', 'wax-melts': 'Wax Melts', 'wax-sachet': 'Wax Sachet' } as const;
 
 const lowestPrice = (category: Category) => Math.min(...products.flatMap(item => item.category === category && item.priceCOP !== null ? [item.priceCOP] : []));
 
@@ -58,7 +58,6 @@ export default function Home() {
             <div className="creation-body"><h3>{creationTitles[category.id]}</h3><p>{category.note}</p><Sprig className="card-sprig" /></div>
           </Link>;
         })}</div>
-        <p className="seasonal-link"><Link href="/catalogo?categoria=detalles-unicos" className="text-link">Detalles únicos: descubre nuestras velas florales <span aria-hidden="true">↗</span></Link></p>
         <p className="seasonal-link"><Link href="/catalogo?categoria=temporada" className="text-link">Explora nuestra línea de temporada navideña <span aria-hidden="true">↗</span></Link></p>
       </section>
       {/* Built only from what the brand already states: its tagline, the product lines and how ordering works. */}

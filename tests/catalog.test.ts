@@ -11,14 +11,14 @@ const bySlug = (slug: string) => {
 
 test('search ignores accents and combines with category without mutating the catalog', () => {
   const original = JSON.stringify(products);
-  assert.deepEqual(filterProducts('PEONÍA', 'detalles-unicos').map(p => p.slug), ['peonia-en-recipiente']);
+  assert.deepEqual(filterProducts('PEONÍA', 'velas-decorativas').map(p => p.slug), ['peonia-en-recipiente', 'set-florero-margaritas-peonia']);
   assert.equal(filterProducts('peonia', 'wax-sachet').length, 0);
   assert.equal(filterProducts('', 'unknown').length, products.length);
   assert.equal(JSON.stringify(products), original);
 });
 
 test('categories follow the home titles and old category links still filter', () => {
-  assert.deepEqual(categories.map(item => [item.id, item.name]), [['velas-decorativas', 'Sets decorativos'], ['wax-melts', 'Wax melts'], ['wax-sachet', 'Wax sachet'], ['temporada', 'Temporada navideña'], ['detalles-unicos', 'Detalles únicos']]);
+  assert.deepEqual(categories.map(item => [item.id, item.name]), [['velas-decorativas', 'Velas decorativas'], ['wax-melts', 'Wax melts'], ['wax-sachet', 'Wax sachet'], ['temporada', 'Temporada navideña']]);
   assert.equal(resolveCategory('velas-florales'), 'velas-decorativas');
   assert.equal(resolveCategory('figuras-en-cera'), 'velas-decorativas');
   assert.equal(resolveCategory('nada'), '');
@@ -90,7 +90,7 @@ test('the order message lists the chosen presentation and options only', () => {
   assert.equal(orderMessage(bySlug('noche-de-velitas'), { options: { referencia: 'Velitas sobre base de perlas' } }),
     `Hola, me interesa el diseño Noche de velitas. Presentación: 5 unidades (${formatCOP(14900)}). Referencia: Velitas sobre base de perlas. ¿Me confirmas disponibilidad?`);
   assert.equal(orderMessage(bySlug('peonia-en-recipiente')),
-    `Hola, me interesa el diseño Peonía en recipiente. Presentación: 1 unidad (${formatCOP(21900)}). ¿Me confirmas disponibilidad?`);
+    `Hola, me interesa el diseño Peonía en recipiente. Presentación: 1 unidad (${formatCOP(21900)}). El precio final depende del empaque. ¿Me confirmas disponibilidad?`);
   // Values outside the published lists are ignored instead of being sent as a choice.
   assert.equal(orderMessage(melts, { variant: 9, options: { forma: 'Rombos' } }),
     `Hola, me interesa el diseño Wax melts. Presentación: 75 gr (${formatCOP(18000)}). ¿Me confirmas disponibilidad?`);
@@ -140,11 +140,25 @@ test('Christmas designs belong to the separate seasonal line with prices preserv
 });
 
 
-test('sets and individual flowers have distinct lines while Christmas names and prices stay accurate', () => {
-  assert.deepEqual(filterProducts('', 'velas-decorativas').map(p => p.slug), ['set-florero-margaritas-peonia']);
-  assert.deepEqual(filterProducts('', 'detalles-unicos').map(p => p.slug), ['peonia-en-recipiente']);
+test('all flowers share decorativas and the removed unique-details link keeps working', () => {
+  assert.deepEqual(filterProducts('', 'velas-decorativas').map(p => p.slug), ['peonia-en-recipiente', 'set-florero-margaritas-peonia']);
+  assert.deepEqual(filterProducts('', 'detalles-unicos'), filterProducts('', 'velas-decorativas'));
   assert.equal(bySlug('figuras-navidenas').name, 'Figuras navideñas');
   assert.equal(bySlug('noche-de-velitas').priceCOP, 14900);
   assert.equal(bySlug('velitas-de-peticiones').priceCOP, 18000);
   assert.equal(products.length, 10);
+});
+
+
+test('flower prices are starting references and packaging remains a consultation without invented choices', () => {
+  for (const slug of ['peonia-en-recipiente', 'set-florero-margaritas-peonia']) {
+    const product = bySlug(slug);
+    assert.equal(product.category, 'velas-decorativas');
+    assert.deepEqual(product.options, [{ id: 'empaque', label: 'Empaque', values: null }]);
+    assert.equal(priceLabel(product), `Desde ${formatCOP(product.priceCOP!)}`);
+    assert.ok(product.details.some(detail => /detalles únicos/.test(detail.value) && /empaques/.test(detail.value)));
+    assert.match(orderMessage(product, { options: { empaque: 'Consultar opciones para regalo' } }), /Empaque: Consultar opciones para regalo\. El precio final depende del empaque\./);
+  }
+  assert.equal(bySlug('peonia-en-recipiente').priceCOP, 21900);
+  assert.equal(bySlug('set-florero-margaritas-peonia').priceCOP, 39900);
 });
