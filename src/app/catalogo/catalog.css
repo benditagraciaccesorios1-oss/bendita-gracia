@@ -12,3 +12,5 @@
 @media (max-width: 767px) {
   .catalog-page .product-grid { row-gap: 42px; }
 }
+/* Long product names keep their exact wording but use a smaller size so the card keeps its height. */
+.catalog-page .product-card h2.is-long-name { font-size: 18px; line-height: 1.08; letter-spacing: -.02em; }

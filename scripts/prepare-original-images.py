@@ -32,6 +32,12 @@ SOURCES = {
     'sachet-flores-conjunto': ('4.02.19 PM (5)', None),
     'sachet-flor-empaque': ('4.02.19 PM', None),
 }
+# Additional product uploads and confirmed prices were supplied by the owner.
+EXTRA_SOURCES = {
+    'sachet-botanico-trio': 'wax sachet.jpeg',
+    'peonia-en-recipiente': 'peonia en recipiente.jpeg',
+    'set-florero-margaritas-peonia': 'Set florero margaritas + peonia en base de ceramica.jpeg',
+}
 # Photographs embedded in the brand's price document, in document order.
 DOCUMENT = ROOT / 'Información página web - Bendita Gracia.docx'
 DOCUMENT_SOURCES = {
@@ -80,8 +86,21 @@ def save(name, original, crop=None):
     print(f'{name}.webp')
 
 for name, (stamp, crop) in SOURCES.items():
-    with Image.open(ROOT / 'images' / f'WhatsApp Image 2026-11-02 at {stamp}.jpeg') as original:
+    source = ROOT / 'images' / f'WhatsApp Image 2026-11-02 at {stamp}.jpeg'
+    if not source.exists():
+        # The owner removed the old snowflake upload; keep its already-reviewed AI version.
+        if name != 'copos-en-caja' or not (AI / f'{name}.webp').exists():
+            raise FileNotFoundError(source)
+        if not EXPORT:
+            with Image.open(AI / f'{name}.webp') as original:
+                save(name, original)
+        continue
+    with Image.open(source) as original:
         save(name, original, crop)
+
+for name, filename in EXTRA_SOURCES.items():
+    with Image.open(ROOT / 'images' / filename) as original:
+        save(name, original)
 
 with zipfile.ZipFile(DOCUMENT) as document:
     for name, media in DOCUMENT_SOURCES.items():

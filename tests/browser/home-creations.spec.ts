@@ -1,17 +1,12 @@
 import { test, expect, type Locator, type Page } from '@playwright/test';
 
-// «Encuentra tu detalle» follows the «Explora nuestras creaciones» block of the new home guide image: complete
-// rounded cards with the scene flush on top and the title and a short description on the attached card body.
-// Home titles follow the root reference and link to the catalog categories of the same name (S20). The images are the three illustrations of that
-// guide block, cropped at source resolution with their printed «Imagen ilustrativa» label (S15-S16); the uploaded
-// photographs stay in the catalog and details.
+// Real catalog photos above the existing category titles and attached tinted description panels.
 const creations = [
-  { id: 'velas-decorativas', name: 'Velas Decorativas', note: 'Pequeños detalles, grandes intenciones', art: 'home-creation-velas-regalo' },
-  { id: 'wax-melts', name: 'Wax Melts', note: 'Aromas premium para tu quemador', art: 'home-creation-figuras-pebetero' },
-  { id: 'wax-sachet', name: 'Wax Sachet', note: 'Tabletas aromáticas para tus espacios', art: 'home-creation-sachets-colgantes' },
+  { id: 'velas-decorativas', name: 'Sets decorativos', note: 'Pequeños detalles, grandes intenciones', art: 'set-florero-margaritas-peonia' },
+  { id: 'wax-melts', name: 'Wax Melts', note: 'Aromas premium para tu quemador', art: 'wax-melts-corazones-quemador' },
+  { id: 'wax-sachet', name: 'Wax Sachet', note: 'Tabletas aromáticas para tus espacios', art: 'sachet-botanico-trio' },
 ];
-// Every crop has the same size: the illustration area of a guide card, enlarged 4× with AI (445×232 source).
-const artSize = [1780, 928];
+const photoSizes = [[940, 1412], [944, 1384], [1376, 1204]];
 
 const box = async (locator: Locator) => (await locator.boundingBox())!;
 const sourceOf = (src: string) => decodeURIComponent(new URL(src, 'http://local').searchParams.get('url') ?? new URL(src, 'http://local').pathname);
@@ -36,7 +31,7 @@ async function cardParts(page: Page) {
 }
 
 for (const [label, width, height] of [['desktop', 1536, 1024], ['mobile', 390, 844]] as const) {
-  test(`${label} creation cards show the guide image above the title and description inside one bounded card`, async ({ page }) => {
+  test(`${label} creation cards show the catalog photograph above the title and description inside one bounded card`, async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.setViewportSize({ width, height });
     await page.goto('/');
@@ -47,12 +42,10 @@ for (const [label, width, height] of [['desktop', 1536, 1024], ['mobile', 390, 8
       await expect(title).toHaveText(creation.name);
       await expect(note).toHaveText(creation.note);
       await expect(note).toBeVisible();
-      // The guide card illustration, served as encoded (no optimizer pass), shown whole and not enlarged beyond its
-      // source pixels. Its label is printed in the image, so the alt text says it is illustrative and no second HTML
-      // label is drawn over it.
-      await expect(image).toHaveAttribute('alt', /^Imagen ilustrativa: /);
-      await expect(image).toHaveAttribute('src', `/images/references/${creation.art}.webp`);
-      await expect(card.locator('.product-image.has-printed-label')).toHaveCount(1);
+      // Serve the same real photograph as the catalog, without an illustrative label or extra recompression.
+      await expect(image).toHaveAttribute('alt', /^Fotografía:/);
+      await expect(image).toHaveAttribute('src', `/images/originals/${creation.art}.webp`);
+      await expect(card.locator('.product-image.is-photograph')).toHaveCount(1);
       await expect(card.locator('.illustrative')).toHaveCount(0);
       await expect.poll(() => image.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0)).toBe(true);
       const shown = await image.evaluate(async (el: HTMLImageElement) => {
@@ -62,10 +55,9 @@ for (const [label, width, height] of [['desktop', 1536, 1024], ['mobile', 390, 8
         const rect = el.getBoundingClientRect();
         return { natural: [served.naturalWidth, served.naturalHeight], size: [rect.width, rect.height] };
       });
-      expect(shown.natural).toEqual(artSize);
-      expect(shown.size[0]).toBeLessThanOrEqual(artSize[0] * 1.05);
-      // Frame follows the illustration proportions, so cover does not crop it noticeably.
-      expect(Math.abs(shown.size[0] / shown.size[1] - artSize[0] / artSize[1])).toBeLessThanOrEqual(.03);
+      expect(shown.natural).toEqual(photoSizes[index]);
+      expect(shown.size[0]).toBeLessThanOrEqual(photoSizes[index][0]);
+      expect(await image.evaluate(el => getComputedStyle(el).objectFit)).toBe('scale-down');
       // Image block, then title, then description, without overlapping, all inside the same framed card.
       expect(boxes.image.y + boxes.image.height).toBeLessThanOrEqual(boxes.title.y + 1);
       expect(boxes.title.y + boxes.title.height).toBeLessThanOrEqual(boxes.note.y + 1);
@@ -171,7 +163,7 @@ test('home wax drops and sheen move gently without moving the layout, and stay s
   await page.waitForTimeout(1500);
   expect(await layout()).toEqual(before);
   // S26: every page keeps the melting, animated menu, including details and the not-found page.
-  for (const path of ['/catalogo/rosas-rosa', '/no-existe']) {
+  for (const path of ['/catalogo/noche-de-velitas', '/no-existe']) {
     await page.goto(path);
     const menu = page.locator('.internal-header .navigation > .wax-edge.is-melt');
     await expect(menu).toHaveCount(1);

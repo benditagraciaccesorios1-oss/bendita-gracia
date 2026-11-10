@@ -48,10 +48,10 @@ export function HeroCarousel() {
 
   return <section className="hero" aria-labelledby="hero-heading">
     <div className="hero-copy">
-      <p className="brand-kicker">BENDITA GRACIA</p>
-      <h1 id="hero-heading">Detalles que <em>florecen.</em></h1>
+      <p className="brand-kicker">Luz, aroma y diseño</p>
+      <h1 id="hero-heading">Bendita <em>Gracia</em></h1>
       <div className="hero-intro">
-        <p className="hero-description">Luz, aroma y diseño para tus espacios.</p>
+        <p className="hero-description">Pequeños detalles, grandes intenciones</p>
         <WaxButton href="/catalogo">Explorar creaciones</WaxButton>
       </div>
       <WaxEdge variant="melt" drops={heroDrops} className="hero-edge" />

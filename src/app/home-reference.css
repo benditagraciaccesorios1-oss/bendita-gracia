@@ -4,9 +4,9 @@
 .home-page .hero { --stage-h: clamp(240px, 22.8vw, 400px); display: grid; grid-template-columns: 36% 64%; align-items: start; }
 
 .home-page .hero-copy {
-  position: relative; z-index: 3; display: flex; flex-direction: column; align-items: flex-start;
+  position: relative; z-index: 3; display: flex; flex-direction: column; align-items: center; text-align: center;
   /* Short bottom padding: the melted lip hangs just under the button, clear of the menu, like the mockup. */
-  padding: clamp(14px, 1.2vw, 20px) 28px 8px clamp(32px, 5.7vw, 88px);
+  padding: clamp(14px, 1.2vw, 20px) clamp(20px, 2.2vw, 34px) 8px;
   border-radius: 0 0 30px 0;
   background-color: var(--rose);
   background-image: radial-gradient(ellipse at 18% 0, #f8d4cbcc, transparent 62%), linear-gradient(176deg, #e9b9b2, var(--rose) 58%, #cf958f);
@@ -14,10 +14,10 @@
   box-shadow: inset 0 3px 3px #ffeae0, inset -3px 0 5px #f1c1b799, 6px 0 12px -8px #6b3f3a55;
 }
 .home-page .hero-edge { left: 0; width: calc(100% - 10px); color: #cf958f; }
-.home-page .brand-kicker { margin: 0 0 4px; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(15px, 1.45vw, 22px); letter-spacing: .42em; color: #3b4b31; }
-.home-page .hero h1 { font-family: Georgia, 'Times New Roman', serif; font-size: clamp(46px, 4.45vw, 74px); font-weight: 700; line-height: .95; letter-spacing: -.035em; text-align: left; color: var(--wine); }
+.home-page .brand-kicker { margin: 0 0 4px; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(14px, 1.2vw, 18px); letter-spacing: .1em; color: #3b4b31; }
+.home-page .hero h1 { font-family: Georgia, 'Times New Roman', serif; font-size: clamp(46px, 4.45vw, 74px); font-weight: 700; line-height: .95; letter-spacing: -.035em; text-align: center; color: var(--wine); }
 .home-page .hero h1 em { display: block; font-style: normal; font-weight: 700; }
-.home-page .hero-intro { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; margin-top: 8px; }
+.home-page .hero-intro { display: flex; flex-direction: column; align-items: center; gap: 14px; margin-top: 8px; }
 .home-page .hero-description { font-family: Georgia, 'Times New Roman', serif; font-size: clamp(16px, 1.45vw, 22px); line-height: 1.25; color: #3b4b31; }
 
 /* The guide scene fills the whole panel edge to edge, like the reference; warm backdrop only shows while loading. */
@@ -123,7 +123,7 @@
   .home-page .heading-rule { display: none; }
   .home-page .creations-title h2 { min-width: 0; white-space: normal; text-wrap: balance; }
   .home-page .card-sprig { width: 44px; }
-  .home-page .brand-kicker { font-size: 15px; letter-spacing: .34em; padding-left: .34em; }
+  .home-page .brand-kicker { font-size: 14px; letter-spacing: .1em; }
   .home-page .hero h1 { font-size: clamp(44px, 12.4vw, 66px); text-align: center; }
   .home-page .hero-intro { align-items: center; gap: 12px; }
   .home-page .hero-description { font-size: clamp(16px, 4.4vw, 21px); }
@@ -136,3 +136,7 @@
 @media (max-width: 479px) {
   .home-page .heading-sprig { display: none; }
 }
+
+/* Link to the seasonal (Christmas) line, kept separate from the three main product cards. */
+.home-page .seasonal-link { display: flex; justify-content: center; margin: 26px 0 0; }
+.home-page .seasonal-link .text-link { gap: 12px; padding: 8px 4px; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(18px, 1.5vw, 22px); font-style: italic; color: var(--wine); border-bottom-color: var(--wine); }

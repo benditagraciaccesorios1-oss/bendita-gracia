@@ -60,6 +60,18 @@ export const originalImageSizes: Record<string, [number, number]> = {
     1200,
     1600
   ],
+  "/images/originals/sachet-botanico-trio.webp": [
+    1376,
+    1204
+  ],
+  "/images/originals/peonia-en-recipiente.webp": [
+    916,
+    1088
+  ],
+  "/images/originals/set-florero-margaritas-peonia.webp": [
+    940,
+    1412
+  ],
   "/images/originals/wax-melts-corazones-quemador.webp": [
     944,
     1384

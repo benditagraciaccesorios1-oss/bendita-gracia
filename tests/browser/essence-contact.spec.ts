@@ -8,7 +8,7 @@ test('essence section presents the brand pillars and how to order, before contac
   const essence = page.locator('#esencia');
   await expect(essence.getByRole('heading', { level: 2 })).toHaveText('Luz, aroma y diseño.');
   await expect(essence).toContainText('Pequeños detalles, grandes intenciones');
-  await expect(essence.getByRole('heading', { level: 3 })).toHaveText(['Luz', 'Aroma', 'Diseño', 'Cómo pedir']);
+  await expect(essence.getByRole('heading', { level: 3 })).toHaveText(['Luz', 'Aroma', 'Diseño', 'Cómo realizar tu pedido']);
   await expect(essence.locator('ol > li')).toHaveCount(3);
   await expect(essence.getByRole('link', { name: /Conocer los diseños/ })).toHaveAttribute('href', '/catalogo');
   const essenceTop = await essence.evaluate(el => el.getBoundingClientRect().top + scrollY);

@@ -11,14 +11,14 @@ const bySlug = (slug: string) => {
 
 test('search ignores accents and combines with category without mutating the catalog', () => {
   const original = JSON.stringify(products);
-  assert.deepEqual(filterProducts('PEONÍA', 'velas-decorativas').map(p => p.slug), ['peonia-en-domo', 'peonia-morada']);
+  assert.deepEqual(filterProducts('PEONÍA', 'detalles-unicos').map(p => p.slug), ['peonia-en-recipiente']);
   assert.equal(filterProducts('peonia', 'wax-sachet').length, 0);
   assert.equal(filterProducts('', 'unknown').length, products.length);
   assert.equal(JSON.stringify(products), original);
 });
 
 test('categories follow the home titles and old category links still filter', () => {
-  assert.deepEqual(categories.map(item => [item.id, item.name]), [['velas-decorativas', 'Velas decorativas'], ['wax-melts', 'Wax melts'], ['wax-sachet', 'Wax sachet']]);
+  assert.deepEqual(categories.map(item => [item.id, item.name]), [['velas-decorativas', 'Sets decorativos'], ['wax-melts', 'Wax melts'], ['wax-sachet', 'Wax sachet'], ['temporada', 'Temporada navideña'], ['detalles-unicos', 'Detalles únicos']]);
   assert.equal(resolveCategory('velas-florales'), 'velas-decorativas');
   assert.equal(resolveCategory('figuras-en-cera'), 'velas-decorativas');
   assert.equal(resolveCategory('nada'), '');
@@ -49,15 +49,7 @@ test('document prices, sizes and fragrance rules are published exactly', () => {
   assert.deepEqual(bySlug('figuras-navidenas').options.map(item => item.id), ['color', 'fragancia']);
 });
 
-test('designs missing from the document keep unconfirmed commercial data', () => {
-  for (const slug of ['rosas-rosa', 'rosas-marfil', 'peonia-en-domo', 'peonia-morada']) {
-    const product = bySlug(slug);
-    assert.equal(product.priceCOP, null);
-    assert.deepEqual(product.variants, []);
-    assert.equal(product.dimensions, null);
-    assert.equal(product.fragrances, null);
-    assert.equal(priceLabel(product), 'Por confirmar');
-  }
+test('availability stays unconfirmed and every image is described', () => {
   for (const product of products) {
     assert.equal(product.availability, 'unconfirmed');
     assert.ok(product.images.every(image => typeof image.illustrative === 'boolean' && image.alt));
@@ -65,7 +57,7 @@ test('designs missing from the document keep unconfirmed commercial data', () =>
 });
 
 test('document photographs join their lines after the sharper earlier photographs', () => {
-  assert.equal(products.length, 12);
+  assert.equal(products.length, 10);
   assert.equal(products.some(item => item.slug === 'copos-en-caja'), false);
   assert.deepEqual(bySlug('noche-de-velitas').options, [{ id: 'referencia', label: 'Referencia', values: ['Velitas en caja', 'Velitas sobre base de perlas'] }]);
   const images = (slug: string) => bySlug(slug).images.map(image => image.src.replace('/images/originals/', ''));
@@ -75,18 +67,9 @@ test('document photographs join their lines after the sharper earlier photograph
   assert.deepEqual(images('wax-melts'), ['wax-melts-corazones-quemador.webp', 'wax-melts-estrellas.webp', 'wax-melts-nubes.webp', 'wax-melts-corazones-colores.webp', 'wax-melts-mar.webp']);
   assert.deepEqual(images('figuras-navidenas'), ['figuras-navidenas.webp', 'copos-en-caja.webp', 'figura-arbol-caja.webp', 'figuras-kit-x2.webp', 'figuras-kit-x3.webp']);
   assert.deepEqual(images('sachet-navideno'), ['sachet-navideno.webp', 'sachet-en-caja.webp', 'sachet-navidad-colgantes.webp']);
-  for (const product of products.filter(item => item.slug !== 'peonia-morada')) assert.equal(product.images[0].illustrative, false, product.slug);
-  assert.equal(bySlug('peonia-morada').images[0].illustrative, true);
+  for (const product of products) assert.equal(product.images[0].illustrative, false, product.slug);
   assert.equal(new Set(products.map(item => item.slug)).size, products.length);
   assert.ok(products.every(item => !/paleta|peppermint|folleto|recordatorio/i.test(item.name)));
-});
-
-test('rose designs open the uncropped photograph rather than a small enlarged crop', () => {
-  for (const slug of ['rosas-rosa', 'rosas-marfil']) {
-    const product = bySlug(slug);
-    assert.equal(product.images[0].src, '/images/originals/rosas-conjunto.webp');
-    assert.match(product.images[0].alt, /conjunto|rosa y marfil|marfil y rosa/i);
-  }
 });
 
 test('prices are shown in Colombian pesos, from the lowest presentation', () => {
@@ -106,7 +89,8 @@ test('the order message lists the chosen presentation and options only', () => {
     `Hola, me interesa el diseño Noche de velitas. Presentación: 5 unidades (${formatCOP(14900)}). ¿Me confirmas disponibilidad?`);
   assert.equal(orderMessage(bySlug('noche-de-velitas'), { options: { referencia: 'Velitas sobre base de perlas' } }),
     `Hola, me interesa el diseño Noche de velitas. Presentación: 5 unidades (${formatCOP(14900)}). Referencia: Velitas sobre base de perlas. ¿Me confirmas disponibilidad?`);
-  assert.equal(orderMessage(bySlug('peonia-en-domo')), 'Hola, me interesa el diseño Peonía bajo domo. ¿Me compartes precio, fragancias y disponibilidad?');
+  assert.equal(orderMessage(bySlug('peonia-en-recipiente')),
+    `Hola, me interesa el diseño Peonía en recipiente. Presentación: 1 unidad (${formatCOP(21900)}). ¿Me confirmas disponibilidad?`);
   // Values outside the published lists are ignored instead of being sent as a choice.
   assert.equal(orderMessage(melts, { variant: 9, options: { forma: 'Rombos' } }),
     `Hola, me interesa el diseño Wax melts. Presentación: 75 gr (${formatCOP(18000)}). ¿Me confirmas disponibilidad?`);
@@ -132,4 +116,35 @@ test('every product photograph has enough pixels to look sharp on scaled screens
       assert.ok(Math.max(...size) <= 1600, `${image.src} is larger than needed`);
     }
   }
+});
+
+
+test('only priced designs remain and the two new peony products use confirmed prices', () => {
+  assert.ok(products.every(product => product.priceCOP !== null && product.priceCOP > 0));
+  for (const slug of ['rosas-rosa', 'rosas-marfil', 'peonia-en-domo', 'peonia-morada']) {
+    assert.equal(products.some(product => product.slug === slug), false, slug);
+  }
+  assert.equal(bySlug('peonia-en-recipiente').priceCOP, 21900);
+  assert.equal(bySlug('set-florero-margaritas-peonia').priceCOP, 39900);
+  assert.deepEqual(bySlug('peonia-en-recipiente').images.map(image => image.src), ['/images/originals/peonia-en-recipiente.webp']);
+  assert.deepEqual(bySlug('set-florero-margaritas-peonia').images.map(image => image.src), ['/images/originals/set-florero-margaritas-peonia.webp']);
+});
+
+test('Christmas designs belong to the separate seasonal line with prices preserved', () => {
+  assert.ok(categories.some(category => category.id === 'temporada' && category.name === 'Temporada navideña'));
+  assert.deepEqual(filterProducts('', 'temporada').map(product => product.slug), ['figuras-navidenas', 'noche-de-velitas', 'velitas-de-peticiones', 'sachet-navideno']);
+  assert.equal(bySlug('figuras-navidenas').priceCOP, 9990);
+  assert.equal(bySlug('sachet-navideno').priceCOP, 11900);
+  assert.equal(bySlug('wax-melts').category, 'wax-melts');
+  assert.equal(bySlug('sachet-botanico').category, 'wax-sachet');
+});
+
+
+test('sets and individual flowers have distinct lines while Christmas names and prices stay accurate', () => {
+  assert.deepEqual(filterProducts('', 'velas-decorativas').map(p => p.slug), ['set-florero-margaritas-peonia']);
+  assert.deepEqual(filterProducts('', 'detalles-unicos').map(p => p.slug), ['peonia-en-recipiente']);
+  assert.equal(bySlug('figuras-navidenas').name, 'Figuras navideñas');
+  assert.equal(bySlug('noche-de-velitas').priceCOP, 14900);
+  assert.equal(bySlug('velitas-de-peticiones').priceCOP, 18000);
+  assert.equal(products.length, 10);
 });

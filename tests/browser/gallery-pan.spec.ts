@@ -85,10 +85,10 @@ for (const width of [390, 1440]) {
     await expect(zoom).toHaveAttribute('aria-pressed', 'true');
     await expect(viewer).toBeFocused();
     await expect(page.getByText('Arrastra la fotografía o usa las flechas del teclado para moverla')).toBeVisible();
-    // Native pixel scale from the supplied 1200×1600 photograph, never an invented enlargement.
+    // Native pixel scale of the AI-prepared owner photo; the viewer adds no further enlargement.
     const native = await box(photo);
-    expect(Math.round(native.width)).toBe(1200);
-    expect(Math.round(native.height)).toBe(1600);
+    expect(Math.round(native.width)).toBe(1376);
+    expect(Math.round(native.height)).toBe(1204);
     expect(await photo.getAttribute('draggable')).toBe('false');
     await expectCentered(viewer, photo);
 
@@ -163,7 +163,7 @@ for (const width of [390, 1440]) {
 
   test(`normal gallery view keeps touch scrolling and the next photo enlarges at its own native size at ${width}px`, async ({ page }, testInfo) => {
     await page.setViewportSize({ width, height: 860 });
-    await page.goto('/catalogo/rosas-rosa');
+    await page.goto('/catalogo/noche-de-velitas');
     const { zoom, viewer, photo, frameImage } = parts(page);
     await frameImage.scrollIntoViewIfNeeded();
 
@@ -180,14 +180,14 @@ for (const width of [390, 1440]) {
     await mouseDrag(page, viewer, 2000, 0);
     await page.getByRole('button', { name: 'Imagen 2', exact: true }).click();
     await expect(viewer).toHaveCount(0);
-    await expect(frameImage).toHaveAttribute('src', '/images/originals/rosas-rosa.webp');
+    await expect(frameImage).toHaveAttribute('src', '/images/originals/figuras-con-estrella.webp');
     expect(await frameImage.evaluate(el => getComputedStyle(el).objectFit)).toBe('scale-down');
 
-    // 1280×1240 AI-enlarged detail photograph: native size, panning stays within its edges.
+    // 1200×1600 second photograph: native size, panning stays within its edges.
     await zoom.click();
     const native = await box(photo);
-    expect(Math.round(native.width)).toBe(1280);
-    expect(Math.round(native.height)).toBe(1240);
+    expect(Math.round(native.width)).toBe(1200);
+    expect(Math.round(native.height)).toBe(1600);
     await expectWithinEdges(viewer, photo);
     await mouseDrag(page, viewer, 200, 200);
     await expectWithinEdges(viewer, photo);

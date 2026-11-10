@@ -42,7 +42,7 @@ test('desktop home follows the mockup: pink copy left, filled guide scene right,
   const nav = page.getByRole('navigation', { name: 'Navegación principal' });
   const heading = page.getByRole('heading', { level: 1 });
   const categoriesHeading = page.getByRole('heading', { name: 'Explora nuestras creaciones' });
-  await expect(heading).toHaveText('Detalles que florecen.');
+  await expect(heading).toHaveText('Bendita Gracia');
   // Document order matches the visual order: hero copy and carousel, then the menu, then the categories.
   expect(await page.evaluate(() => {
     const [h, c, n, k] = ['h1', '[aria-roledescription="carrusel"]', 'nav', '#categories-heading'].map(selector => document.querySelector(selector)!);
@@ -73,7 +73,7 @@ test('desktop home follows the mockup: pink copy left, filled guide scene right,
   // Left-aligned wine title in the mockup's proportions, with the description and CTA inside the pink panel.
   expect(headingBox.x).toBeGreaterThanOrEqual(copyBox.x + 40);
   expect(headingBox.x + headingBox.width).toBeLessThanOrEqual(copyBox.x + copyBox.width);
-  expect(await heading.evaluate(el => getComputedStyle(el).textAlign)).toMatch(/^(left|start)$/);
+  expect(await heading.evaluate(el => getComputedStyle(el).textAlign)).toBe('center');
   expect(await heading.evaluate(el => getComputedStyle(el).color)).toBe('rgb(127, 41, 40)');
   const fontSize = await heading.evaluate(el => parseFloat(getComputedStyle(el).fontSize));
   expect(fontSize).toBeGreaterThanOrEqual(56);
@@ -81,13 +81,17 @@ test('desktop home follows the mockup: pink copy left, filled guide scene right,
   const cta = copy.getByRole('link', { name: 'Explorar creaciones' });
   const ctaBox = await box(cta);
   expect(ctaBox.y + ctaBox.height).toBeLessThanOrEqual(copyBox.y + copyBox.height);
-  expect(Math.abs(ctaBox.x - headingBox.x)).toBeLessThanOrEqual(4);
+  expect(Math.abs(ctaBox.x + ctaBox.width / 2 - headingBox.x - headingBox.width / 2)).toBeLessThanOrEqual(4);
   // Menu directly below the hero, overlapping only its lower edge, before the category heading.
   expect(navBox.y).toBeGreaterThanOrEqual(copyBox.y + copyBox.height - 4);
   expect(navBox.y).toBeGreaterThanOrEqual(sceneBox.y + sceneBox.height - 40);
   expect(navBox.y).toBeLessThanOrEqual(sceneBox.y + sceneBox.height + 4);
   expect(navBox.y + navBox.height).toBeLessThan(kBox.y);
-  // Category heading and the three cards (wider than tall, like the new home guide) share one row inside the first screen.
+  // The new Christmas campaign follows the menu; the three cards remain aligned below it.
+  const campaign = page.getByRole('region', { name: 'Navidad en Bendita Gracia' });
+  const campaignBox = await box(campaign);
+  expect(campaignBox.y).toBeGreaterThanOrEqual(navBox.y + navBox.height);
+  expect(kBox.y).toBeGreaterThanOrEqual(campaignBox.y + campaignBox.height);
   const cards = page.locator('.category-card');
   await expect(cards).toHaveCount(3);
   const cardBoxes = await Promise.all((await cards.all()).map(box));
@@ -95,8 +99,9 @@ test('desktop home follows the mockup: pink copy left, filled guide scene right,
     expect(Math.abs(card.y - cardBoxes[0].y)).toBeLessThanOrEqual(1);
     expect(card.width).toBeGreaterThan(card.height);
     if (index) expect(card.x).toBeGreaterThan(cardBoxes[index - 1].x + cardBoxes[index - 1].width);
-    expect(card.y + card.height).toBeLessThanOrEqual(1024);
+    expect(card.y).toBeGreaterThanOrEqual(campaignBox.y + campaignBox.height);
   }
+  await heading.scrollIntoViewIfNeeded();
   await expect(heading).toBeInViewport();
   await expect(nav).toBeInViewport();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
@@ -191,11 +196,11 @@ test('carousel fades between filled illustrative guide scenes and categories sho
     const image = card.locator('img');
     await expect.poll(() => image.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0)).toBe(true);
     const info = await image.evaluate((el: HTMLImageElement) => ({ src: el.currentSrc || el.src, width: el.getBoundingClientRect().width, transform: getComputedStyle(el).transform }));
-    expect(sourceOf(info.src)).toMatch(/^\/images\/references\/home-creation-(velas-regalo|figuras-pebetero|sachets-colgantes)\.webp$/);
+    expect(sourceOf(info.src)).toMatch(/^\/images\/originals\/(set-florero-margaritas-peonia|wax-melts-corazones-quemador|sachet-botanico-trio)\.webp$/);
     expect(info.width).toBeLessThanOrEqual(445 * 1.05);
     expect(info.transform).toBe('none');
-    await expect(image).toHaveAttribute('alt', /^Imagen ilustrativa: /);
-    await expect(card.locator('.has-printed-label')).toHaveCount(1);
+    await expect(image).toHaveAttribute('alt', /^Fotografía:/);
+    await expect(card.locator('.has-printed-label')).toHaveCount(0);
   }
 });
 
@@ -237,7 +242,7 @@ test('Inicio always returns to the beginning of home without breaking modified c
   await scrollSettled(page);
   await inicio.click();
   await expect(page).toHaveURL(/127\.0\.0\.1:\d+\/$/);
-  await expect(heading).toHaveText('Detalles que florecen.');
+  await expect(heading).toHaveText('Bendita Gracia');
   await expect.poll(() => scrollTop(page)).toBe(0);
 
   // Modified clicks keep the native new-tab behavior and leave this page alone.
@@ -267,4 +272,17 @@ test('mobile Inicio closes the menu and returns to the top', async ({ page }) =>
   await expect(page).toHaveURL(/127\.0\.0\.1:\d+\/$/);
   await expect.poll(() => scrollTop(page)).toBe(0);
   await expect(page.getByRole('heading', { level: 1 })).toBeInViewport();
+});
+
+
+test('home introduces the brand, its light-aroma-design line and its intention motto in order', async ({ page }) => {
+  await page.goto('/');
+  const copy = page.locator('.hero-copy');
+  await expect(copy.locator('.brand-kicker')).toHaveText('Luz, aroma y diseño');
+  await expect(copy.locator('h1')).toHaveText('Bendita Gracia');
+  await expect(copy.locator('.hero-description')).toHaveText('Pequeños detalles, grandes intenciones');
+  await expect(copy).not.toContainText('Detalles que florecen');
+  const text = (await copy.innerText()).replace(/\s+/g, ' ');
+  expect(text.indexOf('Luz, aroma')).toBeLessThan(text.indexOf('Bendita Gracia'));
+  expect(text.indexOf('Bendita Gracia')).toBeLessThan(text.indexOf('Pequeños detalles'));
 });

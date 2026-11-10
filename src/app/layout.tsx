@@ -10,6 +10,8 @@ import './responsive.css';
 import './reference.css';
 import './essence-contact.css';
 import './melt-header.css';
+import './christmas.css';
+import { ChristmasTheme } from '@/components/christmas-theme';
 import { WhatsAppButton } from '@/components/whatsapp-button';
 
 export const metadata: Metadata = {
@@ -22,5 +24,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="es"><body><a className="skip-link" href="#contenido">Saltar al contenido</a>{children}<WhatsAppButton /></body></html>;
+  return <html lang="es"><body><a className="skip-link" href="#contenido">Saltar al contenido</a><ChristmasTheme>{children}<WhatsAppButton /></ChristmasTheme></body></html>;
 }

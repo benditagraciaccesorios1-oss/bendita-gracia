@@ -5,7 +5,7 @@ for (const width of [360, 390, 768, 1024, 1440]) {
     // The home is compact like the mockup; a short viewport leaves room to scroll past the sticky point.
     await page.setViewportSize({ width, height: 600 });
     await page.goto('/');
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Detalles que florecen.');
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Bendita Gracia');
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await page.getByRole('button', { name: 'Diseño siguiente' }).click();
     await expect(page.locator('.carousel-status')).toContainText('02');
@@ -31,31 +31,31 @@ for (const width of [360, 390, 768, 1024, 1440]) {
 test('catalog search combines filters, persists on reload and clears empty results', async ({ page }) => {
   await page.goto('/catalogo');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Nuestras creaciones');
-  await expect(page.locator('.product-card')).toHaveCount(12);
+  await expect(page.locator('.product-card')).toHaveCount(10);
   await page.getByRole('searchbox').fill('PEONÍA');
   await page.getByRole('button', { name: 'Buscar' }).click();
   await expect(page.locator('.product-card')).toHaveCount(2);
-  await page.getByRole('link', { name: 'Velas decorativas', exact: true }).click();
+  await page.getByRole('link', { name: 'Sets decorativos', exact: true }).click();
   await expect(page).toHaveURL(/categoria=velas-decorativas/);
   await page.reload();
   await expect(page.getByRole('searchbox')).toHaveValue('PEONÍA');
-  await expect(page.locator('.product-card')).toHaveCount(2);
+  await expect(page.locator('.product-card')).toHaveCount(1);
   await page.getByRole('link', { name: 'Wax sachet', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'No encontramos ese detalle' })).toBeVisible();
   await page.getByRole('link', { name: 'Limpiar filtros', exact: true }).first().click();
-  await expect(page.locator('.product-card')).toHaveCount(12);
+  await expect(page.locator('.product-card')).toHaveCount(10);
 });
 
 test('detail gallery, consultation, internal links and 404 work', async ({ page }) => {
-  await page.goto('/catalogo/rosas-rosa');
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Vela de rosas rosa');
+  await page.goto('/catalogo/peonia-en-recipiente');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Peonía en recipiente');
   await expect(page.locator('.product-facts')).toContainText('Por confirmar');
   await page.getByRole('button', { name: 'Acercar fotografía' }).click();
   await expect(page.getByRole('button', { name: 'Acercar fotografía' })).toHaveAttribute('aria-pressed', 'true');
-  const consultation = page.locator('.detail-copy').getByRole('link', { name: /Consultar por WhatsApp/ });
+  const consultation = page.locator('.detail-copy').getByRole('link', { name: /Pedir por WhatsApp/ });
   const url = new URL((await consultation.getAttribute('href'))!);
   expect(url.hostname).toBe('wa.me');
-  expect(url.searchParams.get('text')).toContain('Vela de rosas rosa');
+  expect(url.searchParams.get('text')).toContain('Peonía en recipiente');
   await expect(consultation).toHaveAttribute('rel', 'noopener noreferrer');
   await page.getByRole('link', { name: 'Esencia', exact: true }).click();
   await expect(page).toHaveURL(/\/#esencia$/);
@@ -120,27 +120,28 @@ test('home uses labelled guides while detail photographs retain full framing', a
   for (const width of [390, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto('/');
-    const guides = page.locator('.hero-art img, .category-card img');
-    await expect(guides).toHaveCount(7);
-    // Carousel scenes carry an HTML label; the creation-card illustrations have it printed in the image instead.
+    const guides = page.locator('.hero-art img');
+    await expect(guides).toHaveCount(4);
+    // The carousel keeps labelled guide scenes; category cards now use real catalog photographs.
     await expect(page.locator('.hero-art .illustrative')).toHaveCount(4);
-    await expect(page.locator('.category-card .has-printed-label')).toHaveCount(3);
+    await expect(page.locator('.category-card .has-printed-label')).toHaveCount(0);
+    await expect(page.locator('.category-card .is-photograph')).toHaveCount(3);
     for (const guide of await guides.all()) {
       expect(decodeURIComponent((await guide.getAttribute('src'))!)).toContain('/images/references/');
       await expect(guide).toHaveAttribute('alt', /Imagen ilustrativa/);
     }
-    await page.goto('/catalogo/rosas-rosa');
+    await page.goto('/catalogo/noche-de-velitas');
     const image = page.locator('.product-gallery .wax-frame img');
-    await expect(image).toHaveAttribute('src', '/images/originals/rosas-conjunto.webp');
+    await expect(image).toHaveAttribute('src', '/images/originals/noche-de-velitas.webp');
     expect(await image.evaluate(el => getComputedStyle(el).objectFit)).toBe('scale-down');
     await page.getByRole('button', { name: 'Imagen 2', exact: true }).click();
-    await expect(image).toHaveAttribute('src', '/images/originals/rosas-rosa.webp');
+    await expect(image).toHaveAttribute('src', '/images/originals/figuras-con-estrella.webp');
     expect(await image.evaluate(el => getComputedStyle(el).objectFit)).toBe('scale-down');
   }
 });
 
 test('real product photos render without illustrative labels and gallery views remain usable', async ({ page }) => {
-  await page.goto('/catalogo/rosas-rosa');
+  await page.goto('/catalogo/noche-de-velitas');
   await expect(page.locator('.product-gallery .illustrative')).toHaveCount(0);
   await expect(page.getByRole('button', { name: 'Imagen 2', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Imagen 2', exact: true }).click();
@@ -166,8 +167,8 @@ test('real product photos render without illustrative labels and gallery views r
       }
     }
   }
-  await page.goto('/catalogo/peonia-morada');
-  await expect(page.locator('.product-gallery .illustrative')).toHaveCount(1);
+  // Every catalog design now uses a real photograph.
+  await expect(page.locator('.product-card .illustrative')).toHaveCount(0);
 });
 
 test('wax depth responds to hover and focus but stays still with reduced motion', async ({ page }, testInfo) => {

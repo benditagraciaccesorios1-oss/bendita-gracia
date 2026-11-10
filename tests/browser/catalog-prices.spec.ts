@@ -19,9 +19,9 @@ test('home cards lead to the priced categories and old category links still filt
   await expect(cards.nth(1).locator('.card-bottom')).toContainText(cop('74.900'));
 
   await page.goto('/catalogo?categoria=velas-florales');
-  await expect(page.getByRole('link', { name: 'Velas decorativas', exact: true })).toHaveAttribute('aria-current', 'true');
-  await expect(page.locator('.product-card')).toHaveCount(7);
-  await expect(page.locator('.product-card', { hasText: 'Peonía morada' }).locator('.card-bottom')).toContainText('Por confirmar');
+  await expect(page.getByRole('link', { name: 'Sets decorativos', exact: true })).toHaveAttribute('aria-current', 'true');
+  await expect(page.locator('.product-card')).toHaveCount(1);
+  await expect(page.locator('.product-card', { hasText: 'Set florero margaritas' }).locator('.card-bottom')).toContainText(cop('39.900'));
 });
 
 test('wax melts order collects presentation, form, fragrance and color into the WhatsApp message', async ({ page }) => {
@@ -68,7 +68,7 @@ test('single-presentation lines show their size, scent rule and extra details', 
 test('merged snowflake figures redirect to the seasonal figures line', async ({ page }) => {
   await page.goto('/catalogo/copos-en-caja');
   await expect(page).toHaveURL(/\/catalogo\/figuras-navidenas$/);
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Figuras de temporada');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Figuras navideñas');
   await expect(page.locator('.product-facts')).toContainText(/1 unidad: \$\s?9\.990 · Kit x 2 unidades: \$\s?17\.900 · Kit x 3 unidades: \$\s?26\.900/);
   await expect(page.locator('.product-facts')).toContainText('7 cm de alto');
 });
@@ -90,4 +90,41 @@ test('star candles on a pearl base are a reference option of noche de velitas', 
   expect(await whatsappText(page, /Pedir por WhatsApp/)).toMatch(/^Hola, me interesa el diseño Noche de velitas\. Presentación: 5 unidades \(\$\s?14\.900\)\. Referencia: Velitas sobre base de perlas\. ¿Me confirmas disponibilidad\?$/);
   await page.goto('/catalogo');
   await expect(page.locator('.product-card', { hasText: 'Figuras con estrella' })).toHaveCount(0);
+});
+
+test('seasonal line groups the Christmas designs and the new peony products show their prices', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('.category-grid > a')).toHaveCount(3);
+  const seasonal = page.getByRole('link', { name: /línea de temporada/ });
+  // Readable and centered under the three cards, not a small footnote.
+  expect(await seasonal.evaluate(el => parseFloat(getComputedStyle(el).fontSize))).toBeGreaterThanOrEqual(18);
+  const link = (await seasonal.boundingBox())!;
+  const grid = (await page.locator('.category-grid').boundingBox())!;
+  expect(Math.abs(link.x + link.width / 2 - grid.x - grid.width / 2)).toBeLessThan(3);
+  await seasonal.click();
+  await expect(page).toHaveURL(/categoria=temporada$/);
+  await expect(page.getByRole('navigation', { name: 'Filtrar por categoría' }).getByRole('link', { name: 'Temporada navideña', exact: true })).toHaveAttribute('aria-current', 'true');
+  await expect(page.locator('.product-card h2')).toHaveText(['Figuras navideñas', 'Noche de velitas', 'Velitas de peticiones', 'Sachet de temporada']);
+  await page.goto('/catalogo');
+  await expect(page.locator('.card-bottom', { hasText: 'Por confirmar' })).toHaveCount(0);
+  await page.goto('/catalogo/set-florero-margaritas-peonia');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Set florero margaritas + peonía en base de cerámica');
+  await expect(page.locator('.product-facts')).toContainText(cop('39.900'));
+  expect(await whatsappText(page, /Pedir por WhatsApp/)).toMatch(/Set florero margaritas \+ peonía en base de cerámica\. Presentación: Set completo \(\$\s?39\.900\)/);
+  for (const slug of ['rosas-rosa', 'rosas-marfil', 'peonia-en-domo', 'peonia-morada']) {
+    await page.goto(`/catalogo/${slug}`);
+    await expect(page).toHaveURL(/\/catalogo\?categoria=velas-decorativas$/);
+  }
+});
+
+
+test('unique flower details have a separate home link and catalog filter', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('link', { name: /Detalles únicos: descubre nuestras velas florales/ }).click();
+  await expect(page).toHaveURL(/categoria=detalles-unicos$/);
+  await expect(page.getByRole('navigation', { name: 'Filtrar por categoría' }).getByRole('link', { name: 'Detalles únicos', exact: true })).toHaveAttribute('aria-current', 'true');
+  await expect(page.locator('.product-card h2')).toHaveText(['Peonía en recipiente']);
+  await expect(page.locator('.card-bottom')).toContainText(cop('21.900'));
+  await page.getByRole('link', { name: 'Sets decorativos', exact: true }).click();
+  await expect(page.locator('.product-card h2')).toHaveText(['Set florero margaritas + peonía en base de cerámica']);
 });
