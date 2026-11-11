@@ -5,7 +5,7 @@ for (const width of [390, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto('/');
     const campaign = page.getByRole('region', { name: 'Navidad en Bendita Gracia' });
-    await expect(campaign.getByRole('heading', { name: 'Encuentra tu detalle favorito para esta Navidad', exact: true })).toBeVisible();
+    await expect(campaign.getByRole('heading', { name: 'Descubre la magia de nuestra colección navideña', exact: true })).toBeVisible();
     const snow = campaign.locator('[data-snowflake]').first();
     await expect(snow).toHaveAttribute('aria-hidden', 'true');
     expect(await snow.evaluate(el => getComputedStyle(el).animationName)).not.toBe('none');
@@ -19,9 +19,9 @@ for (const width of [390, 1440]) {
     await expect(campaign).not.toContainText(/descuento|%|oferta por tiempo limitado/i);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await campaign.screenshot({ path: testInfo.outputPath(`christmas-${width}.png`) });
-    await campaign.getByRole('link', { name: 'Descubre la colección navideña' }).click();
+    await campaign.getByRole('link', { name: 'Explorar colección navideña' }).click();
     await expect(page).toHaveURL(/categoria=temporada$/);
-    await expect(page.locator('.product-card h2')).toHaveText(['Figuras navideñas', 'Noche de velitas', 'Velitas de peticiones', 'Sachet de temporada']);
+    await expect(page.locator('.product-card h2')).toHaveText(['Figuras navideñas', 'Noche de velitas', 'Velitas de peticiones', 'Sachet de temporada', 'Chao año viejo']);
   });
 }
 
@@ -29,7 +29,7 @@ test('Christmas decoration stays static for reduced motion without losing the co
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
   const campaign = page.getByRole('region', { name: 'Navidad en Bendita Gracia' });
-  await expect(campaign.getByRole('link', { name: 'Descubre la colección navideña' })).toBeVisible();
+  await expect(campaign.getByRole('link', { name: 'Explorar colección navideña' })).toBeVisible();
   for (const element of await campaign.locator('[data-snowflake], [data-light]').all()) {
     expect(await element.evaluate(el => getComputedStyle(el).animationName)).toBe('none');
   }
@@ -46,7 +46,7 @@ test('Christmas lights use four glass colors and the gift-shaped collection link
     expect(new Set(colors).size).toBe(4);
     expect(colors.every(color => color.includes('radial-gradient'))).toBe(true);
   }
-  const gift = campaign.getByRole('link', { name: 'Descubre la colección navideña' });
+  const gift = campaign.getByRole('link', { name: 'Explorar colección navideña' });
   await expect(gift.locator('svg')).toHaveAttribute('aria-hidden', 'true');
   await gift.focus();
   await expect(gift).toBeFocused();

@@ -28,7 +28,7 @@ test('one Christmas pause control stops the site and campaign and survives inter
   await expect(campaign).toHaveAttribute('data-paused', 'true');
   expect(await page.locator('[data-ambient-flake]').first().evaluate(el => getComputedStyle(el).animationPlayState)).toBe('paused');
   expect(await page.locator('.site-footer [data-christmas-light]').first().evaluate(el => getComputedStyle(el).animationPlayState)).toBe('paused');
-  await campaign.getByRole('link', { name: 'Descubre la colección navideña' }).click();
+  await campaign.getByRole('link', { name: 'Explorar colección navideña' }).click();
   await expect(page).toHaveURL(/categoria=temporada$/);
   await expect(page.getByRole('button', { name: 'Reanudar ambiente navideño', exact: true })).toHaveAttribute('aria-pressed', 'true');
   await page.getByRole('button', { name: 'Reanudar ambiente navideño', exact: true }).click();

@@ -28,9 +28,10 @@ type Product = {
   description: string;
   images: { src: string; alt: string; illustrative: boolean }[];
   priceCOP: number | null;
+  priceMaxCOP: number | null; // solo cuando la marca publica un rango («desde … hasta …»)
   dimensions: string | null;
   fragrances: string[] | null;
-  availability: 'unconfirmed' | 'available' | 'unavailable';
+  availability: 'unconfirmed' | 'on-request' | 'available' | 'unavailable';
 };
 ```
 

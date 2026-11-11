@@ -2,7 +2,7 @@
 
 import { useId, useState } from 'react';
 import { WaxButton } from '@/components/wax';
-import { formatCOP, orderMessage, whatsappUrl, type Product } from '@/data/catalog';
+import { formatCOP, orderMessage, priceLabel, whatsappUrl, type Product } from '@/data/catalog';
 import styles from './order-form.module.css';
 
 // Lets the customer pick presentation, form, fragrance and color; the result is a WhatsApp consultation, not a checkout.
@@ -12,6 +12,7 @@ export function OrderForm({ product, phone }: { product: Product; phone: string 
   const [options, setOptions] = useState<Record<string, string>>({});
   const chosen = product.variants[variant];
   const flexiblePackaging = product.options.some(option => option.id === 'empaque');
+  const priceRange = product.priceMaxCOP !== null;
   const href = whatsappUrl(phone, undefined, orderMessage(product, { variant, options }));
 
   return <form className={styles.form} aria-label="Arma tu pedido" onSubmit={event => event.preventDefault()}>
@@ -29,9 +30,9 @@ export function OrderForm({ product, phone }: { product: Product; phone: string 
           <option value="">Elige una opción</option>
           {option.values.map(value => <option key={value}>{value}</option>)}
         </select>
-        : <input type="text" maxLength={60} placeholder="Cuéntanos tu preferencia" value={options[option.id] ?? ''} onChange={event => setOptions({ ...options, [option.id]: event.target.value })} />}
+        : <input type="text" maxLength={option.maxLength ?? 60} placeholder="Cuéntanos tu preferencia" value={options[option.id] ?? ''} onChange={event => setOptions({ ...options, [option.id]: event.target.value })} />}
     </label>)}
-    <p className={styles.total} aria-live="polite">{flexiblePackaging ? 'Precio de referencia' : 'Total'} <strong>{formatCOP(chosen.priceCOP)}</strong> <span>{chosen.label}</span></p>
+    <p className={styles.total} aria-live="polite">{flexiblePackaging || priceRange ? 'Precio de referencia' : 'Total'} <strong>{priceRange ? priceLabel(product) : formatCOP(chosen.priceCOP)}</strong> <span>{chosen.label}</span></p>
     {flexiblePackaging && <p className={styles.packagingNote}>El precio final varía según el empaque elegido. Consulta las opciones y el valor por WhatsApp.</p>}
     <WaxButton href={href} external>Pedir por WhatsApp <span aria-hidden="true">↗</span></WaxButton>
   </form>;

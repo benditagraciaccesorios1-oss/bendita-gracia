@@ -38,8 +38,9 @@ EXTRA_SOURCES = {
     'peonia-en-recipiente': 'peonia en recipiente.jpeg',
     'set-florero-margaritas-peonia': 'Set florero margaritas + peonia en base de ceramica.jpeg',
 }
-# Photographs embedded in the brand's price document, in document order.
-DOCUMENT = ROOT / 'Información página web - Bendita Gracia.docx'
+# Photographs embedded in the brand's price document, in document order. The updated document keeps
+# images 1-15 byte-identical and adds new product photos; the rest of its images are annotated screenshots.
+DOCUMENT = ROOT / 'Información página web - Bendita Gracia actualizada.docx'
 DOCUMENT_SOURCES = {
     'wax-melts-corazones-quemador': 'image1.png',
     'wax-melts-nubes': 'image2.png',
@@ -56,6 +57,8 @@ DOCUMENT_SOURCES = {
     'figuras-kit-x3': 'image13.jpeg',
     'noche-de-velitas': 'image14.jpeg',
     'velitas-peticiones-estrella': 'image15.png',
+    'chao-ano-viejo': 'image16.jpeg',
+    'set-tres-velas-flores': 'image19.jpeg',
 }
 sizes = {}
 # Photos narrower than this blur on scaled laptop screens. `--export-small DIR` writes their sources so

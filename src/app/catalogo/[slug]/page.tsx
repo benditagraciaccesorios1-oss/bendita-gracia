@@ -41,7 +41,7 @@ export default async function DetailPage({ params }: Props) {
             <div><dt>Medidas</dt><dd>{product.dimensions ?? 'Por confirmar'}</dd></div>
             <div><dt>Fragancias</dt><dd>{product.scentless ? 'Sin fragancia' : product.fragrances?.join(', ') ?? 'Por confirmar'}</dd></div>
             {product.details.map(item => <div key={item.label}><dt>{item.label}</dt><dd>{item.value}</dd></div>)}
-            <div><dt>Disponibilidad</dt><dd>{product.availability === 'unconfirmed' ? 'Por confirmar' : product.availability === 'available' ? 'Disponible' : 'No disponible'}</dd></div>
+            <div><dt>Disponibilidad</dt><dd>{{ unconfirmed: 'Por confirmar', 'on-request': 'Bajo pedido', available: 'Disponible', unavailable: 'No disponible' }[product.availability]}</dd></div>
           </dl>
           {product.variants.length
             ? <OrderForm product={product} phone={whatsappPhone} />

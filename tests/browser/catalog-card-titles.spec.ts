@@ -5,7 +5,7 @@ for (const width of [360, 390, 768, 1024, 1440]) {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.setViewportSize({ width, height: 900 });
     await page.goto('/catalogo');
-    await expect(page.locator('.product-card')).toHaveCount(10);
+    await expect(page.locator('.product-card')).toHaveCount(12);
     const measurements = await page.locator('.product-card').evaluateAll(cards => cards.map(card => {
       const title = card.querySelector('h2')!;
       const range = document.createRange();

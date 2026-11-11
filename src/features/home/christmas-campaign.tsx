@@ -20,9 +20,9 @@ export function ChristmasCampaign() {
     </div>
     <div className={styles.copy}>
       <p className={styles.eyebrow}>UNA NAVIDAD LLENA DE LUZ</p>
-      <h2>Encuentra tu detalle favorito para esta Navidad</h2>
-      <p className={styles.description}>Velitas, aromas y pequeños detalles para regalar con intención.</p>
-      <Link className={styles.cta} href="/catalogo?categoria=temporada"><svg className={styles.giftIcon} viewBox="0 0 24 26" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M3 11H21V24H3ZM2 7H22V12H2ZM12 7V24M12 7C3 8 3 0 7 2C10 3 12 7 12 7ZM12 7C21 8 21 0 17 2C14 3 12 7 12 7Z"/></g></svg>Descubre la colección navideña <span aria-hidden="true">↗</span></Link>
+      <h2>Descubre la magia de nuestra colección navideña</h2>
+      <p className={styles.description}>Velas artesanales aromáticas y detalles únicos elaborados con cera de soya para iluminar, decorar y regalar con intención.</p>
+      <Link className={styles.cta} href="/catalogo?categoria=temporada"><svg className={styles.giftIcon} viewBox="0 0 24 26" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M3 11H21V24H3ZM2 7H22V12H2ZM12 7V24M12 7C3 8 3 0 7 2C10 3 12 7 12 7ZM12 7C21 8 21 0 17 2C14 3 12 7 12 7Z"/></g></svg><span aria-hidden="true">✨</span> Explorar colección navideña <span aria-hidden="true">↗</span></Link>
     </div>
     <button className={styles.pause} type="button" aria-pressed={paused} onClick={toggle}>
       <span aria-hidden="true">{paused ? '▷' : 'Ⅱ'}</span> {paused ? 'Reanudar animaciones navideñas' : 'Pausar animaciones navideñas'}

@@ -131,5 +131,13 @@ export const originalImageSizes: Record<string, [number, number]> = {
   "/images/originals/velitas-peticiones-estrella.webp": [
     1600,
     1118
+  ],
+  "/images/originals/chao-ano-viejo.webp": [
+    1272,
+    1600
+  ],
+  "/images/originals/set-tres-velas-flores.webp": [
+    1594,
+    1600
   ]
 };

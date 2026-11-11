@@ -25,7 +25,7 @@ for (const width of [390, 1440]) {
     await page.mouse.wheel(0, 700);
     await expect.poll(() => header.evaluate(el => el.getBoundingClientRect().bottom)).toBeLessThan(0);
     const cards = page.locator('.product-card');
-    await expect(cards).toHaveCount(10);
+    await expect(cards).toHaveCount(12);
     await cards.nth(3).scrollIntoViewIfNeeded();
     const card = (await cards.nth(3).boundingBox())!;
     const edge = (await cards.nth(3).locator('.is-melt').boundingBox())!;
@@ -35,7 +35,7 @@ for (const width of [390, 1440]) {
     await page.screenshot({ path: testInfo.outputPath(`catalog-scroll-${width}.png`) });
     await page.getByRole('searchbox').fill('peonía');
     await page.getByRole('button', { name: 'Buscar' }).click();
-    await expect(cards).toHaveCount(2);
+    await expect(cards).toHaveCount(1);
     await cards.first().getByRole('link', { name: /Ver detalle/ }).click();
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Peonía en recipiente');
     // S26: after client navigation the detail page keeps the same melting, in-flow menu as the listing.
@@ -48,7 +48,7 @@ test('catalog wax animates decoratively and respects reduced motion without chan
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.goto('/catalogo');
   const edges = page.locator('.catalog-page .wax-edge.is-melt');
-  await expect(edges).toHaveCount(11);
+  await expect(edges).toHaveCount(13);
   const parts = page.locator('.catalog-page .wax-drop, .catalog-page .wax-sheen');
   expect(await parts.count()).toBeGreaterThan(13);
   for (const part of await parts.all()) {
