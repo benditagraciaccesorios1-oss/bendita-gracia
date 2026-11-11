@@ -24,15 +24,33 @@ const compositions = [
     ['velitas-de-peticiones', 'velitas-peticiones-estrella', '50%'],
   ] },
 ] as const;
-const slides = compositions.flatMap(composition => {
+const desktopSlides = compositions.flatMap(composition => {
   const photos = composition.photos.flatMap(([slug, file, focus]) => {
     const product = products.find(item => item.slug === slug);
     const photo = product?.images.find(image => image.src === `/images/originals/${file}.webp`);
-    return photo ? [{ ...photo, focus }] : [];
+    return product && photo ? [{ ...photo, focus, name: product.name }] : [];
   });
   // Keep complete compositions only, avoiding empty columns if the catalog changes.
   return photos.length === 3 ? [{ id: composition.id, name: composition.name, photos }] : [];
 });
+// These three photographs remain in desktop compositions and product galleries, but not on mobile.
+const excludedMobilePhotos = new Set([
+  '/images/originals/set-florero-margaritas-peonia.webp',
+  '/images/originals/sachet-navidad-colgantes.webp',
+  '/images/originals/kit-pebetero-navidad.webp',
+]);
+const mobileSlides = desktopSlides.flatMap(scene => scene.photos
+  .filter(photo => !excludedMobilePhotos.has(photo.src))
+  .map(photo => ({ id: photo.src, name: photo.name, photos: [photo] })));
+const mobileQuery = '(max-width: 899px)';
+function subscribeMobile(notify: () => void) {
+  const media = window.matchMedia(mobileQuery);
+  media.addEventListener('change', notify);
+  return () => media.removeEventListener('change', notify);
+}
+const getMobile = () => window.matchMedia(mobileQuery).matches;
+const desktopOnServer = () => false;
+
 // One small drop and one long drop toward the corner, as on the pink panel of the mockup.
 const heroDrops = [[23.8, .9], [76.2, 1.3]] as const;
 const motionQuery = '(prefers-reduced-motion: reduce)';
@@ -50,7 +68,11 @@ const getHidden = () => document.hidden;
 const pausedOnServer = () => true;
 
 export function HeroCarousel() {
+  const mobile = useSyncExternalStore(subscribeMobile, getMobile, desktopOnServer);
+  const slides = mobile ? mobileSlides : desktopSlides;
   const [index, setIndex] = useState(0);
+  // A resize between individual mobile photos and desktop groups must always leave a valid active slide.
+  const activeIndex = index % slides.length;
   const [playChoice, setPlayChoice] = useState<boolean | null>(null);
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
@@ -65,7 +87,7 @@ export function HeroCarousel() {
     if (!rotating) return;
     const timer = window.setInterval(() => setIndex(current => (current + 1) % slides.length), 5000);
     return () => window.clearInterval(timer);
-  }, [rotating, index]);
+  }, [rotating, index, slides.length]);
 
   return <section className="hero" aria-labelledby="hero-heading">
     <div className="hero-copy">
@@ -94,17 +116,17 @@ export function HeroCarousel() {
       }}>
         {/* Every scene stays mounted in the same cell; only opacity changes, so the previous one fades out under the next. */}
         <div className="hero-art">{slides.map((scene, slideIndex) => {
-          const active = slideIndex === index;
+          const active = slideIndex === activeIndex;
           return <div key={scene.id} className={`hero-slide ${active ? 'is-active' : ''}`} role="group" aria-roledescription="diapositiva"
             aria-label={`${slideIndex + 1} de ${slides.length}: ${scene.name}`} aria-hidden={active ? undefined : true} inert={!active}>
             <div className="hero-composition">{scene.photos.map(photo => <div className="hero-photo" key={photo.src} style={{ '--hero-focus': photo.focus } as CSSProperties}>
-              <ProductImage src={photo.src} alt={photo.alt} illustrative={false} priority={slideIndex === 0} sizes="(max-width: 899px) 33vw, 22vw" />
+              <ProductImage src={photo.src} alt={photo.alt} illustrative={false} priority={slideIndex === 0} sizes="(max-width: 899px) 100vw, 22vw" />
             </div>)}</div>
           </div>;
         })}</div>
         <div className="carousel-controls">
           <button type="button" className="carousel-arrow" onClick={() => move(-1)} aria-label="Diseño anterior">‹</button>
-          <div className="carousel-status" aria-live={rotating ? 'off' : 'polite'} aria-atomic="true"><span>{String(index + 1).padStart(2, '0')} <span className="muted">/ {String(slides.length).padStart(2, '0')}</span></span><span className="sr-only">: {slides[index].name}</span></div>
+          <div className="carousel-status" aria-live={rotating ? 'off' : 'polite'} aria-atomic="true"><span>{String(activeIndex + 1).padStart(2, '0')} <span className="muted">/ {String(slides.length).padStart(2, '0')}</span></span><span className="sr-only">: {slides[activeIndex].name}</span></div>
           <button type="button" className="carousel-arrow" onClick={() => move(1)} aria-label="Diseño siguiente">›</button>
           <button className="carousel-toggle" type="button" disabled={reducedMotion} title={reducedMotion ? 'Avance automático desactivado por tu preferencia de movimiento reducido' : undefined} onClick={() => setPlayChoice(!playing)} aria-label={playing ? 'Pausar carrusel' : 'Reanudar carrusel'}>{playing ? 'Ⅱ' : '▶'}</button>
         </div>

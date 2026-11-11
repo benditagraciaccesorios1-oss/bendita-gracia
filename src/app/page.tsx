@@ -52,6 +52,7 @@ export default function Home() {
         <div className="section-heading creations-heading">
           <div className="creations-title"><span className="heading-rule" aria-hidden="true" /><Sprig className="heading-sprig" /><h2 id="categories-heading">Explora nuestras creaciones</h2><Sprig className="heading-sprig is-mirrored" /><span className="heading-rule" aria-hidden="true" /></div>
         </div>
+        <p className="wholesale-note">Adquiere cualquier producto al detal y al por mayor</p>
         <div className="category-grid">{homeCategories.map((category, index) => {
           return <Link href={`/catalogo?categoria=${category.id}`} className={`category-card creation-card tone-${(['cream', 'sage', 'lilac'] as const)[index]}`} key={category.id}>
             <ProductImage {...categoryPhotos[category.id]} sizes="(max-width: 899px) 92vw, 30vw" />

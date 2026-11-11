@@ -109,7 +109,8 @@
 .home-page .card-sprig { position: absolute; right: 14px; bottom: 12px; width: clamp(46px, 3.9vw, 60px); height: auto; color: var(--sprig); }
 
 @media (max-width: 899px) {
-  .home-page .hero { --stage-h: clamp(160px, 42vw, 320px); grid-template-columns: 100%; }
+  /* Keep one full-width photo, but reserve room for the brand panel and menu on short phones. */
+  .home-page .hero { --stage-h: clamp(180px, min(62vw, calc(100svh - 360px)), 260px); grid-template-columns: 100%; }
   .home-page .hero-copy { align-items: center; padding: 22px 20px 22px; text-align: center; border-radius: 0; }
   /* Mobile mockup: the pink lip spans the full width and drips over the top of the guide scene. */
   .home-page .hero-edge { left: 0; width: 100%; }
@@ -127,6 +128,7 @@
   .home-page .hero h1 { font-size: clamp(44px, 12.4vw, 66px); text-align: center; }
   .home-page .hero-intro { align-items: center; gap: 12px; }
   .home-page .hero-description { font-size: clamp(16px, 4.4vw, 21px); }
+  .home-page .hero-composition { grid-template-columns: minmax(0, 1fr); }
   .home-page .carousel-controls { bottom: 18px; gap: 8px; }
   .home-page .carousel-status { min-width: 74px; font-size: 17px; }
   .home-page .home-nav { margin-top: -10px; }
@@ -138,3 +140,5 @@
 /* Link to the seasonal (Christmas) line, kept separate from the three main product cards. */
 .home-page .seasonal-link { display: flex; justify-content: center; margin: 26px 0 0; }
 .home-page .seasonal-link .text-link { gap: 12px; padding: 8px 4px; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(18px, 1.5vw, 22px); font-style: italic; color: var(--wine); border-bottom-color: var(--wine); }
+
+.home-page .wholesale-note { margin: 4px auto 22px; max-width: 680px; padding: 12px 18px; border: 1px solid #b9996d; border-radius: 18px; background: #f8ecd9; color: #3b4b31; text-align: center; font-size: clamp(16px, 1.4vw, 20px); line-height: 1.45; }

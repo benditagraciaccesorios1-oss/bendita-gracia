@@ -121,10 +121,10 @@ test('home carousel and cards use catalog photographs while detail photographs r
     await page.setViewportSize({ width, height: 900 });
     await page.goto('/');
     const photos = page.locator('.hero-art img');
-    await expect(photos).toHaveCount(9);
+    await expect(photos).toHaveCount(width < 900 ? 6 : 9);
     // The carousel shows unlabelled product photographs (S29), as do the category cards.
     await expect(page.locator('.hero-art .illustrative')).toHaveCount(0);
-    await expect(page.locator('.hero-art .is-photograph')).toHaveCount(9);
+    await expect(page.locator('.hero-art .is-photograph')).toHaveCount(width < 900 ? 6 : 9);
     await expect(page.locator('.category-card .has-printed-label')).toHaveCount(0);
     await expect(page.locator('.category-card .is-photograph')).toHaveCount(3);
     for (const photo of await photos.all()) {

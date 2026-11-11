@@ -48,7 +48,7 @@ async function expectCoversPanel(page: Page, scene: Rect) {
   expect(photo.fit).toBe('cover');
   expect(photo.transform).toBe('none');
   for (const side of ['x', 'y', 'height'] as const) expect(Math.abs(photo.rect[side] - scene[side])).toBeLessThanOrEqual(1);
-  expect(Math.abs(photo.rect.width - scene.width / 3)).toBeLessThanOrEqual(1);
+  expect(Math.abs(photo.rect.width - scene.width / (page.viewportSize()!.width < 900 ? 1 : 3))).toBeLessThanOrEqual(1);
   expect(photo.scale).toBeLessThanOrEqual(1);
   await expect(photo.backdrop).toHaveCount(0);
   await expect(photo.label).toHaveCount(0);
@@ -165,7 +165,8 @@ for (const [width, height] of [[1536, 1024], [1440, 900], [1024, 768], [390, 844
     await page.goto('/');
     const carousel = page.getByRole('region', { name: 'Diseños destacados' });
     const sceneBox = await box(page.locator('.hero-scene'));
-    for (const [[file]] of heroPhotos) {
+    const expectedFiles = width < 900 ? heroPhotos.flatMap(([files]) => [...files]).filter(file => !['set-florero-margaritas-peonia', 'sachet-navidad-colgantes', 'kit-pebetero-navidad'].includes(file)) : heroPhotos.map(([files]) => files[0]);
+    for (const file of expectedFiles) {
       expect((await expectCoversPanel(page, sceneBox)).source).toBe(`/images/originals/${file}.webp`);
       await carousel.getByRole('button', { name: 'Diseño siguiente' }).click();
     }
