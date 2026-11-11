@@ -23,7 +23,7 @@ function layers(page: Page, at?: number) {
       stageCenter: stage.x + stage.width / 2,
       layers: nodes.map(node => {
         const style = getComputedStyle(node);
-        const photo = node.querySelector('.hero-photo')!.getBoundingClientRect();
+        const photo = node.querySelector('.hero-composition')!.getBoundingClientRect();
         return {
           label: node.getAttribute('aria-label'), hidden: node.getAttribute('aria-hidden') === 'true',
           opacity: Number(style.opacity), visibility: style.visibility, transform: style.transform, translate: style.translate,
@@ -45,16 +45,16 @@ for (const [width, height] of [[1536, 1024], [390, 844]]) {
     await page.clock.install();
     await page.goto('/');
     const carousel = page.getByRole('region', { name: 'Diseños destacados' });
-    await expect(carousel.getByRole('group')).toHaveAttribute('aria-label', '1 de 4: Velas de rosas y peonía bajo domo');
+    await expect(carousel.getByRole('group')).toHaveAttribute('aria-label', '1 de 3: Peonía, set de flores y florero');
     await expect.poll(() => page.locator('.hero-slide img').evaluateAll(images => images.every(image => (image as HTMLImageElement).complete))).toBe(true);
     await finishFades(page);
 
     const rest = await layers(page);
-    expect(rest.layers.map(layer => layer.opacity)).toEqual([1, 0, 0, 0]);
-    expect(rest.layers.map(layer => layer.visibility)).toEqual(['visible', 'hidden', 'hidden', 'hidden']);
+    expect(rest.layers.map(layer => layer.opacity)).toEqual([1, 0, 0]);
+    expect(rest.layers.map(layer => layer.visibility)).toEqual(['visible', 'hidden', 'hidden']);
 
     await carousel.getByRole('button', { name: 'Diseño siguiente' }).click();
-    await expect(carousel.getByRole('group')).toHaveAttribute('aria-label', '2 de 4: Velas florales');
+    await expect(carousel.getByRole('group')).toHaveAttribute('aria-label', '2 de 3: Aromas y detalles para regalar');
     const middle = await layers(page, .5);
     const [outgoing, incoming] = middle.layers;
     // Both photographs are painted halfway through: the previous one fades out while the next fades in.
@@ -77,14 +77,14 @@ for (const [width, height] of [[1536, 1024], [390, 844]]) {
 
     await finishFades(page);
     const done = await layers(page);
-    expect(done.layers.map(layer => layer.opacity)).toEqual([0, 1, 0, 0]);
-    expect(done.layers.map(layer => layer.visibility)).toEqual(['hidden', 'visible', 'hidden', 'hidden']);
+    expect(done.layers.map(layer => layer.opacity)).toEqual([0, 1, 0]);
+    expect(done.layers.map(layer => layer.visibility)).toEqual(['hidden', 'visible', 'hidden']);
 
     // Automatic advance after five seconds uses the same crossfade.
     await page.mouse.move(0, height - 4);
     await page.locator('#contenido').focus();
     await page.clock.fastForward(5100);
-    await expect(carousel.getByRole('group')).toHaveAttribute('aria-label', '3 de 4: Figuras en cera');
+    await expect(carousel.getByRole('group')).toHaveAttribute('aria-label', '3 de 3: Luz para celebrar');
     const automatic = await layers(page, .5);
     expect(automatic.layers[1].transitions).toBe(1);
     expect(automatic.layers[2].transitions).toBe(1);
@@ -99,11 +99,11 @@ test('reduced motion swaps photographs instantly without transitions', async ({ 
   await page.goto('/');
   const carousel = page.getByRole('region', { name: 'Diseños destacados' });
   await carousel.getByRole('button', { name: 'Diseño siguiente' }).click();
-  await expect(carousel.getByRole('group')).toHaveAttribute('aria-label', '2 de 4: Velas florales');
+  await expect(carousel.getByRole('group')).toHaveAttribute('aria-label', '2 de 3: Aromas y detalles para regalar');
   const state = await layers(page);
   expect(state.layers.every(layer => layer.transitions === 0)).toBe(true);
-  expect(state.layers.map(layer => layer.opacity)).toEqual([0, 1, 0, 0]);
-  expect(state.layers.map(layer => layer.visibility)).toEqual(['hidden', 'visible', 'hidden', 'hidden']);
+  expect(state.layers.map(layer => layer.opacity)).toEqual([0, 1, 0]);
+  expect(state.layers.map(layer => layer.visibility)).toEqual(['hidden', 'visible', 'hidden']);
 });
 
 test('status is not announced while rotating automatically and swipes still change slides', async ({ page }) => {

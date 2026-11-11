@@ -1,17 +1,38 @@
 'use client';
 
-import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from 'react';
 import { ProductImage } from '@/components/product-image';
 import { WaxButton, WaxEdge } from '@/components/wax';
+import { products } from '@/data/catalog';
 
-// Illustrative guide scenes cropped from the supplied mockups fill the panel like the reference;
-// the uploaded photographs stay in the catalog and detail pages.
-const slides = [
-  { id: 'hero-floral', name: 'Velas de rosas y peonía bajo domo', alt: 'velas de rosas marfil y rosa junto a una peonía bajo domo' },
-  { id: 'hero-velas-florales', name: 'Velas florales', alt: 'velas de rosas y peonías sobre una base de madera' },
-  { id: 'hero-figuras', name: 'Figuras en cera', alt: 'figuras con estrella sobre una base de perlas' },
-  { id: 'hero-sachet', name: 'Wax sachet', alt: 'wax sachets botánicos en bolsas de tul' },
-].map(scene => ({ ...scene, src: `/images/references/${scene.id}.webp`, alt: `Imagen ilustrativa de referencia: ${scene.alt}` }));
+// Three genuine portrait photos fit the wide stage without the excessive crop of a single portrait.
+// Never use the externally generated image: products, lettering and backgrounds stay as supplied in the catalog.
+const compositions = [
+  { id: 'flowers', name: 'Peonía, set de flores y florero', photos: [
+    ['peonia-en-recipiente', 'peonia-en-recipiente', '50%'],
+    ['set-tres-velas-flores', 'set-tres-velas-flores', '50%'],
+    ['set-florero-margaritas-peonia', 'set-florero-margaritas-peonia', '50%'],
+  ] },
+  { id: 'aromas', name: 'Aromas y detalles para regalar', photos: [
+    ['kit-pebetero', 'kit-pebetero-navidad', '40%'],
+    ['sachet-botanico', 'sachet-botanico-trio', '50%'],
+    ['sachet-navideno', 'sachet-navidad-colgantes', '50%'],
+  ] },
+  { id: 'celebrations', name: 'Luz para celebrar', photos: [
+    ['figuras-navidenas', 'figuras-kit-x3', '50%'],
+    ['chao-ano-viejo', 'chao-ano-viejo', '50%'],
+    ['velitas-de-peticiones', 'velitas-peticiones-estrella', '50%'],
+  ] },
+] as const;
+const slides = compositions.flatMap(composition => {
+  const photos = composition.photos.flatMap(([slug, file, focus]) => {
+    const product = products.find(item => item.slug === slug);
+    const photo = product?.images.find(image => image.src === `/images/originals/${file}.webp`);
+    return photo ? [{ ...photo, focus }] : [];
+  });
+  // Keep complete compositions only, avoiding empty columns if the catalog changes.
+  return photos.length === 3 ? [{ id: composition.id, name: composition.name, photos }] : [];
+});
 // One small drop and one long drop toward the corner, as on the pink panel of the mockup.
 const heroDrops = [[23.8, .9], [76.2, 1.3]] as const;
 const motionQuery = '(prefers-reduced-motion: reduce)';
@@ -76,9 +97,9 @@ export function HeroCarousel() {
           const active = slideIndex === index;
           return <div key={scene.id} className={`hero-slide ${active ? 'is-active' : ''}`} role="group" aria-roledescription="diapositiva"
             aria-label={`${slideIndex + 1} de ${slides.length}: ${scene.name}`} aria-hidden={active ? undefined : true} inert={!active}>
-            <div className="hero-photo">
-              <ProductImage src={scene.src} alt={scene.alt} priority={slideIndex === 0} sizes="(max-width: 899px) 100vw, 64vw" />
-            </div>
+            <div className="hero-composition">{scene.photos.map(photo => <div className="hero-photo" key={photo.src} style={{ '--hero-focus': photo.focus } as CSSProperties}>
+              <ProductImage src={photo.src} alt={photo.alt} illustrative={false} priority={slideIndex === 0} sizes="(max-width: 899px) 33vw, 22vw" />
+            </div>)}</div>
           </div>;
         })}</div>
         <div className="carousel-controls">

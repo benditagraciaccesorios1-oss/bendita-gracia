@@ -99,36 +99,37 @@ test('carousel advances automatically and pauses for interaction and reduced mot
   await page.mouse.move(0, 890);
   await page.locator('#contenido').focus();
   await page.clock.fastForward(5100);
-  await expect(status).toContainText('04');
+  await expect(status).toContainText('01');
   await page.getByRole('button', { name: 'Diseño siguiente' }).focus();
   await page.clock.fastForward(10000);
-  await expect(status).toContainText('04');
-  await page.keyboard.press('ArrowRight');
   await expect(status).toContainText('01');
+  await page.keyboard.press('ArrowRight');
+  await expect(status).toContainText('02 / 03');
   await page.keyboard.press('ArrowLeft');
-  await expect(status).toContainText('04');
+  await expect(status).toContainText('01 / 03');
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.mouse.move(0, 890);
   await page.locator('#contenido').focus();
   await page.clock.fastForward(10000);
-  await expect(status).toContainText('04');
+  await expect(status).toContainText('01');
   await expect(page.getByRole('button', { name: 'Reanudar carrusel' })).toBeDisabled();
 });
 
-test('home uses labelled guides while detail photographs retain full framing', async ({ page }) => {
+test('home carousel and cards use catalog photographs while detail photographs retain full framing', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   for (const width of [390, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto('/');
-    const guides = page.locator('.hero-art img');
-    await expect(guides).toHaveCount(4);
-    // The carousel keeps labelled guide scenes; category cards now use real catalog photographs.
-    await expect(page.locator('.hero-art .illustrative')).toHaveCount(4);
+    const photos = page.locator('.hero-art img');
+    await expect(photos).toHaveCount(9);
+    // The carousel shows unlabelled product photographs (S29), as do the category cards.
+    await expect(page.locator('.hero-art .illustrative')).toHaveCount(0);
+    await expect(page.locator('.hero-art .is-photograph')).toHaveCount(9);
     await expect(page.locator('.category-card .has-printed-label')).toHaveCount(0);
     await expect(page.locator('.category-card .is-photograph')).toHaveCount(3);
-    for (const guide of await guides.all()) {
-      expect(decodeURIComponent((await guide.getAttribute('src'))!)).toContain('/images/references/');
-      await expect(guide).toHaveAttribute('alt', /Imagen ilustrativa/);
+    for (const photo of await photos.all()) {
+      await expect(photo).toHaveAttribute('src', /^\/images\/originals\/[a-z0-9-]+\.webp$/);
+      await expect(photo).toHaveAttribute('alt', /^Fotografía: /);
     }
     await page.goto('/catalogo/noche-de-velitas');
     const image = page.locator('.product-gallery .wax-frame img');

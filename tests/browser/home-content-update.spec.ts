@@ -15,7 +15,8 @@ for (const width of [390, 1440]) {
       await expect(images.nth(index)).toHaveAttribute('alt', /^Fotografía:/);
     }
     await expect(page.locator('.category-grid .illustrative, .category-grid .has-printed-label')).toHaveCount(0);
-    await expect(page.locator('.hero-art .illustrative')).toHaveCount(4);
+    // The carousel shows product photographs too, without the illustrative label (S29).
+    await expect(page.locator('.hero-art .illustrative')).toHaveCount(0);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await page.locator('.categories-section').screenshot({ path: testInfo.outputPath(`real-creations-${width}.png`) });
   });

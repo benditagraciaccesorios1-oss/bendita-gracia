@@ -11,26 +11,48 @@ const scrollSettled = (page: Page) => expect.poll(() => page.evaluate(() => new 
 const box = async (locator: Locator) => (await locator.boundingBox())!;
 const sourceOf = (src: string) => decodeURIComponent(new URL(src, 'http://local').searchParams.get('url') ?? new URL(src, 'http://local').pathname);
 
-// The visible carousel layer: its guide scene must fill the whole panel like the mockup, with its HTML label.
+type Rect = { x: number; y: number; width: number; height: number };
+
+// Original catalog photos arranged in three equal portrait columns per carousel layer (S31).
+const heroPhotos = [
+  [['peonia-en-recipiente', 'set-tres-velas-flores', 'set-florero-margaritas-peonia'], 'Peonía, set de flores y florero'],
+  [['kit-pebetero-navidad', 'sachet-botanico-trio', 'sachet-navidad-colgantes'], 'Aromas y detalles para regalar'],
+  [['figuras-kit-x3', 'chao-ano-viejo', 'velitas-peticiones-estrella'], 'Luz para celebrar'],
+] as const;
+
+// The first photograph in the active three-column composition.
 async function activeScene(page: Page) {
   const layer = page.locator('.hero-slide:not([aria-hidden="true"])');
-  const image = layer.locator('img');
+  const image = layer.locator('img').first();
   await expect.poll(() => image.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0)).toBe(true);
   const info = await image.evaluate(async (el: HTMLImageElement) => {
     // naturalWidth is density-corrected by srcset/sizes; decode the served file alone to read its real pixels.
     const served = new Image();
     served.src = el.currentSrc || el.src;
     await served.decode();
-    return { src: el.currentSrc || el.src, natural: [served.naturalWidth, served.naturalHeight], rect: el.getBoundingClientRect().toJSON(), fit: getComputedStyle(el).objectFit, transform: getComputedStyle(el).transform };
+    const rect = el.getBoundingClientRect();
+    const style = getComputedStyle(el);
+    return {
+      src: el.currentSrc || el.src, rect: rect.toJSON() as Rect,
+      // object-fit: cover scales the photograph until it fills both sides of its box.
+      scale: Math.max(rect.width / served.naturalWidth, rect.height / served.naturalHeight),
+      fit: style.objectFit, transform: style.transform,
+    };
   });
-  return { ...info, source: sourceOf(info.src), label: layer.getByText('Imagen ilustrativa', { exact: true }) };
+  return { ...info, source: sourceOf(info.src), label: layer.getByText('Imagen ilustrativa', { exact: true }), backdrop: layer.locator('.hero-backdrop') };
 }
 
-function expectFills(rect: { x: number; y: number; width: number; height: number }, scene: { x: number; y: number; width: number; height: number }) {
-  expect(Math.abs(rect.x - scene.x)).toBeLessThanOrEqual(1);
-  expect(Math.abs(rect.y - scene.y)).toBeLessThanOrEqual(1);
-  expect(Math.abs(rect.width - scene.width)).toBeLessThanOrEqual(1);
-  expect(Math.abs(rect.height - scene.height)).toBeLessThanOrEqual(1);
+// Each photograph fills a portrait third, without a matte, blurred background, distortion or enlargement.
+async function expectCoversPanel(page: Page, scene: Rect) {
+  const photo = await activeScene(page);
+  expect(photo.fit).toBe('cover');
+  expect(photo.transform).toBe('none');
+  for (const side of ['x', 'y', 'height'] as const) expect(Math.abs(photo.rect[side] - scene[side])).toBeLessThanOrEqual(1);
+  expect(Math.abs(photo.rect.width - scene.width / 3)).toBeLessThanOrEqual(1);
+  expect(photo.scale).toBeLessThanOrEqual(1);
+  await expect(photo.backdrop).toHaveCount(0);
+  await expect(photo.label).toHaveCount(0);
+  return photo;
 }
 
 test('desktop home follows the mockup: pink copy left, filled guide scene right, menu below and three category cards', async ({ page }) => {
@@ -59,16 +81,9 @@ test('desktop home follows the mockup: pink copy left, filled guide scene right,
   expect(Math.abs(sceneBox.y - copyBox.y)).toBeLessThanOrEqual(1);
   expect(sceneBox.height).toBeGreaterThanOrEqual(330);
   expect(sceneBox.height).toBeLessThanOrEqual(440);
-  // The reference hero scene fills the panel edge to edge (no matte or letterbox) with only mild enlargement.
-  const guide = await activeScene(page);
-  expect(guide.source).toBe('/images/references/hero-floral.webp');
-  expect(guide.fit).toBe('cover');
-  expectFills(guide.rect, sceneBox);
-  expect(Math.max(sceneBox.width / guide.natural[0], sceneBox.height / guide.natural[1])).toBeLessThanOrEqual(1.3);
-  await expect(guide.label).toBeVisible();
-  const labelBox = await box(guide.label);
-  expect(labelBox.x + labelBox.width).toBeLessThanOrEqual(sceneBox.x + sceneBox.width);
-  expect(labelBox.y + labelBox.height).toBeLessThanOrEqual(navBox.y);
+  // The first product photograph fills its own third of the composition.
+  const photo = await expectCoversPanel(page, sceneBox);
+  expect(photo.source).toBe('/images/originals/peonia-en-recipiente.webp');
   expect(await copy.evaluate(el => getComputedStyle(el).backgroundColor)).toBe('rgb(216, 165, 161)');
   // Left-aligned wine title in the mockup's proportions, with the description and CTA inside the pink panel.
   expect(headingBox.x).toBeGreaterThanOrEqual(copyBox.x + 40);
@@ -130,14 +145,8 @@ test('mobile home stacks pink copy above the guide scene, then the menu and stac
   expect(Math.abs(headingBox.x + headingBox.width / 2 - 195)).toBeLessThanOrEqual(2);
   expect(await heading.evaluate(el => parseFloat(getComputedStyle(el).fontSize))).toBeGreaterThanOrEqual(44);
   expect(sceneBox.height).toBeGreaterThanOrEqual(150);
-  const guide = await activeScene(page);
-  expect(guide.source).toBe('/images/references/hero-floral.webp');
-  expect(guide.fit).toBe('cover');
-  expectFills(guide.rect, sceneBox);
-  await expect(guide.label).toBeVisible();
-  const labelBox = await box(guide.label);
-  expect(labelBox.y).toBeGreaterThanOrEqual(sceneBox.y);
-  expect(labelBox.y + labelBox.height).toBeLessThanOrEqual(navBox.y);
+  const photo = await expectCoversPanel(page, sceneBox);
+  expect(photo.source).toBe('/images/originals/peonia-en-recipiente.webp');
   expect(navBox.y).toBeGreaterThanOrEqual(sceneBox.y + sceneBox.height - 30);
   const cardBoxes = await Promise.all((await page.locator('.category-card').all()).map(box));
   expect(cardBoxes).toHaveLength(3);
@@ -149,46 +158,56 @@ test('mobile home stacks pink copy above the guide scene, then the menu and stac
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 
-test('carousel fades between filled illustrative guide scenes and categories show the labeled guide cards', async ({ page }) => {
+for (const [width, height] of [[1536, 1024], [1440, 900], [1024, 768], [390, 844]]) {
+  test(`every carousel composition fills the panel in portrait thirds at ${width}px`, async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.setViewportSize({ width, height });
+    await page.goto('/');
+    const carousel = page.getByRole('region', { name: 'Diseños destacados' });
+    const sceneBox = await box(page.locator('.hero-scene'));
+    for (const [[file]] of heroPhotos) {
+      expect((await expectCoversPanel(page, sceneBox)).source).toBe(`/images/originals/${file}.webp`);
+      await carousel.getByRole('button', { name: 'Diseño siguiente' }).click();
+    }
+  });
+}
+
+test('carousel fades between three original photo compositions and categories show the photo cards', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.setViewportSize({ width: 1536, height: 1024 });
   await page.goto('/');
   const carousel = page.getByRole('region', { name: 'Diseños destacados' });
   const slide = carousel.getByRole('group');
   await expect(slide).toHaveCount(1);
-  await expect(slide).toHaveAttribute('aria-label', '1 de 4: Velas de rosas y peonía bajo domo');
+  await expect(slide).toHaveAttribute('aria-label', '1 de 3: Peonía, set de flores y florero');
+  await expect(page.locator('.carousel-status')).toContainText('01 / 03');
   // Inactive layers stay in place for the crossfade but are hidden from assistive technology and focus.
   const layers = carousel.locator('.hero-slide');
-  await expect(layers).toHaveCount(4);
+  await expect(layers).toHaveCount(3);
   for (const layer of (await layers.all()).slice(1)) {
     await expect(layer).toHaveAttribute('aria-hidden', 'true');
     expect(await layer.evaluate(el => (el as HTMLElement).inert)).toBe(true);
   }
-  // No side previews, dots or thumbnail strip: one scene per layer and three controls.
-  await expect(carousel.locator('img')).toHaveCount(4);
+  // No side previews, dots or thumbnail strip: three photographs per layer and the existing controls.
+  await expect(carousel.locator('img')).toHaveCount(9);
   await expect(carousel.locator('.hero-peek, .carousel-dots')).toHaveCount(0);
   expect(await carousel.getByRole('button').evaluateAll(buttons => buttons.map(button => button.getAttribute('aria-label'))))
     .toEqual(['Diseño anterior', 'Diseño siguiente', 'Reanudar carrusel']);
   await expect(carousel.getByRole('link')).toHaveCount(0);
-  // The carousel uses the guide renders from the mockups; the real photographs are kept for the catalog.
+  // The carousel shows real catalog photographs (S29), never the illustrative guide scenes or their label.
   expect((await carousel.locator('img').evaluateAll(images => images.map(image => (image as HTMLImageElement).src))).map(sourceOf))
-    .toEqual(['hero-floral', 'hero-velas-florales', 'hero-figuras', 'hero-sachet'].map(name => `/images/references/${name}.webp`));
-  const sceneBox = await box(page.locator('.hero-scene'));
-  const names = ['Velas de rosas y peonía bajo domo', 'Velas florales', 'Figuras en cera', 'Wax sachet'];
-  for (const [index, name] of names.entries()) {
-    await expect(slide).toHaveAttribute('aria-label', `${index + 1} de 4: ${name}`);
-    await expect(page.locator('.carousel-status')).toContainText(`0${index + 1}`);
-    await expect(slide.locator('img')).toHaveAttribute('alt', /^Imagen ilustrativa de referencia: /);
-    // Guide crops are already encoded for the site; avoid an additional lossy optimizer pass.
-    await expect(slide.locator('img')).toHaveAttribute('src', /^\/images\/references\/hero-/);
-    const guide = await activeScene(page);
-    expect(guide.fit).toBe('cover');
-    expect(guide.transform).toBe('none');
-    expectFills(guide.rect, sceneBox);
-    await expect(guide.label).toBeVisible();
+    .toEqual(heroPhotos.flatMap(([files]) => files.map(file => `/images/originals/${file}.webp`)));
+  await expect(carousel.locator('.illustrative')).toHaveCount(0);
+  await expect(carousel.getByText('Imagen ilustrativa')).toHaveCount(0);
+  for (const [index, [files, name]] of heroPhotos.entries()) {
+    await expect(slide).toHaveAttribute('aria-label', `${index + 1} de 3: ${name}`);
+    await expect(page.locator('.carousel-status')).toContainText(`0${index + 1} / 03`);
+    for (const image of await slide.locator('img').all()) await expect(image).toHaveAttribute('alt', /^Fotografía: /);
+    // Photographs are served as optimized originals, without a second lossy optimizer pass.
+    for (const [slot, file] of files.entries()) await expect(slide.locator('img').nth(slot)).toHaveAttribute('src', `/images/originals/${file}.webp`);
     await carousel.getByRole('button', { name: 'Diseño siguiente' }).click();
   }
-  await expect(slide).toHaveAttribute('aria-label', '1 de 4: Velas de rosas y peonía bajo domo');
+  await expect(slide).toHaveAttribute('aria-label', '1 de 3: Peonía, set de flores y florero');
   // Category cards show the three illustrations of the new home guide's creation block (S15-S16), with their printed
   // illustrative label; the uploaded photographs stay in the catalog and details. The frame follows the illustration
   // proportions, so it is neither cropped nor enlarged.
