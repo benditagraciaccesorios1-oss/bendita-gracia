@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { homeTitle, homeDescription, pageMetadata, siteOrigin } from '@/lib/seo';
 import '@fontsource/cormorant-garamond/400.css';
 import '@fontsource/cormorant-garamond/500.css';
 import '@fontsource/cormorant-garamond/600.css';
@@ -15,14 +16,13 @@ import { ChristmasTheme } from '@/components/christmas-theme';
 import { WhatsAppButton } from '@/components/whatsapp-button';
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.SITE_URL || 'http://localhost:3000'),
-  title: { default: 'Bendita Gracia · Luz, aroma y diseño', template: '%s | Bendita Gracia' },
-  description: 'Velas decorativas, wax melts y wax sachet de Bendita Gracia. Elige forma, fragancia y color, y pide por WhatsApp.',
-  robots: { index: false, follow: false },
-  openGraph: { title: 'Bendita Gracia', description: 'Luz, aroma y diseño para tus espacios.', locale: 'es_CO', type: 'website', images: [{ url: '/social-card.jpg', width: 1200, height: 630, alt: 'Inicio de Bendita Gracia: velas decorativas y nuestras creaciones.' }] },
-  twitter: { card: 'summary_large_image', title: 'Bendita Gracia', description: 'Luz, aroma y diseño para tus espacios.', images: ['/social-card.jpg'] },
+  ...pageMetadata('/', homeTitle, homeDescription),
+  metadataBase: new URL(siteOrigin),
+  title: { default: homeTitle, template: '%s | Bendita Gracia' },
+  applicationName: 'Bendita Gracia',
+  category: 'Velas artesanales y detalles para regalar',
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="es"><body><a className="skip-link" href="#contenido">Saltar al contenido</a><ChristmasTheme>{children}<WhatsAppButton /></ChristmasTheme></body></html>;
+  return <html lang="es-CO"><body><a className="skip-link" href="#contenido">Saltar al contenido</a><ChristmasTheme>{children}<WhatsAppButton /></ChristmasTheme></body></html>;
 }

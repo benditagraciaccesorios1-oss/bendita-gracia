@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
+import { originalImageSizes } from '@/data/image-sizes';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Navigation } from '@/components/navigation';
@@ -18,7 +20,12 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const product = products.find(item => item.slug === slug);
-  return { title: product?.name || 'Diseño no encontrado', description: product?.description };
+  if (!product) notFound();
+  const photo = product.images[0];
+  const dimensions = originalImageSizes[photo.src];
+  return pageMetadata(`/catalogo/${product.slug}`, product.name, product.description, {
+    url: photo.src, alt: photo.alt, width: dimensions?.[0], height: dimensions?.[1],
+  });
 }
 
 export default async function DetailPage({ params }: Props) {

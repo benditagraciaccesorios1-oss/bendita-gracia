@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import Link from 'next/link';
 import { Navigation } from '@/components/navigation';
 import { ContactSection, SiteFooter } from '@/components/footer';
@@ -7,9 +8,14 @@ import { ProductCard } from '@/features/catalog/product-card';
 import { categories, filterProducts, resolveCategory } from '@/data/catalog';
 import './catalog.css';
 
-export const metadata: Metadata = { title: 'Nuestras creaciones', description: 'Explora velas decorativas, wax melts y wax sachet con precios en pesos colombianos. Elige forma, fragancia y color, y pide por WhatsApp.' };
-
 type Search = { q?: string | string[]; categoria?: string | string[] };
+
+export async function generateMetadata({ searchParams }: { searchParams: Promise<Search> }): Promise<Metadata> {
+  const params = await searchParams;
+  return pageMetadata('/catalogo', 'Nuestras creaciones',
+    'Explora velas decorativas, wax melts y wax sachet con precios en pesos colombianos. Elige forma, fragancia y color, y pide por WhatsApp.',
+    undefined, !params.q && !params.categoria);
+}
 
 export default async function CatalogPage({ searchParams }: { searchParams: Promise<Search> }) {
   const params = await searchParams;
