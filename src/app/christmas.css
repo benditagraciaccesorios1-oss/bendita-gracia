@@ -21,11 +21,11 @@
 .christmas-site .category-card { position: relative; }
 .christmas-site .essence-section { background-image: radial-gradient(ellipse at 50% 0, #e6d4ac25, transparent 65%); }
 .christmas-site .contact-section { border-top: 2px solid #b49b64; }
-.christmas-site .site-footer { position: relative; border-top: 2px solid #a89764; padding-top: 28px; padding-bottom: 72px; }
+.christmas-site .site-footer { position: relative; border-top: 2px solid #a89764; padding-top: 28px; padding-bottom: 24px; }
 .christmas-site .site-footer .christmas-garland { top: 3px; }
 .christmas-site .footer-brand { color: #7f2928; }
 .christmas-site .filter-links a[aria-current='true'] { border-color: #ad8d52; box-shadow: 0 0 0 2px #b7995f30; }
-.christmas-motion-toggle { position: fixed; left: 14px; bottom: 14px; z-index: 45; display: inline-flex; align-items: center; gap: 8px; max-width: calc(100vw - 100px); min-height: 44px; padding: 10px 14px; border: 1px solid #c0a674; border-radius: 24px; color: #fff7e7; background: #3b4b31; box-shadow: 0 3px 12px #3b4b312a; font: 11px/1.35 'Inter', sans-serif; cursor: pointer; }
+.christmas-motion-toggle { display: inline-flex; align-items: center; justify-content: center; gap: 6px; max-width: 100%; min-height: 44px; padding: 6px 10px; border: 1px solid #c0a674; border-radius: 24px; color: #fff7e7; background: #3b4b31; box-shadow: 0 3px 12px #3b4b312a; font: 10px/1.35 'Inter', sans-serif; cursor: pointer; }
 .christmas-motion-toggle:focus-visible { outline: 3px solid #7f2928; outline-offset: 4px; }
 .christmas-site[data-christmas-paused='true'] .christmas-ambient-flake, .christmas-site[data-christmas-paused='true'] [data-christmas-light] { animation-play-state: paused; }
 @keyframes christmas-fall { from { transform: translateY(-30px) rotate(0deg); } to { transform: translateY(calc(100vh + 60px)) rotate(100deg); } }
@@ -39,8 +39,7 @@
   .christmas-ambient-flake:nth-of-type(n + 5) { display: none; }
   .christmas-ambient-flake { font-size: 13px; opacity: .25; }
   .christmas-garland { left: 15px; right: 15px; }
-  .christmas-motion-toggle { left: 10px; bottom: 12px; padding: 9px 12px; font-size: 10px; }
-  .christmas-site .site-footer { padding-bottom: 72px; }
+  .christmas-site .site-footer { padding-bottom: 24px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .christmas-ambient-flake, .christmas-garland > span { animation: none; }

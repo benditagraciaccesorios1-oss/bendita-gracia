@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { displayPhone, whatsappPhone, whatsappUrl } from '@/data/catalog';
 import { WaxButton, WaxEdge } from './wax';
 import { ChristmasGarland } from './christmas-garland';
+import { ChristmasMotionToggle } from './christmas-theme';
 
 export function ContactSection() {
   return <section className="contact-section" id="contacto" aria-labelledby="contact-heading">
@@ -15,5 +16,5 @@ export function ContactSection() {
 }
 
 export function SiteFooter() {
-  return <footer className="site-footer container"><ChristmasGarland /><Link href="/" className="footer-brand">BENDITA GRACIA</Link><p>Luz, aroma y diseño.</p><p className="demo-notice">Precios en pesos colombianos · Disponibilidad por confirmar.</p></footer>;
+  return <footer className="site-footer container"><ChristmasGarland /><Link href="/" className="footer-brand">BENDITA GRACIA</Link><p>Luz, aroma y diseño.</p><p className="demo-notice">Precios en pesos colombianos · Disponibilidad por confirmar.</p><ChristmasMotionToggle /></footer>;
 }

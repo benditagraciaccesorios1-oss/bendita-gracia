@@ -17,9 +17,14 @@ export function ChristmasTheme({ children }: { children: ReactNode }) {
         {positions.map((left, index) => <span key={index} className="christmas-ambient-flake" data-ambient-flake style={{ '--left': `${left}%`, '--delay': `${index * -3.1}s`, '--duration': `${18 + index % 4}s` } as CSSProperties}>{index % 2 ? '✧' : '❄'}</span>)}
       </div>
       {children}
-      <button type="button" className="christmas-motion-toggle" aria-pressed={paused} aria-label={paused ? 'Reanudar ambiente navideño' : 'Pausar ambiente navideño'} onClick={toggle}>
-        <span aria-hidden="true">{paused ? '▷' : 'Ⅱ'} ❄</span><span>{paused ? 'Reanudar ambiente navideño' : 'Pausar ambiente navideño'}</span>
-      </button>
     </div>
   </ChristmasMotion.Provider>;
+}
+
+// Reuses the site-wide state from the footer without floating over page content.
+export function ChristmasMotionToggle() {
+  const { paused, toggle } = useChristmasMotion();
+  return <button type="button" className="christmas-motion-toggle" aria-pressed={paused} aria-label={paused ? 'Reanudar ambiente navideño' : 'Pausar ambiente navideño'} onClick={toggle}>
+    <span aria-hidden="true">{paused ? '▷' : 'Ⅱ'} ❄</span><span>{paused ? 'Reanudar ambiente navideño' : 'Pausar ambiente navideño'}</span>
+  </button>;
 }
