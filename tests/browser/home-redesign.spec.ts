@@ -84,12 +84,12 @@ test('desktop home follows the mockup: pink copy left, filled guide scene right,
   // The first product photograph fills its own third of the composition.
   const photo = await expectCoversPanel(page, sceneBox);
   expect(photo.source).toBe('/images/originals/peonia-en-recipiente.webp');
-  expect(await copy.evaluate(el => getComputedStyle(el).backgroundColor)).toBe('rgb(206, 161, 155)');
-  // Left-aligned dark gold title in the mockup's proportions, with the description and CTA inside the pink panel.
+  expect(await copy.evaluate(el => getComputedStyle(el).backgroundColor)).toBe('rgb(246, 227, 225)');
+  // Centered olive title in the mockup's proportions, with the description and CTA inside the pink panel.
   expect(headingBox.x).toBeGreaterThanOrEqual(copyBox.x + 40);
   expect(headingBox.x + headingBox.width).toBeLessThanOrEqual(copyBox.x + copyBox.width);
   expect(await heading.evaluate(el => getComputedStyle(el).textAlign)).toBe('center');
-  expect(await heading.evaluate(el => getComputedStyle(el).color)).toBe('rgb(87, 55, 14)');
+  expect(await heading.evaluate(el => getComputedStyle(el).color)).toBe('rgb(122, 132, 80)');
   const fontSize = await heading.evaluate(el => parseFloat(getComputedStyle(el).fontSize));
   expect(fontSize).toBeGreaterThanOrEqual(56);
   expect(fontSize).toBeLessThanOrEqual(84);
@@ -140,7 +140,7 @@ test('mobile home stacks pink copy above the guide scene, then the menu and stac
   expect(Math.abs(copyBox.width - 390)).toBeLessThanOrEqual(1);
   expect(Math.abs(sceneBox.width - 390)).toBeLessThanOrEqual(1);
   expect(sceneBox.y).toBeGreaterThanOrEqual(copyBox.y + copyBox.height - 20);
-  expect(await copy.evaluate(el => getComputedStyle(el).backgroundColor)).toBe('rgb(206, 161, 155)');
+  expect(await copy.evaluate(el => getComputedStyle(el).backgroundColor)).toBe('rgb(246, 227, 225)');
   expect(await heading.evaluate(el => getComputedStyle(el).textAlign)).toBe('center');
   expect(Math.abs(headingBox.x + headingBox.width / 2 - 195)).toBeLessThanOrEqual(2);
   expect(await heading.evaluate(el => parseFloat(getComputedStyle(el).fontSize))).toBeGreaterThanOrEqual(44);

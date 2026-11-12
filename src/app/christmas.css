@@ -5,7 +5,7 @@
 .christmas-corner { position: absolute; top: -8px; left: -8px; width: clamp(75px, 10vw, 152px); opacity: .96; filter: drop-shadow(2px 5px 3px #172f2940); }
 .christmas-corner-right { left: auto; right: 0; transform: scaleX(-1); }
 .christmas-ambient-flake { position: absolute; top: -30px; left: var(--left); color: var(--gold); opacity: .34; font: 17px/1 Georgia, serif; animation: christmas-fall var(--duration) linear var(--delay) infinite; }
-.christmas-site .navigation { border-color: var(--gold); box-shadow: inset 0 2px 4px #f5de9080, inset 0 -5px 7px #222b1caa, 0 5px 12px #303b2840; }
+.christmas-site .navigation { border-color: var(--gold-soft); box-shadow: inset 0 2px 4px #fbfcf8, inset 0 -5px 7px var(--sage-deep), 0 5px 12px rgb(var(--shade) / 25%); }
 .christmas-garland { position: absolute; display: flex; justify-content: space-around; align-items: flex-start; top: 0; left: 22px; right: 22px; height: 15px; border-top: 2px solid #283e2c; border-radius: 50%; box-shadow: 0 -1px 0 #9ca97980, inset 0 1px 1px #152a2350; pointer-events: none; }
 .christmas-garland > span { --bulb-core: #ffd65d; --bulb-edge: #bc7b13; --bulb-glow: #ffd24c90; position: relative; top: 3px; width: 10px; height: 16px; border-radius: 44% 44% 52% 52%; background: radial-gradient(ellipse at 34% 25%, #fffef3 0%, var(--bulb-core) 24%, var(--bulb-core) 48%, var(--bulb-edge) 85%, #694d2c 100%); box-shadow: inset -2px -2px 3px #35231450, inset 1px 1px 1px #fff9dd, 0 2px 3px #14271d70, 0 0 9px 2px var(--bulb-glow), 0 0 20px var(--bulb-glow); animation: christmas-light 5s ease-in-out infinite alternate; }
 .christmas-garland > span::before { content: ''; position: absolute; top: -5px; left: 2px; width: 6px; height: 6px; border-radius: 2px 2px 0 0; background: repeating-linear-gradient(90deg, #293c2c 0 1px, #6b7953 1px 2px); box-shadow: inset 0 1px 0 #b2b98a; }
@@ -13,20 +13,21 @@
 .christmas-garland > span:nth-child(4n + 1) { --bulb-core: #ff6758; --bulb-edge: #b3262b; --bulb-glow: #ff4d4d90; animation-delay: -2s; }
 .christmas-garland > span:nth-child(4n + 2) { --bulb-core: #6ee99c; --bulb-edge: #168153; --bulb-glow: #43df8b90; animation-delay: -3.5s; }
 .christmas-garland > span:nth-child(4n + 3) { --bulb-core: #7dcaff; --bulb-edge: #285fbe; --bulb-glow: #5cb9ff90; animation-delay: -1s; }
-.christmas-site .hero-copy { background-image: radial-gradient(ellipse at 18% 0, #f1e2dfcc, transparent 62%), repeating-linear-gradient(135deg, transparent 0 44px, #f5de9022 44px 45px, transparent 45px 88px), linear-gradient(176deg, #dcb8b2, var(--rose) 58%, var(--rosewood-shade)); }
+.christmas-site .hero-copy { background-image: radial-gradient(ellipse at 18% 0, #fdf6f5cc, transparent 62%), repeating-linear-gradient(135deg, transparent 0 44px, #f5de9022 44px 45px, transparent 45px 88px), linear-gradient(176deg, #f9ecea, var(--pink) 58%, var(--pink-powder)); }
 .christmas-site .creations-title h2, .christmas-site .page-intro h1 { text-shadow: 0 2px 0 #fbf6ef; }
-.christmas-site .category-card, .christmas-site .product-card { outline: 1px solid #a5884e66; outline-offset: 3px; }
-.christmas-site .category-card:focus-visible, .christmas-site .product-card:focus-within { outline: 3px solid var(--chestnut); outline-offset: 4px; }
+.christmas-site .category-card, .christmas-site .product-card { outline: 1px solid #b8975a66; outline-offset: 3px; }
+.christmas-site .category-card:focus-visible, .christmas-site .product-card:focus-within { outline: 3px solid var(--olive-deep); outline-offset: 4px; }
 .christmas-site .category-card::after, .christmas-site .product-card::after { content: '✦'; position: absolute; top: -12px; right: 20px; z-index: 2; color: var(--gold); font: 22px/1 Georgia, serif; text-shadow: 0 1px 2px #fbf6ef; pointer-events: none; }
 .christmas-site .category-card { position: relative; }
 .christmas-site .essence-section { background-image: radial-gradient(ellipse at 50% 0, #f5de9026, transparent 65%); }
 .christmas-site .contact-section { border-top: 2px solid var(--gold); }
 .christmas-site .site-footer { position: relative; border-top: 2px solid var(--gold); padding-top: 28px; padding-bottom: 24px; }
 .christmas-site .site-footer .christmas-garland { top: 3px; }
-.christmas-site .footer-brand { color: var(--gold-dark); }
-.christmas-site .filter-links a[aria-current='true'] { border-color: var(--gold); box-shadow: 0 0 0 2px #a5884e30; }
-.christmas-motion-toggle { display: inline-flex; align-items: center; justify-content: center; gap: 6px; max-width: 100%; min-height: 44px; padding: 6px 10px; border: 1px solid var(--gold); border-radius: 24px; color: var(--ivory); background: var(--slate-deep); box-shadow: 0 3px 12px #303b282a; font: 10px/1.35 'Inter', sans-serif; cursor: pointer; }
-.christmas-motion-toggle:focus-visible { outline: 3px solid var(--chestnut); outline-offset: 4px; }
+.christmas-site .footer-brand { color: var(--olive-deep); }
+.christmas-site .filter-links a[aria-current='true'] { border-color: var(--gold-soft); box-shadow: 0 0 0 2px #b8975a30; }
+.christmas-motion-toggle { display: inline-flex; align-items: center; justify-content: center; gap: 6px; max-width: 100%; min-height: 44px; padding: 6px 10px; border: 1px solid var(--gold-soft); border-radius: 24px; color: var(--slate-deep); background: var(--sage-light); box-shadow: 0 3px 12px rgb(var(--shade) / 16%); font: 10px/1.35 'Inter', sans-serif; cursor: pointer; }
+.christmas-motion-toggle:hover { background: var(--sage-deep); }
+.christmas-motion-toggle:focus-visible { outline: 3px solid var(--olive-deep); outline-offset: 4px; }
 .christmas-site[data-christmas-paused='true'] .christmas-ambient-flake, .christmas-site[data-christmas-paused='true'] [data-christmas-light] { animation-play-state: paused; }
 @keyframes christmas-fall { from { transform: translateY(-30px) rotate(0deg); } to { transform: translateY(calc(100vh + 60px)) rotate(100deg); } }
 @keyframes christmas-light { from { opacity: .65; } to { opacity: 1; } }

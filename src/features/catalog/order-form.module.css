@@ -1,25 +1,25 @@
 .form { display: grid; gap: 10px; margin: 0 0 18px; }
 .presentations { display: flex; flex-wrap: wrap; gap: 8px; border: 0; margin: 0; padding: 0; }
-.presentations legend, .field > span { font-family: Georgia, serif; font-size: 18px; font-weight: 600; color: var(--gold-dark); margin-bottom: 6px; }
+.presentations legend, .field > span { font-family: Georgia, serif; font-size: 18px; font-weight: 600; color: var(--olive-deep); margin-bottom: 6px; }
 .presentations label {
   display: grid; gap: 2px; min-width: 112px; padding: 8px 14px; cursor: pointer;
   border: 2px solid var(--rosewood); border-radius: 14px; background: #faf6f3;
-  box-shadow: inset 1px 2px 2px #fdfaf8d9, 0 6px 10px -8px #60402c66;
+  box-shadow: inset 1px 2px 2px #fdfaf8d9, 0 6px 10px -8px rgb(var(--shade) / 40%);
   transition: background-color .2s, border-color .2s;
 }
-.presentations label:focus-within { outline: 2px solid var(--chestnut); outline-offset: 2px; }
+.presentations label:focus-within { outline: 2px solid var(--olive-deep); outline-offset: 2px; }
 .presentations input { position: absolute; opacity: 0; pointer-events: none; }
 .presentations span { font-size: 13px; }
 .presentations strong { font-family: Georgia, serif; font-size: 18px; }
-.presentations .active { background: var(--rosewood); border-color: var(--chestnut); color: var(--slate-deep); }
+.presentations .active { background: var(--pink-powder); border-color: var(--olive-deep); color: var(--slate-deep); }
 .field { display: grid; }
 .field select, .field input {
   font: inherit; font-size: 15px; padding: 9px 12px; color: var(--ink);
   border: 2px solid var(--rosewood); border-radius: 12px; background: #fcf9f7;
 }
-.field select:focus-visible, .field input:focus-visible { outline: 2px solid var(--chestnut); outline-offset: 2px; }
+.field select:focus-visible, .field input:focus-visible { outline: 2px solid var(--olive-deep); outline-offset: 2px; }
 .total { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; margin: 6px 0 4px; font-family: Georgia, serif; font-size: 18px; }
-.total strong { font-size: 26px; color: var(--gold-dark); }
+.total strong { font-size: 26px; color: var(--olive-deep); }
 .total span { font-family: 'Inter', sans-serif; font-size: 12px; }
 @media (prefers-reduced-motion: reduce) { .presentations label { transition: none; } }
 

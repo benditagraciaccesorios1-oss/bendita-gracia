@@ -2,23 +2,24 @@
 
 ## Paleta de implementación
 
-Paleta actualizada de `paleta de colores actualizada.jpeg` (raíz). La imagen no trae códigos: los valores se midieron en el centro de cada muestra y son aproximados, no códigos oficiales de marca. Se definen en `:root` de `src/app/globals.css`.
+Paleta pastel pedida por la marca: los tonos pastel son protagonistas y el café desaparece (no hay textos, fondos, bordes ni sombras café, ni fondos oscuros). Se definen en `:root` de `src/app/globals.css`.
 
 | Token | HEX | Uso |
 | --- | --- | --- |
-| gold-light | #F5DE90 | Título de Contacto, moño de la campaña, foco sobre fondos oscuros |
-| gold | #A5884E | Bordes, separadores y adornos (✦, ✧, copos) |
-| gold-dark | #57370E | Títulos (h1, h2, tarjetas), banda de Contacto |
-| chestnut | #8E6A0C | Foco, selección activa, cinta del regalo, números de pasos |
-| slate | #4F5B43 | Menú y botones de cera; texto secundario sobre fondos claros |
-| rosewood | #CEA19B | Panel del hero, encabezado del catálogo, botón «Consultar», marcos |
-| sage | #95AA7F | Bordes y reflejos de cera verde |
-| blush | #E4D1CD | Fondos de tarjetas, campaña y tablas |
-| mist | #D5DDCE | Filtros y tarjetas verdes |
+| cream | #FAF5EE | Fondo general de la página y pie |
+| pink | #F6E3E1 | Panel del hero, encabezado del catálogo, primera tarjeta, fichas rosas |
+| pink-powder | #F3DCD8 | Banda de Contacto, botón «Consultar», filtro activo, etiquetas de la tabla, regalo de la campaña |
+| lavender | #ECE6F2 | Campaña navideña, tercera tarjeta, pilar «Diseño» |
+| sage-light | #E4EADB | Menú, banda de Esencia, segunda tarjeta, filtros, control navideño |
+| olive | #7A8450 | Único acento de texto: títulos y texto grande (h1, h2, tarjetas, Contacto) |
+| olive-deep | #5E6740 | Texto pequeño de acento (eyebrows, etiquetas, precios, marca del pie, títulos de fichas) y contorno de foco |
+| gold-soft | #B8975A | Solo líneas finas, bordes, separadores y adornos (✦, ✧, copos, cinta). Nunca texto |
 
-Derivados: `slate-deep` #303B28 (texto pequeño sobre rosewood, sage y blush, y lado oscuro de la cera), `rosewood-shade` #C89A94 y `rosewood-deep` #A97A74 (degradados y bordes del rosa), `gold-rim` #CDB071 (bordes dorados de tarjetas). Se conservan `ivory` #FAF6EF (fondo claro y texto sobre oscuro) e `ink` #292820. Los nombres anteriores siguen como alias: `rose` → rosewood, `forest` → slate-deep, `wine` → gold-dark, `oat` → blush.
+Derivados para botones y hover (el mismo tono, un poco más intenso): `champagne-light` #F8EEDB, `champagne` #F2E4C6, `champagne-deep` #E8D3A8 y `champagne-hover` #DCC48F (botones principales de cera); `pink-deep` #ECC9C3 y `pink-hover` #E6BFB8 (botones rosas); `sage-deep` #D3DDC4 (hover salvia); `lavender-deep` #DDD3E8. Las sombras usan `--shade` (oliva, `rgb(94 103 64 / x)`) en lugar de café. Se conservan como bordes y adornos `rosewood` #CEA19B, `rosewood-shade`, `rosewood-deep`, `sage` #95AA7F, `gold-rim` #CDB071 y `gold-light` #F5DE90; `slate` #4F5B43 y `slate-deep` #303B28 quedan solo como texto (notas y cuerpo). Alias: `gold` → gold-soft, `wine` → olive, `rose` → pink, `blush` → pink, `mist` → sage-light, `oat` → cream, `forest` → slate-deep. Se retiraron `gold-dark` #57370E y `chestnut` #8E6A0C.
 
-Evitar texto claro sobre sage o blush. El texto pequeño va en slate-deep o gold-dark; los títulos grandes en gold-dark. Los degradados con texto no bajan del tono que mantiene 4.5:1 (texto normal) o 3:1 (texto grande) frente a cada parada; `tests/browser/palette.spec.ts` lo comprueba a 390 y 1440 px. Excepciones: el verde funcional del botón flotante de WhatsApp y los colores navideños de bombillas, pino y bayas.
+Contraste medido (WCAG): el dorado suave #B8975A no llega a 3:1 sobre ningún pastel (2.1–2.5), por eso no se usa en texto. El oliva #7A8450 da 3.06–3.69:1 (texto grande, ≥ 24 px o ≥ 18.66 px en negrita); el oliva oscuro #5E6740 da 4.6–5.55:1 (texto pequeño); slate-deep da 9–10.9:1 (cuerpo y etiquetas de botones). Los degradados con texto no bajan del tono que mantiene 4.5:1 (texto normal) o 3:1 (texto grande) frente a cada parada; `tests/browser/palette.spec.ts` lo comprueba a 390 y 1440 px y recorre inicio, catálogo, ficha y 404 buscando café (tono 20–50°, luminosidad < 45 %) y fondos oscuros. Excepciones: fotografías, el verde funcional del botón flotante de WhatsApp y los colores navideños de bombillas, pino y bayas.
+
+Secciones del inicio, en orden: hero rosa pastel → menú salvia clara → campaña lavanda → «Explora nuestras creaciones» sobre crema con tarjetas rosa, salvia y lavanda → Esencia en banda salvia clara (pilares rosa, salvia pálida y lavanda) → Contacto rosa empolvado con líneas doradas finas → pie crema. Botones: relleno champaña (dorado suave pastel) o rosa empolvado con texto slate-deep; en hover el mismo color un poco más intenso.
 
 ## Tipografía y ritmo
 
@@ -35,7 +36,7 @@ Propuesta: Cormorant Garamond para títulos y marca provisional; Inter para nave
 
 ### 01 — Inicio escritorio
 
-Hero dividido: panel rosa con titular propuesto «Detalles que florecen.» y presentación de producto sobre beige. Carrusel con flechas, estado y progreso. La navegación aparece inmediatamente debajo del hero: marca, Inicio, Catálogo, Esencia, Contacto y Consultar. Galería de categorías y bloque vino para WhatsApp. (Propuesta original; los colores vigentes están en la paleta de arriba: el bloque de Contacto es dorado oscuro.)
+Hero dividido: panel rosa con titular propuesto «Detalles que florecen.» y presentación de producto sobre beige. Carrusel con flechas, estado y progreso. La navegación aparece inmediatamente debajo del hero: marca, Inicio, Catálogo, Esencia, Contacto y Consultar. Galería de categorías y bloque vino para WhatsApp. (Propuesta original; los colores vigentes están en la paleta de arriba: el bloque de Contacto es rosa empolvado.)
 
 ### 02 — Catálogo escritorio
 
@@ -64,16 +65,16 @@ Las animaciones descritas son especificaciones para construir: los PNG no tienen
 
 ## Acabado de cera derretida — versión vigente
 
-La referencia principal es la imagen seleccionada con bordes de cera. Con la paleta actualizada la cera es rosewood, slate/sage y dorada. Este acabado forma parte de la interfaz, sin modificar ni ocultar los productos.
+La referencia principal es la imagen seleccionada con bordes de cera. Con la paleta pastel la cera es rosa, salvia clara y champaña. Este acabado forma parte de la interfaz, sin modificar ni ocultar los productos.
 
 | Elemento | Acabado | Límite |
 | --- | --- | --- |
-| Panel rosewood del hero | Borde inferior fluido y 2 gotas | No cubrir CTA ni imagen |
-| Menú slate | Labio inferior y hasta 3 gotas cortas | Texto y foco permanecen rectos |
-| Botones principales | Volumen satinado slate y gota en esquina | Mantener área táctil rectangular |
+| Panel rosa del hero | Borde inferior fluido y 2 gotas | No cubrir CTA ni imagen |
+| Menú salvia clara | Labio inferior y hasta 3 gotas cortas | Texto y foco permanecen rectos |
+| Botones principales | Volumen satinado champaña y gota en esquina | Mantener área táctil rectangular |
 | Marcos de imágenes | Labio fino rosewood, dorado o sage | No cubrir etiquetas ilustrativas |
 | Separadores | Línea fina dorada con gota central | Separada de títulos |
-| Contacto dorado oscuro | Transición de cera clara | No invadir WhatsApp |
+| Contacto rosa empolvado | Labio de cera clara con línea dorada fina | No invadir WhatsApp |
 
 No aplicar el efecto a letras, campos de búsqueda, tablas de datos ni todos los bordes. El fondo general conserva espacios limpios. Mantener gotas de 8–20 px en desktop y 4–10 px en móvil, con margen exterior reservado de 24 y 16 px respectivamente. Estas medidas son guía, no requieren copiar imperfecciones de un render.
 

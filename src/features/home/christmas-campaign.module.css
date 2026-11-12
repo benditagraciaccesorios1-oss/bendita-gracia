@@ -4,25 +4,25 @@
   overflow: hidden;
   margin-top: 30px;
   margin-bottom: 10px;
-  border: 1px solid var(--gold-rim);
+  border: 1px solid var(--gold-soft);
   border-radius: 26px;
-  background: radial-gradient(ellipse at 50% 0%, #fdfaf6 0%, #f4ebe8 55%, var(--blush) 100%);
-  box-shadow: inset 0 2px 0 #fdfaf6, 0 9px 24px #57370e14;
+  background: radial-gradient(ellipse at 50% 0%, #fbf9fd 0%, #f3eff7 55%, var(--lavender) 100%);
+  box-shadow: inset 0 2px 0 #fdfcfe, 0 9px 24px rgb(var(--shade) / 10%);
   text-align: center;
   color: var(--slate-deep);
 }
 .copy { position: relative; z-index: 1; max-width: 820px; margin: auto; padding: 46px 60px 20px; }
-.copy h2 { font-family: Georgia, 'Times New Roman', serif; font-size: clamp(28px, 3vw, 42px); line-height: 1.12; font-weight: 500; text-wrap: balance; color: var(--gold-dark); }
-.eyebrow { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: .17em; margin-bottom: 10px; }
+.copy h2 { font-family: Georgia, 'Times New Roman', serif; font-size: clamp(28px, 3vw, 42px); line-height: 1.12; font-weight: 500; text-wrap: balance; color: var(--olive); }
+.eyebrow { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: .17em; margin-bottom: 10px; color: var(--olive-deep); }
 .description { font-family: 'Inter', sans-serif; font-size: 15px; line-height: 1.5; margin: 12px 0 18px; }
-/* Slate gift with a chestnut ribbon and a gold bow; the ribbon stays dark enough for the light label. */
-.cta { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 10px; max-width: 100%; min-height: 52px; padding: 14px 20px; border: 2px solid var(--gold-rim); border-radius: 8px 8px 14px 14px; background: linear-gradient(90deg, transparent 18px, var(--chestnut) 18px 24px, transparent 24px), linear-gradient(var(--slate), var(--slate-deep)); box-shadow: inset 0 2px 0 #95aa7f70, inset 0 -3px 3px #1f271950, 0 5px 10px #303b2830; color: var(--ivory); font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.4; text-decoration: none; }
-.cta::before, .cta::after { content: ''; position: absolute; top: -11px; width: 15px; height: 12px; border: 3px solid var(--gold-rim); background: linear-gradient(135deg, var(--gold-light), var(--gold)); box-shadow: inset 0 0 0 2px var(--chestnut), 0 1px 2px #3a250a40; pointer-events: none; }
+/* Powder-pink gift with a soft-gold ribbon and bow; the ribbon stays light enough for the dark label. */
+.cta { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 10px; max-width: 100%; min-height: 52px; padding: 14px 20px; border: 2px solid var(--gold-rim); border-radius: 8px 8px 14px 14px; background: linear-gradient(90deg, transparent 18px, var(--champagne-hover) 18px 24px, transparent 24px), linear-gradient(#f9ecea, var(--pink-powder) 55%, var(--pink-deep)); box-shadow: inset 0 2px 0 #fdf6f5, inset 0 -3px 3px #e2bcb6, 0 5px 10px rgb(var(--shade) / 20%); color: var(--slate-deep); font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.4; text-decoration: none; }
+.cta::before, .cta::after { content: ''; position: absolute; top: -11px; width: 15px; height: 12px; border: 3px solid var(--gold-rim); background: linear-gradient(135deg, var(--gold-light), var(--gold-soft)); box-shadow: inset 0 0 0 2px var(--gold-soft), 0 1px 2px rgb(var(--shade) / 25%); pointer-events: none; }
 .cta::before { left: 4px; border-radius: 70% 70% 0 70%; transform: rotate(16deg); }
 .cta::after { left: 20px; border-radius: 70% 70% 70% 0; transform: rotate(-16deg); }
-.cta:hover { background: linear-gradient(90deg, transparent 18px, var(--chestnut) 18px 24px, transparent 24px), linear-gradient(#5a674c, var(--slate-deep)); }
-.giftIcon { flex: 0 0 22px; width: 22px; height: 24px; margin-right: 2px; color: var(--gold-light); filter: drop-shadow(0 1px 1px #1f271970); }
-.cta:focus-visible, .pause:focus-visible { outline: 3px solid var(--chestnut); outline-offset: 4px; }
+.cta:hover { background: linear-gradient(90deg, transparent 18px, var(--champagne-hover) 18px 24px, transparent 24px), linear-gradient(var(--pink-powder), var(--pink-deep) 55%, var(--pink-hover)); }
+.giftIcon { flex: 0 0 22px; width: 22px; height: 24px; margin-right: 2px; color: var(--olive-deep); filter: drop-shadow(0 1px 0 #fdf6f5); }
+.cta:focus-visible, .pause:focus-visible { outline: 3px solid var(--olive-deep); outline-offset: 4px; }
 .pause { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; margin: 0 12px 12px; min-height: 44px; background: transparent; border: 0; border-radius: 8px; color: var(--slate-deep); font: 12px/1.4 'Inter', sans-serif; cursor: pointer; }
 .decoration { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
 .lights { position: absolute; inset: -18px -10px auto; height: 45px; border-bottom: 3px solid var(--slate); border-radius: 0 0 50% 50%; box-shadow: 0 2px 2px #233c2928, inset 0 -1px 0 var(--sage); }
@@ -32,8 +32,8 @@
 .light:nth-child(4n + 1) { --core: #ff6758; --edge: #b3262b; --halo: #ff4d4d90; }
 .light:nth-child(4n + 2) { --core: #6ee99c; --edge: #168153; --halo: #43df8b90; }
 .light:nth-child(4n + 3) { --core: #7dcaff; --edge: #285fbe; --halo: #5cb9ff90; }
-.snowflake { position: absolute; left: var(--left); top: -26px; color: var(--gold-dark); font-size: 16px; opacity: .23; pointer-events: none; animation: snowfall var(--duration) linear var(--delay) infinite; }
-.ornament { position: absolute; top: 80px; left: 25px; font: 92px/1 Georgia, serif; color: var(--gold); opacity: .3; transform: rotate(-12deg); }
+.snowflake { position: absolute; left: var(--left); top: -26px; color: var(--gold-soft); font-size: 16px; opacity: .23; pointer-events: none; animation: snowfall var(--duration) linear var(--delay) infinite; }
+.ornament { position: absolute; top: 80px; left: 25px; font: 92px/1 Georgia, serif; color: var(--gold-soft); opacity: .3; transform: rotate(-12deg); }
 .right { left: auto; right: 25px; transform: rotate(12deg); }
 .campaign[data-paused='true'] .snowflake, .campaign[data-paused='true'] .light { animation-play-state: paused; }
 @keyframes snowfall { from { transform: translate3d(-8px, 0, 0) rotate(0deg); } to { transform: translate3d(18px, 420px, 0) rotate(95deg); } }

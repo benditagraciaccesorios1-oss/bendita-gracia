@@ -7,7 +7,7 @@
   height: 28px;
   bottom: -21px;
   color: var(--card-rim);
-  filter: drop-shadow(0 2px 2px #5b3b2b33);
+  filter: drop-shadow(0 2px 2px rgb(var(--shade) / 20%));
 }
 @media (max-width: 767px) {
   .catalog-page .product-grid { row-gap: 42px; }

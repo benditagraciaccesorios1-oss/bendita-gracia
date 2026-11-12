@@ -8,15 +8,15 @@
   /* Short bottom padding: the melted lip hangs just under the button, clear of the menu, like the mockup. */
   padding: clamp(14px, 1.2vw, 20px) clamp(20px, 2.2vw, 34px) 8px;
   border-radius: 0 0 30px 0;
-  background-color: var(--rose);
-  /* The darkest stop stays light enough for slate-deep text and the dark gold title. */
-  background-image: radial-gradient(ellipse at 18% 0, #f1e2dfcc, transparent 62%), linear-gradient(176deg, #dcb8b2, var(--rose) 58%, var(--rosewood-shade));
+  background-color: var(--pink);
+  /* The darkest stop (powder pink) keeps the olive title above 3:1 and slate-deep text above 4.5:1. */
+  background-image: radial-gradient(ellipse at 18% 0, #fdf6f5cc, transparent 62%), linear-gradient(176deg, #f9ecea, var(--pink) 58%, var(--pink-powder));
   /* No dark bottom band: the melted lip below continues the surface and carries the shadow. */
-  box-shadow: inset 0 3px 3px #f6e9e6, inset -3px 0 5px #e2c0bb99, 6px 0 12px -8px #6b4a3a55;
+  box-shadow: inset 0 3px 3px #fdf6f5, inset -3px 0 5px #ecd0cb99, 6px 0 12px -8px rgb(var(--shade) / 33%);
 }
-.home-page .hero-edge { left: 0; width: calc(100% - 10px); color: var(--rosewood-shade); }
+.home-page .hero-edge { left: 0; width: calc(100% - 10px); color: var(--pink-powder); }
 .home-page .brand-kicker { margin: 0 0 4px; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(14px, 1.2vw, 18px); letter-spacing: .1em; color: var(--slate-deep); }
-.home-page .hero h1 { font-family: Georgia, 'Times New Roman', serif; font-size: clamp(46px, 4.45vw, 74px); font-weight: 700; line-height: .95; letter-spacing: -.035em; text-align: center; color: var(--wine); }
+.home-page .hero h1 { font-family: Georgia, 'Times New Roman', serif; font-size: clamp(46px, 4.45vw, 74px); font-weight: 700; line-height: .95; letter-spacing: -.035em; text-align: center; color: var(--olive); }
 .home-page .hero h1 em { display: block; font-style: normal; font-weight: 700; }
 .home-page .hero-intro { display: flex; flex-direction: column; align-items: center; gap: 14px; margin-top: 8px; }
 .home-page .hero-description { font-family: Georgia, 'Times New Roman', serif; font-size: clamp(16px, 1.45vw, 22px); line-height: 1.25; color: var(--slate-deep); }
@@ -25,8 +25,8 @@
 .home-page .hero-carousel { position: relative; min-width: 0; }
 .home-page .hero-scene {
   position: relative; height: var(--stage-h); overflow: hidden; touch-action: pan-y;
-  background: linear-gradient(180deg, #efe5e2, var(--blush) 70%, #d9c3be);
-  box-shadow: inset 0 -8px 12px #9f7f5d33;
+  background: linear-gradient(180deg, #faf2f0, var(--pink) 70%, #efd8d4);
+  box-shadow: inset 0 -8px 12px rgb(var(--shade) / 15%);
 }
 .home-page .hero-art { position: absolute; inset: 0; display: grid; }
 .home-page .hero-slide {
@@ -42,7 +42,7 @@
 .home-page .hero-photo .product-image img { width: 100%; height: 100%; aspect-ratio: auto; object-fit: cover; object-position: center var(--hero-focus, 50%); }
 
 .home-page .carousel-controls { position: absolute; z-index: 3; left: 50%; bottom: 40px; translate: -50% 0; width: max-content; display: flex; align-items: center; gap: 10px; }
-.home-page .carousel-arrow, .home-page .carousel-toggle { display: grid; place-items: center; width: 44px; height: 44px; padding: 0 0 3px; border: 1px solid var(--blush); border-radius: 50%; background: linear-gradient(170deg, #fdfaf8, #efe5e2); color: var(--slate-deep); font-size: 30px; line-height: 1; box-shadow: inset 0 2px 2px #fffdf8, 0 3px 6px #49372040; }
+.home-page .carousel-arrow, .home-page .carousel-toggle { display: grid; place-items: center; width: 44px; height: 44px; padding: 0 0 3px; border: 1px solid var(--pink-deep); border-radius: 50%; background: linear-gradient(170deg, #fdfaf8, var(--pink)); color: var(--slate-deep); font-size: 30px; line-height: 1; box-shadow: inset 0 2px 2px #fffdf8, 0 3px 6px rgb(var(--shade) / 25%); }
 .home-page .carousel-toggle { padding: 0; font-size: 14px; }
 .home-page .carousel-status { min-width: 84px; padding: 2px 12px; white-space: nowrap; border-radius: 999px; background: #fcf9f7d9; font-family: Georgia, 'Times New Roman', serif; font-size: 19px; font-style: italic; text-align: center; color: var(--slate-deep); }
 .home-page .muted { opacity: .7; }
@@ -51,9 +51,11 @@
 .home-page .home-nav { position: sticky; top: 8px; z-index: 20; margin-top: -14px; }
 
 /* Melted lips of the mockup (WaxEdge variant="melt"): the lip starts a few pixels inside the surface it rolls from. */
-.home-page .wax-edge.is-melt { height: 48px; bottom: -43px; filter: drop-shadow(0 2px 1.5px #5b3b2b4d); }
+.home-page .wax-edge.is-melt { height: 48px; bottom: -43px; filter: drop-shadow(0 2px 1.5px rgb(var(--shade) / 30%)); }
 .home-page .hero-edge.is-melt { bottom: -40px; }
-.home-page .navigation > .wax-edge.is-melt { left: 18px; width: calc(100% - 36px); bottom: -41px; color: #414c37; }
+.home-page .navigation > .wax-edge.is-melt { left: 18px; width: calc(100% - 36px); bottom: -41px; color: #dfe6d5; }
+/* On home the contact lip rolls from the light sage essence band above it. */
+.home-page .contact-edge { color: var(--sage-light); }
 
 /* Wax motion: each drop slowly gathers and swells and a short reflection travels along the lip. Only transforms and
    stroke offsets inside the decorative SVG change, so nothing in the layout moves; reduced motion keeps it still. */
@@ -91,7 +93,7 @@
 .home-page .creation-card {
   display: flex; flex-direction: column; overflow: hidden;
   border: 1px solid var(--card-border); border-radius: 16px; background: var(--body);
-  box-shadow: 0 1px 0 #fdfaf8, 0 8px 18px -10px #6b4a3f59;
+  box-shadow: 0 1px 0 #fdfaf8, 0 8px 18px -10px rgb(var(--shade) / 35%);
 }
 .home-page .creation-card .product-image { flex: none; aspect-ratio: 445 / 232; background: transparent; }
 .home-page .creation-card .product-image img { height: 100%; aspect-ratio: auto; object-position: center; }
@@ -102,11 +104,11 @@
   background: linear-gradient(180deg, var(--body-light), var(--body));
   border-top: 1px solid var(--card-border);
 }
-/* Blush, mist and a light gold tint; the third card keeps its `tone-lilac` class but no longer uses lilac. */
-.home-page .tone-cream { --card-border: #dcc0bb; --body-light: #f6eeec; --body: var(--blush); --sprig: var(--rosewood-deep); }
-.home-page .tone-sage { --card-border: #c3cfb7; --body-light: #f1f4ee; --body: var(--mist); --sprig: #71865c; }
-.home-page .tone-lilac { --card-border: #e2cf9c; --body-light: #fcf6e4; --body: #f4e8c4; --sprig: var(--gold); }
-.home-page .creation-body h3 { font-family: Georgia, 'Times New Roman', serif; font-size: clamp(27px, 2.15vw, 34px); font-weight: 700; line-height: 1.08; letter-spacing: -.02em; color: var(--wine); }
+/* Pink, light sage and lavender bodies (the first card keeps its `tone-cream` class but is pink). */
+.home-page .tone-cream { --card-border: #ecd0cb; --body-light: #fbf1ef; --body: var(--pink); --sprig: var(--rosewood-deep); }
+.home-page .tone-sage { --card-border: #cdd8bf; --body-light: #f1f4ec; --body: var(--sage-light); --sprig: #71865c; }
+.home-page .tone-lilac { --card-border: #d9cfe5; --body-light: #f6f3f9; --body: var(--lavender); --sprig: #8f80a6; }
+.home-page .creation-body h3 { font-family: Georgia, 'Times New Roman', serif; font-size: clamp(27px, 2.15vw, 34px); font-weight: 700; line-height: 1.08; letter-spacing: -.02em; color: var(--olive); }
 .home-page .creation-body p { margin-top: 6px; font-family: 'Inter', sans-serif; font-size: clamp(16px, 1.2vw, 18px); line-height: 1.45; color: var(--forest); }
 .home-page .card-sprig { position: absolute; right: 14px; bottom: 12px; width: clamp(46px, 3.9vw, 60px); height: auto; color: var(--sprig); }
 
@@ -141,6 +143,6 @@
 
 /* Link to the seasonal (Christmas) line, kept separate from the three main product cards. */
 .home-page .seasonal-link { display: flex; justify-content: center; margin: 26px 0 0; }
-.home-page .seasonal-link .text-link { gap: 12px; padding: 8px 4px; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(18px, 1.5vw, 22px); font-style: italic; color: var(--wine); border-bottom-color: var(--wine); }
+.home-page .seasonal-link .text-link { gap: 12px; padding: 8px 4px; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(18px, 1.5vw, 22px); font-style: italic; color: var(--olive-deep); border-bottom-color: var(--olive-deep); }
 
-.home-page .wholesale-note { margin: 4px auto 22px; max-width: 680px; padding: 12px 18px; border: 1px solid var(--gold); border-radius: 18px; background: #fbf3dc; color: var(--slate-deep); text-align: center; font-size: clamp(16px, 1.4vw, 20px); line-height: 1.45; }
+.home-page .wholesale-note { margin: 4px auto 22px; max-width: 680px; padding: 12px 18px; border: 1px solid var(--gold-soft); border-radius: 18px; background: #fffdf8; color: var(--slate-deep); text-align: center; font-size: clamp(16px, 1.4vw, 20px); line-height: 1.45; }

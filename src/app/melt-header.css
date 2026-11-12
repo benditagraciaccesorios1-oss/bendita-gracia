@@ -12,8 +12,8 @@
   width: calc(100% - 36px);
   height: 44px;
   bottom: -37px;
-  color: #414c37;
-  filter: drop-shadow(0 2px 2px #5b3b2b40);
+  color: #dfe6d5;
+  filter: drop-shadow(0 2px 2px rgb(var(--shade) / 25%));
 }
 .melt-page .wax-sheen { display: none; }
 @media (prefers-reduced-motion: no-preference) {

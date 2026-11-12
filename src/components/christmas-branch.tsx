@@ -10,10 +10,10 @@ export function ChristmasBranch({ right = false }: { right?: boolean }) {
       <linearGradient id={`${id}-pine`} x1="0" y1="0" x2=".8" y2="1">
         <stop stopColor="#a4b583" /><stop offset=".32" stopColor="#506d3c" /><stop offset=".75" stopColor="#223e2b" /><stop offset="1" stopColor="#102c22" />
       </linearGradient>
-      <linearGradient id={`${id}-stem`}><stop stopColor="#342d1c"/><stop offset=".5" stopColor="#8e794b"/><stop offset="1" stopColor="#3b4529"/></linearGradient>
-      <radialGradient id={`${id}-gold`} cx="30%" cy="25%" r="78%"><stop stopColor="#fff7d8"/><stop offset=".2" stopColor="#eed38d"/><stop offset=".55" stopColor="#c69b49"/><stop offset=".83" stopColor="#886029"/><stop offset="1" stopColor="#533c24"/></radialGradient>
+      <linearGradient id={`${id}-stem`}><stop stopColor="#4f5735"/><stop offset=".5" stopColor="#8f9661"/><stop offset="1" stopColor="#3b4529"/></linearGradient>
+      <radialGradient id={`${id}-gold`} cx="30%" cy="25%" r="78%"><stop stopColor="#fff7d8"/><stop offset=".2" stopColor="#eed38d"/><stop offset=".55" stopColor="#c69b49"/><stop offset=".83" stopColor="#a8894f"/><stop offset="1" stopColor="#6e6a45"/></radialGradient>
       <radialGradient id={`${id}-berry`} cx="28%" cy="23%" r="80%"><stop stopColor="#f4c4b5"/><stop offset=".22" stopColor="#c46355"/><stop offset=".65" stopColor="#8f302e"/><stop offset="1" stopColor="#491d24"/></radialGradient>
-      <linearGradient id={`${id}-cap`}><stop stopColor="#745c32"/><stop offset=".35" stopColor="#f7dfa0"/><stop offset=".65" stopColor="#bb9145"/><stop offset="1" stopColor="#6c512a"/></linearGradient>
+      <linearGradient id={`${id}-cap`}><stop stopColor="#8a8450"/><stop offset=".35" stopColor="#f7dfa0"/><stop offset=".65" stopColor="#c4a263"/><stop offset="1" stopColor="#6e6a45"/></linearGradient>
     </defs>
     <g fill="none" stroke={paint('stem')} strokeWidth="4" strokeLinecap="round"><path d="M-9 2Q73 12 145 115M10-8Q15 56 63 116"/></g>
     {['translate(-14 3) rotate(12)', 'translate(8 -16) rotate(64)', 'translate(34 -12) rotate(39)', 'translate(70 -15) rotate(67)', 'translate(-22 34) rotate(31)'].map((transform, branch) => <g key={transform} transform={transform}>
@@ -31,7 +31,7 @@ export function ChristmasBranch({ right = false }: { right?: boolean }) {
     <g fill={paint('berry')} stroke="#64252a" strokeWidth=".4"><circle cx="46" cy="36" r="8"/><circle cx="61" cy="37" r="8"/><circle cx="53" cy="49" r="8"/></g>
     <path d="M109 20Q113 44 109 67" fill="none" stroke="#bd9554" strokeWidth="1.3"/>
     <ellipse cx="111" cy="101" rx="21" ry="5" fill="#203522" opacity=".16"/>
-    <circle cx="109" cy="83" r="21" fill={paint('gold')} stroke="#95723d" strokeWidth=".6"/>
+    <circle cx="109" cy="83" r="21" fill={paint('gold')} stroke="#a8894f" strokeWidth=".6"/>
     <rect x="104" y="60" width="10" height="5" rx="1.5" fill={paint('cap')}/>
     <path d="M106 60Q109 54 112 60" fill="none" stroke="#b29257" strokeWidth="1.4"/>
     <ellipse cx="101" cy="75" rx="5" ry="8" fill="#fff9e6" opacity=".55" transform="rotate(35 101 75)"/>
