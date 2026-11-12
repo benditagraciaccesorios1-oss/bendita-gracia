@@ -11,9 +11,9 @@ for (const width of [390, 1440]) {
     await expect(kicker).toHaveText('Luz, aroma y diseño');
     await expect(title).toHaveText('Bendita Gracia');
     await expect(motto).toHaveText('Pequeños detalles, grandes intenciones');
-    expect(await kicker.evaluate(el => getComputedStyle(el).color)).toBe('rgb(59, 75, 49)');
-    expect(await motto.evaluate(el => getComputedStyle(el).color)).toBe('rgb(59, 75, 49)');
-    expect(await title.evaluate(el => getComputedStyle(el).color)).toBe('rgb(127, 41, 40)');
+    expect(await kicker.evaluate(el => getComputedStyle(el).color)).toBe('rgb(48, 59, 40)');
+    expect(await motto.evaluate(el => getComputedStyle(el).color)).toBe('rgb(48, 59, 40)');
+    expect(await title.evaluate(el => getComputedStyle(el).color)).toBe('rgb(87, 55, 14)');
     expect(await title.evaluate(el => getComputedStyle(el).textAlign)).toBe('center');
     const size = async (locator: typeof title) => locator.evaluate(el => parseFloat(getComputedStyle(el).fontSize));
     expect(await size(title)).toBeGreaterThan(await size(kicker) * 2);

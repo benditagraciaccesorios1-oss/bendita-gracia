@@ -2,18 +2,23 @@
 
 ## Paleta de implementación
 
-Valores aproximados derivados de la referencia; no son códigos oficiales de marca.
+Paleta actualizada de `paleta de colores actualizada.jpeg` (raíz). La imagen no trae códigos: los valores se midieron en el centro de cada muestra y son aproximados, no códigos oficiales de marca. Se definen en `:root` de `src/app/globals.css`.
 
 | Token | HEX | Uso |
 | --- | --- | --- |
-| rose | #D3A09B | Hero, paneles, acentos |
-| forest | #394B30 | Navegación, texto y acciones |
-| wine | #822C2A | Títulos, contacto y énfasis |
-| oat | #DDCEBA | Fondos secundarios |
-| ivory | #FAF6EF | Fondo general y texto claro |
-| ink | #292820 | Texto principal |
+| gold-light | #F5DE90 | Título de Contacto, moño de la campaña, foco sobre fondos oscuros |
+| gold | #A5884E | Bordes, separadores y adornos (✦, ✧, copos) |
+| gold-dark | #57370E | Títulos (h1, h2, tarjetas), banda de Contacto |
+| chestnut | #8E6A0C | Foco, selección activa, cinta del regalo, números de pasos |
+| slate | #4F5B43 | Menú y botones de cera; texto secundario sobre fondos claros |
+| rosewood | #CEA19B | Panel del hero, encabezado del catálogo, botón «Consultar», marcos |
+| sage | #95AA7F | Bordes y reflejos de cera verde |
+| blush | #E4D1CD | Fondos de tarjetas, campaña y tablas |
+| mist | #D5DDCE | Filtros y tarjetas verdes |
 
-Evitar texto blanco sobre rosa claro. Usar vino o tinta. Comprobar contraste de cada combinación final: 4.5:1 en texto normal y 3:1 en texto grande.
+Derivados: `slate-deep` #303B28 (texto pequeño sobre rosewood, sage y blush, y lado oscuro de la cera), `rosewood-shade` #C89A94 y `rosewood-deep` #A97A74 (degradados y bordes del rosa), `gold-rim` #CDB071 (bordes dorados de tarjetas). Se conservan `ivory` #FAF6EF (fondo claro y texto sobre oscuro) e `ink` #292820. Los nombres anteriores siguen como alias: `rose` → rosewood, `forest` → slate-deep, `wine` → gold-dark, `oat` → blush.
+
+Evitar texto claro sobre sage o blush. El texto pequeño va en slate-deep o gold-dark; los títulos grandes en gold-dark. Los degradados con texto no bajan del tono que mantiene 4.5:1 (texto normal) o 3:1 (texto grande) frente a cada parada; `tests/browser/palette.spec.ts` lo comprueba a 390 y 1440 px. Excepciones: el verde funcional del botón flotante de WhatsApp y los colores navideños de bombillas, pino y bayas.
 
 ## Tipografía y ritmo
 
@@ -30,7 +35,7 @@ Propuesta: Cormorant Garamond para títulos y marca provisional; Inter para nave
 
 ### 01 — Inicio escritorio
 
-Hero dividido: panel rosa con titular propuesto «Detalles que florecen.» y presentación de producto sobre beige. Carrusel con flechas, estado y progreso. La navegación aparece inmediatamente debajo del hero: marca, Inicio, Catálogo, Esencia, Contacto y Consultar. Galería de categorías y bloque vino para WhatsApp.
+Hero dividido: panel rosa con titular propuesto «Detalles que florecen.» y presentación de producto sobre beige. Carrusel con flechas, estado y progreso. La navegación aparece inmediatamente debajo del hero: marca, Inicio, Catálogo, Esencia, Contacto y Consultar. Galería de categorías y bloque vino para WhatsApp. (Propuesta original; los colores vigentes están en la paleta de arriba: el bloque de Contacto es dorado oscuro.)
 
 ### 02 — Catálogo escritorio
 
@@ -59,16 +64,16 @@ Las animaciones descritas son especificaciones para construir: los PNG no tienen
 
 ## Acabado de cera derretida — versión vigente
 
-La referencia principal es la imagen seleccionada con bordes de cera en rosa, verde, crema y vino. Este acabado forma parte de la interfaz, sin modificar ni ocultar los productos.
+La referencia principal es la imagen seleccionada con bordes de cera. Con la paleta actualizada la cera es rosewood, slate/sage y dorada. Este acabado forma parte de la interfaz, sin modificar ni ocultar los productos.
 
 | Elemento | Acabado | Límite |
 | --- | --- | --- |
-| Panel rosa del hero | Borde inferior fluido y 2 gotas | No cubrir CTA ni imagen |
-| Menú forest | Labio inferior y hasta 3 gotas cortas | Texto y foco permanecen rectos |
-| Botones principales | Volumen satinado y gota en esquina | Mantener área táctil rectangular |
-| Marcos de imágenes | Labio fino rosa, crema o salvia | No cubrir etiquetas ilustrativas |
-| Separadores | Línea fina con gota central | Separada de títulos |
-| Contacto vino | Transición de cera crema | No invadir WhatsApp |
+| Panel rosewood del hero | Borde inferior fluido y 2 gotas | No cubrir CTA ni imagen |
+| Menú slate | Labio inferior y hasta 3 gotas cortas | Texto y foco permanecen rectos |
+| Botones principales | Volumen satinado slate y gota en esquina | Mantener área táctil rectangular |
+| Marcos de imágenes | Labio fino rosewood, dorado o sage | No cubrir etiquetas ilustrativas |
+| Separadores | Línea fina dorada con gota central | Separada de títulos |
+| Contacto dorado oscuro | Transición de cera clara | No invadir WhatsApp |
 
 No aplicar el efecto a letras, campos de búsqueda, tablas de datos ni todos los bordes. El fondo general conserva espacios limpios. Mantener gotas de 8–20 px en desktop y 4–10 px en móvil, con margen exterior reservado de 24 y 16 px respectivamente. Estas medidas son guía, no requieren copiar imperfecciones de un render.
 
