@@ -13,7 +13,7 @@ type Search = { q?: string | string[]; categoria?: string | string[] };
 export async function generateMetadata({ searchParams }: { searchParams: Promise<Search> }): Promise<Metadata> {
   const params = await searchParams;
   return pageMetadata('/catalogo', 'Nuestras creaciones',
-    'Explora velas decorativas, wax melts y wax sachet con precios en pesos colombianos. Elige forma, fragancia y color, y pide por WhatsApp.',
+    'Explora velas decorativas, velas navideñas, wax melts, wax sachet y detalles navideños con precios en pesos colombianos. Personaliza y pide por WhatsApp.',
     undefined, !params.q && !params.categoria);
 }
 

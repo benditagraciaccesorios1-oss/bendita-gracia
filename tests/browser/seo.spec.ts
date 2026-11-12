@@ -25,6 +25,17 @@ test('home and catalog expose indexable metadata on the confirmed public domain'
   await metadata(page, '/catalogo', /Nuestras creaciones.*Bendita Gracia/, '/social-card.jpg');
 });
 
+test('home and catalog search and social descriptions include the Christmas product terms', async ({ page }) => {
+  for (const path of ['/', '/catalogo']) {
+    await page.goto(path);
+    for (const selector of ['meta[name="description"]', 'meta[property="og:description"]', 'meta[name="twitter:description"]']) {
+      const description = await page.locator(selector).getAttribute('content');
+      expect(description).toContain('velas navideñas');
+      expect(description).toContain('detalles navideños');
+    }
+  }
+});
+
 test('every product has its own canonical, title, description and social photograph', async ({ page, request }) => {
   const sitemap = await request.get('/sitemap.xml');
   const paths = [...(await sitemap.text()).matchAll(/<loc>([^<]+)<\/loc>/g)]

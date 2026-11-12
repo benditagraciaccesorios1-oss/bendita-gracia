@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 export const siteOrigin = new URL(process.env.SITE_URL || 'https://bendita-gracia.benditagraciaccesorios1.workers.dev').origin;
 export const siteName = 'Bendita Gracia';
 export const homeTitle = 'Bendita Gracia · Velas artesanales, aromas y detalles';
-export const homeDescription = 'Velas decorativas, wax melts, wax sachet y detalles para regalar de Bendita Gracia, al detal y al por mayor. Personaliza tu diseño y consulta por WhatsApp.';
+export const homeDescription = 'Velas decorativas, velas navideñas, wax melts, wax sachet y detalles navideños de Bendita Gracia. Al detal y al por mayor; personaliza por WhatsApp.';
 
 // Development and local-origin builds remain out of search results.
 const canonicalUrl = new URL(siteOrigin);
